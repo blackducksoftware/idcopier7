@@ -1,0 +1,73 @@
+ID Copier
+----------
+
+Web application that allows users to copy identifications between different folders in Protex.
+
+Setup
+------
+
+1.  Deploy WAR file under webapps directory of Tomcat server.  
+
+(if same server as Protex server, will need to edit /opt/blackduck/protexIP/tomcat/conf/server.xml
+
+Change:
+
+ <Host appBase="webapps" autoDeploy="false" name="localhost" unpackWARs="false">
+
+To:
+
+ <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
+
+and then restart Tomcat
+
+2.  Once deployed, special properties for the tool can be configured from the following file (tomcat needs to be restarted to take effect): 
+
+\WEB-INF\classes\config.properties
+
+protex.copy.id.inherits: 0(false) or 1(true) value to indicate whether BOM Overwrites should occur.  Default is true
+protex.copy.id.delete.existing: 0(false) or 1(true) to indicate if existing identifications in the target folder should be deleted before new identifications are copied over
+protex.default.server: default URL for the Protex server for ID copying
+
+3.  Application can be accessed by navigating in the browser:
+
+http://[hostname:port]/IDCopier/login.jsp
+
+4.  User has to enter: Protex username (email address), password and server URL for Protex server (e.g https://salesdemo.blackducksoftware.com)
+	Click Login
+
+5. A window appears with 2 sections to select source project/source folder and target project/target folder
+   The projects are selected by a drop-down and will refresh with a code tree for that project
+   
+6.  Select the node in the tree of the source project and node in the tree for the target project.
+	(Parentheses next to the nodes indicate the # of pending matches for that node)
+
+7.  A middle section appears with button to Copy. Options include:
+
+Recursive: if checked, performs identification for selected folder as well as all items below.
+
+Defer BOM Refresh: if checked, does not perform BOM Refresh after end of operation. Makes the process quicker yet results in the UI do not appear 
+synchronized with what took place.
+
+8.  Clicking Copy will initiate the process and open a pop-up when all ids have been copied successfully.  
+In case of errors, tomcat logs would need to be checked.
+
+
+Known Issues:
+-------------
+
+* Bugs in the Protex 6.1.x SDK cause the methods needed by IDCopier to fail.  It is advised to upgrade the
+system to 6.2 or later if plan to use this tool
+
+* Local String Search identifications are not copied over due to a bug in the ID Copy method not taking into account
+the different IDs of the same Local String Searches between projects.
+
+
+Appendix
+---------
+
+BOM Overwrites: identifications in Protex consist of selections under the Code Matches tab for the discoveries based on the scan.
+It may be that users post-identification decide to change the license or version of the identification.  This is done under the 
+BOM tab.  These are called BOM Overwrites and ID Copier handles those post-copy.
+
+
+
