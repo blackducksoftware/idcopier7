@@ -11,6 +11,7 @@ package com.blackducksoftware.soleng.idcopier.service;
 import org.apache.log4j.Logger;
 
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxyV6_2;
+import com.blackducksoftware.sdk.protex.project.ProjectApi;
 import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
 
 /**
@@ -22,28 +23,38 @@ public class LoginService
 {
     static Logger log = Logger.getLogger(LoginService.class);
 
+    private boolean loggedIn = false;
+    
     private ProtexServer serverInfo = new ProtexServer();
     private ProtexServerProxyV6_2 protexProxy = null;
     
     
-    public LoginService()
+    public LoginService(ProtexServer protexServer)
     {
-	String uri = "http://se-menger.blackducksoftware.com/";
-	String user = "akamen@blackducksoftware.com";
-	String password = "blackduck";
 	try{
-	    protexProxy = new ProtexServerProxyV6_2
-		    (uri, user, password);
+	    serverInfo = protexServer;
 	    
+	    protexProxy = new ProtexServerProxyV6_2
+		    (protexServer.getServerName(), protexServer.getUserName(), protexServer.getPassword());
+	    
+	    ProjectApi pApi = protexProxy.getProjectApi();
+	    pApi.getProjectsByUser(protexServer.getUserName());
+	    
+	    loggedIn = true;
 	    log.info("Login successful");
 	    
-	    serverInfo.setServerName(uri);
-	    serverInfo.setUserName(user);
+	  
 	    
 	} catch (Exception e)
 	{
-	    log.error("Error establishing login service", e);
+	    log.error("Error establishing login service: " + e.getMessage());
+	    serverInfo.setError(e.getCause().getMessage());
 	}
+    }
+    
+    public Boolean isLoggedIn()
+    {
+	return loggedIn;
     }
     
     /**

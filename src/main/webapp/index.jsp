@@ -1,5 +1,2 @@
-<html>
-<body>
-<h2>Hello IDCopier7!</h2>
-</body>
-</html>
+Welcome to IDCopier 7, now redirect me somewhere.
+

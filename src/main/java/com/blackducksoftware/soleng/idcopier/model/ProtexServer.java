@@ -18,6 +18,7 @@ public class ProtexServer
     private String serverName;
     private String userName;
     private String password;
+    private String error;
     
     public ProtexServer()
     {
@@ -47,5 +48,15 @@ public class ProtexServer
     public void setServerName(String serverName)
     {
 	this.serverName = serverName;
+    }
+
+    public String getError()
+    {
+	return error;
+    }
+
+    public void setError(String error)
+    {
+	this.error = error;
     }
 }

@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,10 +33,40 @@ import com.blackducksoftware.soleng.idcopier.service.LoginService;
 public class IDCopierController
 {
     static Logger log = Logger.getLogger(IDCopierController.class);
-
-    
+  
     // Internal 
     private static LoginService loginService = null;
+    
+    
+    @RequestMapping(value="/login")  
+    public ModelAndView personPage() {  
+        return new ModelAndView("login/login", "protex-server", new ProtexServer());  
+    }  
+    
+    /**
+     * Login method, grabs the user's inputs, calls the loginserver
+     * and redirects to server info
+     * @param student
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/login.do")
+    public ModelAndView processLogin(@ModelAttribute ProtexServer server)
+    {
+	ModelAndView modelAndView = new ModelAndView();
+
+	log.info("Logging in...: " + server.getServerName());
+	// Login
+	loginService = getLoginService(server);
+	
+	modelAndView.addObject("server", server);
+	modelAndView.setViewName("serverinfo");
+
+	return modelAndView;
+    }
+  
+   
+    // Just messing around
     
     @RequestMapping(value = "/hai", method = RequestMethod.GET)
     public String hi(
@@ -48,10 +79,10 @@ public class IDCopierController
 	return "idcopier7";
     }
     
+    
     @RequestMapping(value = "/server", method = RequestMethod.GET)  
     public String showServer(ModelMap model)
     {
-	loginService = getLoginService();
 	ProtexServer serverInfo = loginService.getServerInfo();
 	
 	model.addAttribute("server", serverInfo);
@@ -62,14 +93,15 @@ public class IDCopierController
     
     
     /**
+     * @param server 
      * @return
      */
-    private LoginService getLoginService()
+    private LoginService getLoginService(ProtexServer server)
     {
 	// TODO Auto-generated method stub
-	if(loginService == null)
+	if(loginService == null || !loginService.isLoggedIn())
 	{
-	    loginService = new LoginService();
+	    loginService = new LoginService(server);
 	    return loginService;
 	}
 	else
