@@ -8,10 +8,13 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxyV6_2;
 import com.blackducksoftware.sdk.protex.project.ProjectApi;
+import com.blackducksoftware.sdk.protex.project.ProjectInfo;
 import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
 
 /**
@@ -38,7 +41,10 @@ public class LoginService
 		    (protexServer.getServerName(), protexServer.getUserName(), protexServer.getPassword());
 	    
 	    ProjectApi pApi = protexProxy.getProjectApi();
-	    pApi.getProjectsByUser(protexServer.getUserName());
+	    List<ProjectInfo> projects = pApi.getProjectsByUser(protexServer.getUserName());
+	    
+	    protexServer.setProjects(projects);
+	    
 	    
 	    loggedIn = true;
 	    log.info("Login successful");

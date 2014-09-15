@@ -8,6 +8,10 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.model;
 
+import java.util.List;
+
+import com.blackducksoftware.sdk.protex.project.ProjectInfo;
+
 /**
  *  @author Ari Kamen
  *  @date Sep 15, 2014
@@ -19,6 +23,7 @@ public class ProtexServer
     private String userName;
     private String password;
     private String error;
+    private List<ProjectInfo> projects;
     
     public ProtexServer()
     {
@@ -58,5 +63,15 @@ public class ProtexServer
     public void setError(String error)
     {
 	this.error = error;
+    }
+
+    public List<ProjectInfo> getProjects()
+    {
+	return projects;
+    }
+
+    public void setProjects(List<ProjectInfo> projects)
+    {
+	this.projects = projects;
     }
 }
