@@ -17,13 +17,7 @@ public class IDCTester {
         String password = "blackduck";
         
 		int treeNum=1;
-		
-        serverSingleton ss = serverSingleton.getServerSingleton();
-        ss.isUserAuthenticated(username, password, sessId, host);
 
-        Boolean ret= ss.copyIDs(host, username, password, src_projId, srcCodeTreePath, dest_projId, targetCodeTreePath, true, sessId, false);
-        System.err.println(ret);
-        System.exit(-1);
 	}
 
 }

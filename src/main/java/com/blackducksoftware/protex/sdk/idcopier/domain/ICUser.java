@@ -2,7 +2,7 @@ package com.blackducksoftware.protex.sdk.idcopier.domain;
 
 import java.util.Date;
 
-import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxyV6_2;
+import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 
 public class ICUser {
 	private String loginName;
@@ -14,7 +14,7 @@ public class ICUser {
 	private String httpSession;
 	private String protexSession;
 	private String server;
-    private ProtexServerProxyV6_2 myProtexServer = null;
+    private ProtexServerProxy myProtexServer = null;
 	
 
     private boolean isUserAuthorized = false;
@@ -28,11 +28,11 @@ public class ICUser {
 	  this.email = email;
 	  }
 
-	public ProtexServerProxyV6_2 getMyProtexServer() {
+	public ProtexServerProxy getMyProtexServer() {
 		return myProtexServer;
 	}
 
-	public void setMyProtexServer(ProtexServerProxyV6_2 myProtexServer) {
+	public void setMyProtexServer(ProtexServerProxy myProtexServer) {
 		this.myProtexServer = myProtexServer;
 	}
 
