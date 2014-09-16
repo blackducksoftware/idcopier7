@@ -8,6 +8,9 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.blackducksoftware.sdk.protex.project.ProjectInfo;
+import com.blackducksoftware.soleng.idcopier.model.ProcessProject;
+import com.blackducksoftware.soleng.idcopier.model.ProjectModel;
 import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
 
@@ -59,12 +65,31 @@ public class IDCopierController
 	// Login
 	loginService = getLoginService(server);
 	
-	modelAndView.addObject("server", server);
+	modelAndView.addObject("server", server);	
+	modelAndView.addObject("project-list", server.getProjects());
+	
 	modelAndView.setViewName("serverinfo");
-
 	return modelAndView;
     }
   
+    /**
+     * Displays the project information
+     * @param server
+     * @return
+     */
+    @RequestMapping(value = "/processProject.do")
+    public ModelAndView processLogin(@RequestParam(value = "project-id", required = false) String projectId,
+	    Model model)
+    {
+	ModelAndView modelAndView = new ModelAndView();
+
+	log.info("Processing project: " + projectId);
+	
+	modelAndView.setViewName("projectInfo");
+
+	return modelAndView;
+    }
+    
    
     // Just messing around
     
@@ -81,13 +106,19 @@ public class IDCopierController
     
     
     @RequestMapping(value = "/server", method = RequestMethod.GET)  
-    public String showServer(ModelMap model)
+    public ModelAndView showServer()
     {
+	List<ProjectModel> projectModelList = new ArrayList<ProjectModel>();
+	
+	ModelAndView mav = new ModelAndView("serverInfo");
+	
 	ProtexServer serverInfo = loginService.getServerInfo();
 	
-	model.addAttribute("server", serverInfo);
+	mav.addObject("server", serverInfo);
+	mav.addObject("projectList", projectModelList);
+	mav.addObject("project-model", new ProjectModel());
 	
-	return "serverinfo";
+	return mav;
     }
 
     

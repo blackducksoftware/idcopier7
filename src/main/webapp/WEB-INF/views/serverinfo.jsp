@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <html>
 <head>
@@ -17,13 +18,15 @@
 			</h1>
 			<h2>User: ${server.userName}</h2>
 			<p>
+				<form:form method="POST" action="processProject.do">
 
-				<select name="project">
-					<c:forEach items="${server.projects}" var="pinfo">
-						<option value="${pinfo.name}"
-							selected=${role == selectedPinfo ? 'selected' : ''}>${pinfo.name}</option>
-					</c:forEach>
-				</select>
+					<select name="project-id" onchange="this.form.submit();">
+						<c:forEach var="pinfo" items="${server.projects}">
+							<option value="${pinfo.projectId}">${pinfo.name}</option>
+						</c:forEach>
+					</select>
+
+				</form:form>
 	</c:if>
 	<c:if test="${server.error != null}">
 		<h2>
