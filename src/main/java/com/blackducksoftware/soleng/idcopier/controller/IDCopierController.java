@@ -105,7 +105,10 @@ public class IDCopierController
 	    return loginService;
 	}
 	else
+	{
+	    log.info("Already logged in...");
 	    return loginService;
+	}
     }
     
 }

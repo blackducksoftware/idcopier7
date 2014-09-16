@@ -12,12 +12,23 @@
 <body>
 
 	<c:if test="${server.error == null}">
-		<h1>Server Information : ${server.serverName}</h1>
-		<br>
-		<h2>User: ${server.userName}</h2>
+		<h2>
+			Server Information : ${server.serverName}
+			</h1>
+			<h2>User: ${server.userName}</h2>
+			<p>
+
+				<select name="project">
+					<c:forEach items="${server.projects}" var="pinfo">
+						<option value="${pinfo.name}"
+							selected=${role == selectedPinfo ? 'selected' : ''}>${pinfo.name}</option>
+					</c:forEach>
+				</select>
 	</c:if>
 	<c:if test="${server.error != null}">
-			<h2><font color="red">Error: ${server.error}</font></h2>
+		<h2>
+			<font color="red">Error: ${server.error}</font>
+		</h2>
 	</c:if>
 
 	<p>
