@@ -1,2 +1,3 @@
-Welcome to IDCopier 7, now redirect me somewhere.
-
+<script type="text/javascript">
+	window.location = "./login"
+</script>
