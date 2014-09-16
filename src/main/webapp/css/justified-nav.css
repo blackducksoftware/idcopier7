@@ -1,0 +1,129 @@
+body {
+    padding-top: 30px;
+}
+
+.footer {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+    margin-top: 30px;
+    padding: 30px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: #eee;
+}
+.jumbotron .btn {
+    padding: 14px 24px;
+    font-size: 21px;
+}
+
+/* Customize the nav-justified links to be fill the entire space of the .navbar */
+
+.header-logo{
+    padding-top: 6px;
+}
+
+.transparent {
+    opacity: 0;
+}
+
+.nav-justified {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+}
+.nav-justified > li > a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 0;
+    font-weight: bold;
+    color: #777;
+    text-align: center;
+    background-color: white; /* Old browsers */
+    border-bottom: 1px solid #d5d5d5;
+}
+.nav-justified > .active > a,
+.nav-justified > .active > a:hover,
+.nav-justified > .active > a:focus {
+    background-color: #ddd;
+    background-image: none;
+    -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,0);
+    box-shadow: inset 0 0px 0px rgba(0,0,0,0);
+}
+.nav-justified > li:first-child > a {
+    border-radius: 0px 0px 0 0;
+}
+.nav-justified > li:last-child > a {
+    border-bottom: 0px;
+    border-radius: 0px 0px 0px 0px;
+}
+
+.main-container{
+    padding-right: 40px;
+    padding-left: 40px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.summary-row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-33 {
+    width: 33.33333333%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .nav-justified {
+        max-height: 52px;
+    }
+    .nav-justified > li > a {
+        border-right: 1px solid #d5d5d5;
+        border-left: 1px solid #fff;
+    }
+    .nav-justified > li:first-child > a {
+        border-left: 0px;
+        border-radius: 0px 0px 0px 0px;
+    }
+    .nav-justified > li:last-child > a {
+        border-right: 0px;
+        border-radius: 0px 0px 0px 0px;
+    }
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .masthead{
+        padding-bottom: 30px;
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .marketing,
+    .footer {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+@media (min-width: 992px) {
+    col-33 {
+        float: left;
+    }
+    col-33 {
+        width: 33.33333333%;
+    }
+}
