@@ -13,9 +13,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxyV6_2;
+import com.blackducksoftware.sdk.protex.project.Project;
 import com.blackducksoftware.sdk.protex.project.ProjectApi;
 import com.blackducksoftware.sdk.protex.project.ProjectInfo;
+import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNode;
+import com.blackducksoftware.sdk.protex.project.codetree.PartialCodeTree;
+import com.blackducksoftware.sdk.protex.util.CodeTreeUtilities;
 import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
+import com.google.gson.Gson;
 
 /**
  *  @author Ari Kamen
@@ -71,6 +76,32 @@ public class LoginService
 	return serverInfo;
     }
 
-    
+    /**
+     * Returns the JSON code path for the project
+     * @param projectID
+     * @return
+     */
+    public String getProjectCodeTree(String projectID)
+    {
+	String json = "";
+	try{
+	    PartialCodeTree tree =  protexProxy.getCodeTreeApi().getCodeTree(projectID, "/", CodeTreeUtilities.INFINITE_DEPTH, true);
+	    List<CodeTreeNode> nodes = tree.getNodes();
+	    
+	    log.info("Got top level nodes, count: " + nodes.size());
+	    
+	    Gson gson = new Gson();
+		
+	    json = gson.toJson(nodes);
+	    
+	}
+	
+	catch (Exception e)
+	{
+	    log.error("Could not convert project tree to JSON", e);
+	}
+	
+	return json;
+    }
     
 }

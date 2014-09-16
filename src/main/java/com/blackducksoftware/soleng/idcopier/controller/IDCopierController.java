@@ -26,6 +26,7 @@ import com.blackducksoftware.soleng.idcopier.model.ProcessProject;
 import com.blackducksoftware.soleng.idcopier.model.ProjectModel;
 import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
+import com.blackducksoftware.soleng.idcopier.service.ProjectService;
 
 /**
  * Just a silly test controller to make sure spring-mvc works.
@@ -85,8 +86,15 @@ public class IDCopierController
 
 	log.info("Processing project: " + projectId);
 	
-	modelAndView.setViewName("projectInfo");
 
+
+	
+	ProjectService ps = new ProjectService(loginService);
+	String jsonTree = ps.getProjectJSON(projectId);
+	
+	modelAndView.addObject("jsonTree", jsonTree);
+	
+	modelAndView.setViewName("projectInfo");
 	return modelAndView;
     }
     

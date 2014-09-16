@@ -10,6 +10,9 @@
 	<h1>Project : ${project.name}</h1>
 	<br>
 	Project ID:  ${project.projectId}
+	<br>
+	
+	Project JSON: ${jsonTree}
 </body>
 </html>
 

@@ -47,6 +47,12 @@
 			<version>2.3</version>
 		</dependency>
 
+		<!--  For data binding back to the views -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>1.7.1</version>
+		</dependency>
 
 		<!-- Servlet -->
 		<!-- Servlet API, JSTL -->
