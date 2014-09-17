@@ -4,7 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <head>
-<title>Black Duck | IdCopier</title>
+<title>Protex ID Copier | Login</title>
 
 <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
 <link rel="stylesheet" href="css/main.css">
@@ -62,27 +62,13 @@
 					<div class="form-group">
 						<label class="control-label" for="submitButton"></label>
 						<div>
-							<a href="#myModal">
-								<button id="submitButton" name="submitButton"
-									class="btn btn-primary pull-right" data-toggle="modal">Submit</button>
-							</a>
+							<button id="submitButton" name="submitButton"
+								class="btn btn-primary pull-right">Submit</button>
+							<label id="spinner"></label>
 						</div>
 					</div>
 				</fieldset>
 			</form>
-		</div>
-
-		<div id="loginModal" class="modal fade">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 class="modal-title">Logging in user...</h4>
-					</div>
-					<div class="modal-body">
-						<p>Loader will go here...</p>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 </body>
