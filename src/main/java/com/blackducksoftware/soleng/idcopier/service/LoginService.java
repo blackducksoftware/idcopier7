@@ -18,7 +18,7 @@ import com.blackducksoftware.sdk.protex.project.ProjectInfo;
 import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNode;
 import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNodeRequest;
 import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNodeType;
-import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
+import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.google.gson.Gson;
 
 /**
@@ -32,23 +32,24 @@ public class LoginService
 
     private boolean loggedIn = false;
 
-    private ProtexServer serverInfo = new ProtexServer();
+    private IDCSession serverInfo = new IDCSession();
     private ProtexServerProxy protexProxy = null;
 
-    public LoginService(ProtexServer protexServer)
+    public LoginService(IDCSession session)
     {
 	try
 	{
-	    serverInfo = protexServer;
+	    serverInfo = session;
 
-	    protexProxy = new ProtexServerProxy(protexServer.getServerName(),
-		    protexServer.getUserName(), protexServer.getPassword());
+	    protexProxy = new ProtexServerProxy(session.getServerName(),
+		    session.getUserName(), session.getPassword());
 
 	    ProjectApi pApi = protexProxy.getProjectApi();
-	    List<ProjectInfo> projects = pApi.getProjectsByUser(protexServer
+	    List<ProjectInfo> projects = pApi.getProjectsByUser(session
 		    .getUserName());
 
-	    protexServer.setProjects(projects);
+	    session.setProjects(projects);
+	    session.setProxy(protexProxy);
 
 	    loggedIn = true;
 	    log.info("Login successful");
@@ -68,46 +69,11 @@ public class LoginService
     /**
      * @return
      */
-    public ProtexServer getServerInfo()
+    public IDCSession getSessionObject()
     {
 	return serverInfo;
     }
 
-    /**
-     * Returns the JSON code path for the project
-     * 
-     * @param projectID
-     * @return
-     */
-    public String getProjectCodeTree(String projectID)
-    {
-	String json = "";
-	try
-	{
-	    CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
-	    ctrRequest.setDepth(-1);
-	    ctrRequest.setIncludeParentNode(true);
-	    List<CodeTreeNodeType> nodeTypes = ctrRequest
-		    .getIncludedNodeTypes();
-
-	    nodeTypes.add(CodeTreeNodeType.FILE);
-	    nodeTypes.add(CodeTreeNodeType.FOLDER);
-
-	    List<CodeTreeNode> nodes = protexProxy.getCodeTreeApi()
-		    .getCodeTreeNodes(projectID, "/", ctrRequest);
-
-	    log.info("Got top level nodes, count: " + nodes.size());
-
-	    Gson gson = new Gson();
-	    json = gson.toJson(nodes);
-	}
-
-	catch (Exception e)
-	{
-	    log.error("Could not convert project tree to JSON", e);
-	}
-
-	return json;
-    }
+ 
 
 }

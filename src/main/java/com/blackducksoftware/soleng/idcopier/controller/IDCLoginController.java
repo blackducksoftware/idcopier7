@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
-import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
+import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
 
 /**
@@ -30,7 +30,7 @@ import com.blackducksoftware.soleng.idcopier.service.LoginService;
  */
 
 @Controller
-@SessionAttributes(IDCViewModelConstants.PROTEX_SERVER) 
+@SessionAttributes(IDCViewModelConstants.IDC_SESSION) 
 public class IDCLoginController
 {
     static Logger log = Logger.getLogger(IDCLoginController.class);
@@ -41,8 +41,8 @@ public class IDCLoginController
     @RequestMapping(value = IDCPathConstants.LOGIN_MAIN_PATH)
     public ModelAndView personPage()
     {
-	return new ModelAndView(IDCViewConstants.LOGIN_FORM, IDCViewModelConstants.PROTEX_SERVER,
-		new ProtexServer());
+	return new ModelAndView(IDCViewConstants.LOGIN_FORM, IDCViewModelConstants.IDC_SESSION,
+		new IDCSession());
     }
 
     /**
@@ -54,17 +54,17 @@ public class IDCLoginController
      * @return
      */
     @RequestMapping(value = IDCPathConstants.LOGIN_PROCESS_PATH)
-    public ModelAndView processLogin(@ModelAttribute(IDCViewModelConstants.PROTEX_SERVER) ProtexServer server)
+    public ModelAndView processLogin(@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session)
     {
 	ModelAndView modelAndView = new ModelAndView();
 
-	log.info("Logging in...: " + server.getServerName());
+	log.info("Logging in...: " + session.getServerName());
 	// Login
-	loginService = getLoginService(server);
-	server = loginService.getServerInfo();
+	loginService = getLoginService(session);
+	session = loginService.getSessionObject();
 	
-	modelAndView.addObject(IDCViewModelConstants.PROTEX_SERVER, server);
-	modelAndView.addObject(IDCViewModelConstants.PROJECT_LIST, server.getProjects());
+	modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
+	modelAndView.addObject(IDCViewModelConstants.PROJECT_LIST, session.getProjects());
 
 	modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
 	return modelAndView;
@@ -74,9 +74,9 @@ public class IDCLoginController
      * @param server
      * @return
      */
-    private LoginService getLoginService(ProtexServer server)
+    private LoginService getLoginService(IDCSession session)
     {
-	loginService = new LoginService(server);
+	loginService = new LoginService(session);
 	return loginService;
     }
 }

@@ -11,21 +11,25 @@ package com.blackducksoftware.soleng.idcopier.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.sdk.protex.project.ProjectInfo;
 
 /**
+ * Session object containing relevant information
+ * 
  * @author Ari Kamen
  * @date Sep 15, 2014
  *
  */
-public class ProtexServer implements Serializable {
+public class IDCSession implements Serializable {
 	private String serverName;
 	private String userName;
 	private String password;
 	private String error;
 	private List<ProjectInfo> projects;
-
-	public ProtexServer() {
+	private ProtexServerProxy proxy;
+	
+	public IDCSession() {
 
 	}
 
@@ -67,5 +71,15 @@ public class ProtexServer implements Serializable {
 
 	public void setProjects(List<ProjectInfo> projects) {
 		this.projects = projects;
+	}
+
+	public ProtexServerProxy getProxy()
+	{
+	    return proxy;
+	}
+
+	public void setProxy(ProtexServerProxy proxy)
+	{
+	    this.proxy = proxy;
 	}
 }

@@ -25,7 +25,7 @@ import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
 import com.blackducksoftware.soleng.idcopier.model.ProjectModel;
-import com.blackducksoftware.soleng.idcopier.model.ProtexServer;
+import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
 import com.blackducksoftware.soleng.idcopier.service.ProjectService;
 
@@ -36,7 +36,7 @@ import com.blackducksoftware.soleng.idcopier.service.ProjectService;
  */
 
 @Controller
-@SessionAttributes(IDCViewModelConstants.PROTEX_SERVER) 
+@SessionAttributes(IDCViewModelConstants.IDC_SESSION) 
 public class IDCProjectController
 {
     static Logger log = Logger.getLogger(IDCProjectController.class);
@@ -44,20 +44,19 @@ public class IDCProjectController
     @RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
     public ModelAndView processLogin(
 	    @RequestParam(value = "project-id") String projectId,
-	    @ModelAttribute(IDCViewModelConstants.PROTEX_SERVER) ProtexServer server, 
+	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, 
 	    Model model)
     {
 	ModelAndView modelAndView = new ModelAndView();
 
 	log.info("Processing project: " + projectId);
 
-	LoginService ls = new LoginService(server);
-	ProjectService ps = new ProjectService(ls);
+	ProjectService ps = new ProjectService(session);
 	String jsonTree = ps.getProjectJSON(projectId);
 
 	modelAndView.addObject("jsonTree", jsonTree);
 
-	modelAndView.setViewName("projectInfo");
+	modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
 	return modelAndView;
     }
 }

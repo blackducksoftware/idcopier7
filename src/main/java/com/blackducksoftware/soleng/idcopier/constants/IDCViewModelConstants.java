@@ -20,8 +20,8 @@ public class IDCViewModelConstants
     /**
      * login/auth related variables
      */
-    // Server information housing credentials
-    public static final String PROTEX_SERVER = "server";
+    // Session object
+    public static final String IDC_SESSION = "server";
     
     /**
      * Project related variables

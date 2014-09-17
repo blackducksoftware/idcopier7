@@ -40,7 +40,8 @@
 			<font color="red">Error: ${server.error}</font>
 		</h2>
 	</c:if>
-
+			<h3>Project ID: ${projectId}</h3>
+					<br /> Project JSON: ${jsonTree}
 	<p>
 </body>
 </html>
