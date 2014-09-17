@@ -64,8 +64,29 @@
 			</div>
 			<div class="col-sm-5 col-lg-5">
 				<div class="container well">
-					<h3>Project ID: ${projectId}</h3>
-					<br /> Project JSON: ${jsonTree}
+					<table class="table">
+						<tbody>
+							<tr>
+								<h4>Destination Project</h4>
+							</tr>
+							<tr>
+								<td><h4>Server</h4></td>
+								<td><select id="selectDestinationServer"
+									name="selectDestinationServer" class="form-control">
+										<option value="1">https://server-one.blackducksoftware.com</option>
+										<option value="2">https://server-two.blackducksoftware.com</option>
+								</select></td>
+							</tr>
+							<tr>
+								<td><h4>Project</h4></td>
+								<td><select id="selectDestinationProject"
+									name="selectDestinationProject" class="form-control">
+										<option value="1">Project 1</option>
+										<option value="2">Project 2</option>
+								</select></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
