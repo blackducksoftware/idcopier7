@@ -35,6 +35,7 @@
 	width: 100%;
 }
 
-.max-600 {
-	max-width: 400px;
+.project-container {
+	width: 95%;
+	margin: 0 auto;
 }
