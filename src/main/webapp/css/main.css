@@ -2,24 +2,39 @@
     Created on : Jun 29, 2014, 9:44:23 PM
     Author     : Niles Madison <niles.madison@gmail.com>
 */
-.header-buffer{
-    padding-top: 10px;
+.header-buffer {
+	padding-top: 10px;
 }
 
-.center-content{
-    text-align: center;
-    vertical-align: bottom;
+.center-content {
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.main {
+	max-width: 100%;
+	margin: 0 auto;
 }
 
 .body {
-    max-width: 90%;
-    margin: 0 auto;
+	max-width: 90%;
+	margin: 0 auto;
 }
 
-.header-logo{
-    padding-left: 20px;
+.login-body {
+	width: 60%;
+	float: right;
+	vertical-align: middle;
 }
 
-.fill{
+.header-logo {
+	padding-left: 20px;
+}
+
+.fill {
 	width: 100%;
+}
+
+.float-right {
+	float: right;
 }

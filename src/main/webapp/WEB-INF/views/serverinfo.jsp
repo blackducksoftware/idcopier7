@@ -7,26 +7,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Black Duck | IdCopier</title>
 
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/justified-nav.css">
 
 </head>
 <body>
 
 	<c:if test="${server.error == null}">
 		<h2>
-			Server Information : ${server.serverName}
-			</h1>
-			<h2>User: ${server.userName}</h2>
-			<p>
-				<form:form method="POST" action="processProject.do">
+			Server Information : <small>${server.serverName}</small>
+		</h2>
+		<h2>
+			User: <small>${server.userName}</small>
+		</h2>
 
-					<select name="project-id" onchange="this.form.submit();">
-						<c:forEach var="pinfo" items="${server.projects}">
-							<option value="${pinfo.projectId}">${pinfo.name}</option>
-						</c:forEach>
-					</select>
-
-				</form:form>
+		<form:form method="POST" action="processProject.do">
+			<select name="project-id" onchange="this.form.submit();">
+				<c:forEach var="pinfo" items="${server.projects}">
+					<option value="${pinfo.projectId}">${pinfo.name}</option>
+				</c:forEach>
+			</select>
+		</form:form>
 	</c:if>
 	<c:if test="${server.error != null}">
 		<h2>

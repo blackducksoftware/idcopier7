@@ -9,15 +9,13 @@ All rights reserved. **/
 package com.blackducksoftware.soleng.idcopier.model;
 
 /**
- *  @author Ari Kamen
- *  @date Sep 16, 2014
+ * @author Ari Kamen
+ * @date Sep 16, 2014
  *
  */
-public class ProcessProject
-{
+public class ProcessProject {
 
-    public ProcessProject()
-    {
-	
-    }
+	public ProcessProject() {
+
+	}
 }
