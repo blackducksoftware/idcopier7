@@ -8,6 +8,7 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.blackducksoftware.sdk.protex.project.ProjectInfo;
@@ -17,7 +18,7 @@ import com.blackducksoftware.sdk.protex.project.ProjectInfo;
  * @date Sep 15, 2014
  *
  */
-public class ProtexServer {
+public class ProtexServer implements Serializable {
 	private String serverName;
 	private String userName;
 	private String password;

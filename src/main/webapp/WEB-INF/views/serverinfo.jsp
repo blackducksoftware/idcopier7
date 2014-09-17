@@ -27,9 +27,11 @@
 
 		<form:form method="POST" action="processProject.do">
 			<select name="project-id" onchange="this.form.submit();">
+			
 				<c:forEach var="pinfo" items="${server.projects}">
 					<option value="${pinfo.projectId}">${pinfo.name}</option>
 				</c:forEach>
+				
 			</select>
 		</form:form>
 	</c:if>
