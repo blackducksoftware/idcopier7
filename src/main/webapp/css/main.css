@@ -35,6 +35,6 @@
 	width: 100%;
 }
 
-.float-right {
-	float: right;
+.max-600 {
+	max-width: 400px;
 }
