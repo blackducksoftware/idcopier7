@@ -93,7 +93,7 @@
 	</div>
 </body>
 
-<script src="js/libs/jquery/jquery.min.js"></script>
+<script src="js/libs/jquery/jquery.js"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
 </html>
 
