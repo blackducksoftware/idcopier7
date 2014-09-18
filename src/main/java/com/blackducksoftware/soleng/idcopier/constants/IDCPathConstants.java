@@ -23,6 +23,7 @@ public class IDCPathConstants
      */
     public static final String LOGIN_MAIN_PATH = "/login";
     public static final String LOGIN_PROCESS_PATH = "/login.do";
+    public static final String LOGIN_REDIRECT = "/redirect";
     
     /**
      * Projects

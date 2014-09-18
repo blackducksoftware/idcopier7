@@ -19,6 +19,7 @@ public class IDCViewConstants
 {
     // Login
     public static final String LOGIN_FORM = "login/login";
+    public static final String LOGIN_REDIRECT = "login/timeout";
     
     // Project Page
     public static final String PROJECT_PAGE = "serverinfo";

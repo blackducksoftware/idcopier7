@@ -45,6 +45,12 @@ public class IDCLoginController
 		new IDCSession());
     }
 
+    @RequestMapping(value = IDCPathConstants.LOGIN_REDIRECT)
+    public ModelAndView redirect()
+    {
+	return new ModelAndView(IDCViewConstants.LOGIN_REDIRECT);
+    }
+    
     /**
      * Login method, grabs the user's inputs, calls the loginserver and
      * redirects to server info

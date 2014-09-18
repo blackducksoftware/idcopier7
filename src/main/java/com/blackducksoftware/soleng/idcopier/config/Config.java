@@ -9,7 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.JstlView;  
 import org.springframework.web.servlet.view.UrlBasedViewResolver;  
   
-@Configuration //Marks this class as configuration
+//Marks this class as configuration
+@Configuration 
 //Specifies which package to scan
 @ComponentScan("com.blackducksoftware.soleng.idcopier.controller")
 //Enables Spring's annotations 

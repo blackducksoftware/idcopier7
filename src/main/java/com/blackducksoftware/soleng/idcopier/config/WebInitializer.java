@@ -4,12 +4,17 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.blackducksoftware.soleng.idcopier.controller.IDCLoginController;
+
 public class WebInitializer implements WebApplicationInitializer
 {
+
+    static Logger log = Logger.getLogger(WebInitializer.class);
 
     public void onStartup(ServletContext servletContext)
 	    throws ServletException
@@ -23,6 +28,11 @@ public class WebInitializer implements WebApplicationInitializer
 		new DispatcherServlet(ctx));
 	servlet.addMapping("/");
 	servlet.setLoadOnStartup(1);
+	
+	// Session stuff
+	servletContext.addListener(new IDCSessionListener());
+	IDCSessionFilter sessionFilter = new IDCSessionFilter();
+	servletContext.addFilter("sessionFilter", sessionFilter).addMappingForUrlPatterns(null, false, "/*");
 
     }
 
