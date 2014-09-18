@@ -26,7 +26,7 @@
 		</h2>
 
 		<form:form method="POST" action="processProject.do">
-			<select name="project-id" onchange="this.form.submit();">
+			<select name="project-source-id" onchange="this.form.submit();">
 			
 				<c:forEach var="pinfo" items="${server.projects}">
 					<option value="${pinfo.projectId}">${pinfo.name}</option>
@@ -41,7 +41,7 @@
 		</h2>
 	</c:if>
 			<h3>Project ID: ${projectId}</h3>
-					<br /> Project JSON: ${jsonTree}
+					<br /> Project JSON: ${projectJsonTree}
 	<p>
 </body>
 </html>

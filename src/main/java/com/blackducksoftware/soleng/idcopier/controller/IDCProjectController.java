@@ -43,7 +43,7 @@ public class IDCProjectController
 
     @RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
     public ModelAndView processLogin(
-	    @RequestParam(value = "project-id") String projectId,
+	    @RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
 	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, 
 	    Model model)
     {
@@ -54,7 +54,7 @@ public class IDCProjectController
 	ProjectService ps = new ProjectService(session);
 	String jsonTree = ps.getProjectJSON(projectId);
 
-	modelAndView.addObject("jsonTree", jsonTree);
+	modelAndView.addObject(IDCViewModelConstants.PROJECT_JSON_TREE, jsonTree);
 
 	modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
 	return modelAndView;
