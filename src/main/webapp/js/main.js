@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
 	$.ajax({
-		url : 'myprojects',
+		url : 'servers',
 		success : function(data) {
 			alert(data);
 		}
