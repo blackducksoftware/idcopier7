@@ -52,7 +52,7 @@ public class IDCSessionFilter implements Filter
 	HttpSession session = request.getSession(false);
 	String url = request.getServletPath();
 
-	if (!url.contains("login"))
+	if (!url.equals(IDCPathConstants.LOGIN_MAIN_PATH))
 	{
 	    if (session == null)
 	    {		

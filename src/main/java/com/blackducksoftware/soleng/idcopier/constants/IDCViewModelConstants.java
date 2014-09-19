@@ -31,7 +31,7 @@ public class IDCViewModelConstants
      */
     // List of projects belonging to a particular server
     public static final String PROJECT_LIST = "project-list";
-    public static final String PROJECT_SOURCE_ID = "project-source-id";
+    public static final String PROJECT_SOURCE_ID = "selected-project-source-id";
     // Tree representing a particular project
     public static final String PROJECT_JSON_TREE = "projectJsonTree";
 
