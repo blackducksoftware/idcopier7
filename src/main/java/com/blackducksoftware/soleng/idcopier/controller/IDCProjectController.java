@@ -11,6 +11,7 @@ package com.blackducksoftware.soleng.idcopier.controller;
 import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +49,15 @@ public class IDCProjectController {
 
 		modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
 		return modelAndView;
+	}
+
+	@RequestMapping(value = "/projet/{projectId}")
+	public String getProjectNodes(@PathVariable String projectId, @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
+		log.info("Generating: /projet/" + projectId);
+
+		ProjectService ps = new ProjectService(session);
+		String jsonTree = ps.getProjectJSON(projectId);
+
+		return jsonTree;
 	}
 }
