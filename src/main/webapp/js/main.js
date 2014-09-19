@@ -123,6 +123,30 @@ jQuery(document).ready(
 													.attr("id"));
 								}
 							});
+
+			$(".userSourcePathInput").tooltip({
+				'show' : true,
+				'placement' : 'bottom',
+				'title' : "Type source path here"
+			});
+
+			$(".userSourcePathInput").keyup(function() {
+				$('.sourceSelectedPath').empty();
+				$('.sourceSelectedPath').text(this.value);
+				console.log("user type = " + this.value);
+			});
+
+			$(".userDestinationPathInput").tooltip({
+				'show' : true,
+				'placement' : 'bottom',
+				'title' : "Type destination path here"
+			});
+
+			$(".userDestinationPathInput").keyup(function() {
+				$('.destinationSelectedPath').empty();
+				$('.destinationSelectedPath').text(this.value);
+				console.log("user type = " + this.value);
+			});
 		});
 
 /*
