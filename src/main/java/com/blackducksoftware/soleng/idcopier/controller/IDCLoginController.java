@@ -85,19 +85,17 @@ public class IDCLoginController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/servers")
+	@RequestMapping(IDCPathConstants.SERVERS)
 	public String processServers() {
 		return new Gson().toJson(servers);
 	}
 
-	@RequestMapping("/sourceProjects")
+	@RequestMapping(IDCPathConstants.SOURCE_PROJECTS)
 	public String processSourceProjects() {
-		System.out.println(new Gson().toJson(sourceProjects));
-
 		return new Gson().toJson(sourceProjects);
 	}
 
-	@RequestMapping("/destinationProjects")
+	@RequestMapping(IDCPathConstants.DESTINATION_PROJECTS)
 	public String processDestinationProjects() {
 		return new Gson().toJson(destinationProjects);
 	}
