@@ -35,4 +35,5 @@ public class IDCPathConstants {
 	public static final String SERVERS = "/servers";
 	public static final String SOURCE_PROJECTS = "/sourceProjects";
 	public static final String DESTINATION_PROJECTS = "/destinationProjects";
+	public static final String TREE_NODES = "/treeNodes";
 }
