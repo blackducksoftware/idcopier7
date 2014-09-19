@@ -43,15 +43,23 @@
 								</select></td>
 							</tr>
 							<tr>
-								<form:form method="POST" action="processProject.do">
-
-									<td><select id="selectSourceProject"
-										name="selected-project-source-id"
-										class="form-control selectSourceProject">
-											<option value="1">No Projects</option>
-									</select></td>
-								</form:form>
-
+								<td><select id="selectSourceProject"
+									name="selectSourceProject"
+									class="form-control selectSourceProject">
+										<option value="1">No Projects</option>
+								</select></td>
+							</tr>
+							<tr>
+								<td><input class="form-control userSourcePathInput"
+									id="userSourcePathInput" name="userSourcePathInput"
+									placeholder="Manual source path entry"></input></td>
+							</tr>
+							<tr>
+								<td><i>Selected:</i>
+									<h6 class="sourceSelectedPath"></h6></td>
+							</tr>
+							<tr>
+								<td></td>
 							</tr>
 						</tbody>
 					</table>
@@ -95,6 +103,17 @@
 									class="form-control selectDestinationProject">
 										<option value="1">No Projects</option>
 								</select></td>
+							<tr>
+								<td><input class="form-control userDestinationPathInput"
+									id="userDestinationPathInput" name="userDestinationPathInput"
+									placeholder="Manual destination path entry"></input></td>
+							</tr>
+							<tr>
+								<td><i>Selected:</i>
+									<h6 class="destinationSelectedPath"></h6></td>
+							</tr>
+							<tr>
+								<td></td>
 							</tr>
 						</tbody>
 					</table>
@@ -105,7 +124,8 @@
 </body>
 
 <script src="js/libs/jquery/jquery.js"></script>
-<script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
+<script src="js/libs/twitter-bootstrap/js
+								/bootstrap.js"></script>
 <script src="js/main.js"></script>
 </html>
 
