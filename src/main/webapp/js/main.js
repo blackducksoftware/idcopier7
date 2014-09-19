@@ -5,6 +5,10 @@ jQuery(document).ready(
 			var selectSourceProject = "Select Source Project";
 			var selectDestinationProject = "Select Destinaton Project";
 
+			$('#sourceCodeTree').easytree();
+			$('#destinationCodeTree').easytree();
+			// $('#sourceCodeTree').empty();
+
 			/**
 			 * Skipping a bunch in here for now, because we are only working
 			 * with one server. So I am going to just load all of the projects
@@ -100,17 +104,20 @@ jQuery(document).ready(
 				}
 			});
 
-			$(".selectSourceProject")
-					.change(
-							function() {
-								if (this.value !== selectSourceProject) {
-									console.log("source project = "
-											+ this.value);
-									console.log("source project ID = "
-											+ $(this).children(":selected")
-													.attr("id"));
-								}
-							});
+			$(".selectSourceProject").change(function() {
+				if (this.value !== selectSourceProject) {
+					/*
+					 * console.log("source project = " + this.value);
+					 * console.log("source project ID = " +
+					 * $(this).children(":selected") .attr("id"));
+					 */
+					$(".userSourcePathInput").empty();
+					$(".userSourcePathInput").val("/");
+					$('.sourceSelectedPath').empty();
+					$('.sourceSelectedPath').text("/");
+
+				}
+			});
 
 			$(".selectDestinationProject")
 					.change(
@@ -121,6 +128,10 @@ jQuery(document).ready(
 									console.log("source project ID = "
 											+ $(this).children(":selected")
 													.attr("id"));
+									$(".userDestinationPathInput").empty();
+									$(".userDestinationPathInput").val("/");
+									$('.destinationSelectedPath').empty();
+									$('.destinationSelectedPath').text("/");
 								}
 							});
 
@@ -146,6 +157,27 @@ jQuery(document).ready(
 				$('.destinationSelectedPath').empty();
 				$('.destinationSelectedPath').text(this.value);
 				console.log("user type = " + this.value);
+			});
+
+			function openLazyNode(event, nodes, node, hasChildren) {
+				if (hasChildren) { // don't call ajax if lazy node already has
+					// children
+					return false;
+				}
+				counter++;
+				node.lazyUrl = '/Demos/LazyLoadingExample/'; // must be set
+				// here or when
+				// the tree is
+				// initialised
+				node.lazyUrlJson = JSON.stringify({
+					text : counter
+				}); // any json object here (optional)
+				// node.lazyUrlJson = "{ text: " + counter + " } "; // IE 6/7
+				// compatible
+			}
+
+			var easyTree = $('#demo_menu').easytree({
+				openLazyNode : openLazyNode
 			});
 		});
 
