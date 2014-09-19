@@ -1,6 +1,8 @@
 package com.blackducksoftware.soleng.idcopier.model;
 
-public class IDCServer {
+import java.io.Serializable;
+
+public class IDCServer implements Serializable {
 	private String ServerName;
 
 	public IDCServer(String server) {

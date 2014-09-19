@@ -5,6 +5,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<!-- 
+
+	The initial display after the login. 
+	Contains the server selectors, project pulldown and JSON representing tree paths.
+
+ -->
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -39,15 +46,14 @@
 								<td><select id="selectSourceProject"
 									name="selectSourceProject"
 									class="form-control selectSourceProject">
-										<option value="1">Project 1</option>
-										<option value="2">Project 2</option>
+										<option value="1">No Projects</option>
 								</select></td>
 							</tr>
 						</tbody>
 					</table>
 
 					<h3>Project ID: ${projectId}</h3>
-					<br /> Project JSON: ${jsonTree}
+					<br /> Project JSON: ${projectJsonTree}
 				</div>
 			</div>
 			<div class="col-sm-2 col-lg-2">
@@ -83,8 +89,7 @@
 								<td><select id="selectDestinationProject"
 									name="selectDestinationProject"
 									class="form-control selectDestinationProject">
-										<option value="1">Project 1</option>
-										<option value="2">Project 2</option>
+										<option value="1">No Projects</option>
 								</select></td>
 							</tr>
 						</tbody>
@@ -93,32 +98,6 @@
 			</div>
 		</div>
 	</div>
-
-	<c:if test="${server.error == null}">
-		<h2>
-			Server Information : <small>${server.serverName}</small>
-		</h2>
-		<h2>
-			User: <small>${server.userName}</small>
-		</h2>
-
-		<form:form method="POST" action="processProject.do">
-			<select name="project-source-id" onchange="this.form.submit();">
-
-				<c:forEach var="pinfo" items="${server.projects}">
-					<option value="${pinfo.projectId}">${pinfo.name}</option>
-				</c:forEach>
-
-			</select>
-		</form:form>
-	</c:if>
-	<c:if test="${server.error != null}">
-		<h2>
-			<font color="red">Error: ${server.error}</font>
-		</h2>
-	</c:if>
-	<h3>Project ID: ${projectId}</h3>
-	<br /> Project JSON: ${projectJsonTree}
 </body>
 
 <script src="js/libs/jquery/jquery.js"></script>

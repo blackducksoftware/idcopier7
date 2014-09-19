@@ -22,6 +22,6 @@ public class IDCViewConstants
     public static final String LOGIN_REDIRECT = "login/timeout";
     
     // Project Page
-    public static final String PROJECT_PAGE = "serverinfo";
+    public static final String PROJECT_PAGE = "project/projectdisplay";
     
 }

@@ -8,6 +8,8 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.model;
 
+import java.io.Serializable;
+
 /**
  * Model representation of the project info (sdk) class
  * 
@@ -16,7 +18,7 @@ package com.blackducksoftware.soleng.idcopier.model;
  *
  */
 
-public class ProjectModel {
+public class ProjectModel implements Serializable {
 
 	private String id;
 	private String name;
