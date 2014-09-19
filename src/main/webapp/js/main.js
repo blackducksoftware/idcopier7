@@ -104,36 +104,41 @@ jQuery(document).ready(
 				}
 			});
 
-			$(".selectSourceProject").change(function() {
-				if (this.value !== selectSourceProject) {
+			$(".selectSourceProject").change(
+					function() {
+						if (this.value !== selectSourceProject) {
+							var projectPath = 'projet/'
+									+ $(this).children(":selected").attr("id");
+
+							/*
+							 * console.log("source project = " + this.value);
+							 * console.log("source project ID = " +
+							 * $(this).children(":selected") .attr("id"));
+							 */
+
+							$(".userSourcePathInput").empty();
+							$(".userSourcePathInput").val("/");
+							$('.sourceSelectedPath').empty();
+							$('.sourceSelectedPath').text("/");
+						}
+					});
+
+			$(".selectDestinationProject").change(function() {
+				if (this.value !== selectDestinationProject) {
+					var projectId = $(this).children(":selected").attr("id");
+
 					/*
-					 * console.log("source project = " + this.value);
-					 * console.log("source project ID = " +
+					 * console.log("destination project = " + this.value);
+					 * console.log("destination project ID = " +
 					 * $(this).children(":selected") .attr("id"));
 					 */
-					$(".userSourcePathInput").empty();
-					$(".userSourcePathInput").val("/");
-					$('.sourceSelectedPath').empty();
-					$('.sourceSelectedPath').text("/");
 
+					$(".userDestinationPathInput").empty();
+					$(".userDestinationPathInput").val("/");
+					$('.destinationSelectedPath').empty();
+					$('.destinationSelectedPath').text("/");
 				}
 			});
-
-			$(".selectDestinationProject")
-					.change(
-							function() {
-								if (this.value !== selectDestinationProject) {
-									console.log("source project = "
-											+ this.value);
-									console.log("source project ID = "
-											+ $(this).children(":selected")
-													.attr("id"));
-									$(".userDestinationPathInput").empty();
-									$(".userDestinationPathInput").val("/");
-									$('.destinationSelectedPath').empty();
-									$('.destinationSelectedPath').text("/");
-								}
-							});
 
 			$(".userSourcePathInput").tooltip({
 				'show' : true,
@@ -158,31 +163,4 @@ jQuery(document).ready(
 				$('.destinationSelectedPath').text(this.value);
 				console.log("user type = " + this.value);
 			});
-
-			function openLazyNode(event, nodes, node, hasChildren) {
-				if (hasChildren) { // don't call ajax if lazy node already has
-					// children
-					return false;
-				}
-				counter++;
-				node.lazyUrl = '/Demos/LazyLoadingExample/'; // must be set
-				// here or when
-				// the tree is
-				// initialised
-				node.lazyUrlJson = JSON.stringify({
-					text : counter
-				}); // any json object here (optional)
-				// node.lazyUrlJson = "{ text: " + counter + " } "; // IE 6/7
-				// compatible
-			}
-
-			var easyTree = $('#demo_menu').easytree({
-				openLazyNode : openLazyNode
-			});
 		});
-
-/*
- * jQuery(document).ready(function() { $.ajax({ url : 'servers', success :
- * function(data) { alert(data[1]); // $("#selectSourceServer").append($("<option></option>").attr("value", //
- * data[0].ServerName).text(server.ServerName); } }); });
- */
