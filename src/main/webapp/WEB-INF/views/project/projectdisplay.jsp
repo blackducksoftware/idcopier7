@@ -20,6 +20,7 @@
 <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/EasyTree/skin-win8/ui.easytree.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 
 </head>
@@ -52,20 +53,24 @@
 							<tr>
 								<td><input class="form-control userSourcePathInput"
 									id="userSourcePathInput" name="userSourcePathInput"
-									placeholder="Manual source path entry"></input></td>
+									placeholder="Source Path"></input></td>
 							</tr>
 							<tr>
 								<td><i>Selected:</i>
-									<h6 class="sourceSelectedPath"></h6></td>
+									<h5 class="sourceSelectedPath"></h5></td>
 							</tr>
 							<tr>
 								<td></td>
 							</tr>
 						</tbody>
 					</table>
-
-					<h3>Project ID: ${projectId}</h3>
-					<br /> Project JSON: ${projectJsonTree}
+					<div id="sourceCodeTree"
+						style="float: left; width: 100%; height: 200px;">
+						<ul>
+							<li class="isLazy isFolder sourceRootNode" name="sourceRootNode"
+								id="sourceRootNode"></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 			<div class="col-sm-2 col-lg-2">
@@ -93,8 +98,6 @@
 								<td><select id="selectDestinationServer"
 									name="selectDestinationServer"
 									class="form-control selectDestinationServer">
-										<option value="1">https://server-one.blackducksoftware.com</option>
-										<option value="2">https://server-two.blackducksoftware.com</option>
 								</select></td>
 							</tr>
 							<tr>
@@ -106,17 +109,19 @@
 							<tr>
 								<td><input class="form-control userDestinationPathInput"
 									id="userDestinationPathInput" name="userDestinationPathInput"
-									placeholder="Manual destination path entry"></input></td>
+									placeholder="Destination Path"></input></td>
 							</tr>
 							<tr>
 								<td><i>Selected:</i>
-									<h6 class="destinationSelectedPath"></h6></td>
+									<h5 class="destinationSelectedPath"></h5></td>
 							</tr>
 							<tr>
 								<td></td>
 							</tr>
 						</tbody>
 					</table>
+					<div id="destinationCodeTree"
+						style="float: left; width: 100%; height: 200px;"></div>
 				</div>
 			</div>
 		</div>
@@ -124,8 +129,8 @@
 </body>
 
 <script src="js/libs/jquery/jquery.js"></script>
-<script src="js/libs/twitter-bootstrap/js
-								/bootstrap.js"></script>
+<script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
+<script src="js/libs/EasyTree/jquery.easytree.js"></script>
 <script src="js/main.js"></script>
 </html>
 
