@@ -21,6 +21,10 @@ package com.blackducksoftware.soleng.idcopier.constants;
 public class IDCViewModelConstants
 {
     /**
+     * Context
+     */
+    public static final String IDC_WEB_CONTEXT = "idcopier7";
+    /**
      * login/auth related variables
      */
     // Session object

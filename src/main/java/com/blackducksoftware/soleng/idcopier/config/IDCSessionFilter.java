@@ -36,9 +36,6 @@ public class IDCSessionFilter implements Filter
 
     static Logger log = Logger.getLogger(IDCSessionFilter.class);
 
-    @Autowired
-    ServletContext context;
-
     public void destroy()
     {
     }

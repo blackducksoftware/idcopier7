@@ -9,7 +9,9 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
 import com.blackducksoftware.soleng.idcopier.controller.IDCLoginController;
+import com.blackducksoftware.soleng.idcopier.model.IDCConfig;
 
 public class WebInitializer implements WebApplicationInitializer
 {
@@ -21,10 +23,11 @@ public class WebInitializer implements WebApplicationInitializer
     {
 
 	AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-	ctx.register(Config.class);
+	ctx.register(IDCWebConfig.class);
+	ctx.register(IDCConfig.class);
 	ctx.setServletContext(servletContext);
 
-	Dynamic servlet = servletContext.addServlet("idcopier7",
+	Dynamic servlet = servletContext.addServlet(IDCViewModelConstants.IDC_WEB_CONTEXT,
 		new DispatcherServlet(ctx));
 	servlet.addMapping("/");
 	servlet.setLoadOnStartup(1);
@@ -33,6 +36,8 @@ public class WebInitializer implements WebApplicationInitializer
 	servletContext.addListener(new IDCSessionListener());
 	IDCSessionFilter sessionFilter = new IDCSessionFilter();
 	servletContext.addFilter("sessionFilter", sessionFilter).addMappingForUrlPatterns(null, false, "/*");
+	
+	
 
     }
 

@@ -15,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ import com.blackducksoftware.sdk.protex.project.ProjectInfo;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
+import com.blackducksoftware.soleng.idcopier.model.IDCConfig;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
@@ -46,6 +48,10 @@ public class IDCLoginController
 {
     static Logger log = Logger.getLogger(IDCLoginController.class);
 
+    // This injects the configuration file 
+    @Autowired
+    private IDCConfig config;
+    
     // Internal
     private static LoginService loginService = null;
     private static List<IDCServer> servers = null;
@@ -58,6 +64,7 @@ public class IDCLoginController
 	    @CookieValue(value = IDCViewModelConstants.IDC_COOKIE_USER, required = false) String userNameCookie,
 	    @CookieValue(value = IDCViewModelConstants.IDC_COOKIE_PASSWORD, required = false) String passwordCookie)
     {
+
 	IDCSession session = new IDCSession();
 
 	/**
