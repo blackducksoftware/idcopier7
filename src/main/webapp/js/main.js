@@ -100,19 +100,30 @@ jQuery(document).ready(
 				}
 			});
 
-			$(".selectSourceProject").change(function() {
-				if (this.value !== selectDestinationProject) {
-					console.log("source project = " + this.value);
-				}
-			});
+			$(".selectSourceProject")
+					.change(
+							function() {
+								if (this.value !== selectSourceProject) {
+									console.log("source project = "
+											+ this.value);
+									console.log("source project ID = "
+											+ $(this).children(":selected")
+													.attr("id"));
+								}
+							});
 
-			$(".selectDestinationProject").change(function() {
-				if (this.value !== selectDestinationProject) {
-					console.log("destination project = " + this.value);
-				}
-			});
+			$(".selectDestinationProject")
+					.change(
+							function() {
+								if (this.value !== selectDestinationProject) {
+									console.log("source project = "
+											+ this.value);
+									console.log("source project ID = "
+											+ $(this).children(":selected")
+													.attr("id"));
+								}
+							});
 		});
-
 
 /*
  * jQuery(document).ready(function() { $.ajax({ url : 'servers', success :
