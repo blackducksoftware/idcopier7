@@ -25,7 +25,13 @@ public class IDCViewModelConstants
      */
     // Session object
     public static final String IDC_SESSION = "server";
-
+    // User select to remember or not remember cookies
+    public static final String REMEMBER_COOKIES = "remember-cookies";
+    // Cookie to remember the login information
+    public static final String IDC_COOKIE_SERVER = "idcServerCookie";
+    public static final String IDC_COOKIE_USER = "idcUserCookie";
+    public static final String IDC_COOKIE_PASSWORD = "idcPasswordCookie";
+    
     /**
      * Project related variables
      */

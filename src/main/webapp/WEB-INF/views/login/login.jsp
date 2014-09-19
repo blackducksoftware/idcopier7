@@ -32,7 +32,7 @@
 						<div>
 							<input id="serverName" name="serverName" placeholder="Server"
 								class="form-control input-md" required="" type="text"
-								path="serverName">
+								path="serverName" value=${server.serverName}>
 						</div>
 					</div>
 
@@ -42,7 +42,7 @@
 						<div>
 							<input id="userName" name="userName" placeholder="Username"
 								class="form-control input-md" required="" type="text"
-								path="userName">
+								path="userName" value=${server.userName}>
 
 						</div>
 					</div>
@@ -53,9 +53,21 @@
 						<div>
 							<input id="password" name="password" placeholder="Password"
 								class="form-control input-md" required="" type="password"
-								path="password">
+								path="password" value=${server.password}>
 
 						</div>
+					</div>
+
+					<!-- Remember Me Option -->
+
+					<div class="form-group">
+
+						<div>
+							Remember me: <input id="remember-cookies" name="remember-cookies"
+								placeholder="RememberMe" class="checkbox" 
+								type="checkbox">
+						</div>
+
 					</div>
 
 					<!-- Submit Button -->

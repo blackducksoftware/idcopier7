@@ -43,11 +43,15 @@
 								</select></td>
 							</tr>
 							<tr>
-								<td><select id="selectSourceProject"
-									name="selectSourceProject"
-									class="form-control selectSourceProject">
-										<option value="1">No Projects</option>
-								</select></td>
+								<form:form method="POST" action="processProject.do">
+
+									<td><select id="selectSourceProject"
+										name="selected-project-source-id"
+										class="form-control selectSourceProject">
+											<option value="1">No Projects</option>
+									</select></td>
+								</form:form>
+
 							</tr>
 						</tbody>
 					</table>
