@@ -165,7 +165,7 @@ public class IDCLoginController
 	    HttpServletResponse response)
     {
 	// User logged in, save it
-	if (rememberCookie != null)
+	if (rememberCookie)
 	{
 	    Cookie serverCookie = new Cookie(
 		    IDCViewModelConstants.IDC_COOKIE_SERVER,
