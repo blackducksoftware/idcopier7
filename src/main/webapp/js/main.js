@@ -120,6 +120,11 @@ jQuery(document).ready(
 							$(".userSourcePathInput").val("/");
 							$('.sourceSelectedPath').empty();
 							$('.sourceSelectedPath').text("/");
+							
+							$('#sourceCodeTree').easytree({
+								allowActivate: true,
+								dataUrl: projectPath,
+							});
 						}
 					});
 
