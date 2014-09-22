@@ -67,6 +67,8 @@ public class IDCLoginController
 
 	IDCSession session = new IDCSession();
 
+	config.getProperty("somekey");
+	
 	/**
 	 * This seems like a painful way to handle cookies...:-/
 	 * TODO:  Find an alternate way

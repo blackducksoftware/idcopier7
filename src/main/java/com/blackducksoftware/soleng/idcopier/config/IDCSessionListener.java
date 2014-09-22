@@ -62,16 +62,23 @@ public class IDCSessionListener implements HttpSessionListener
 			+ IDCViewModelConstants.IDC_WEB_CONTEXT);
 
 	IDCConfig configBean = ctx.getBean(IDCConfig.class);
-	String timeOutStr = configBean.getSessionTimeOut();
-	if (timeOutStr != null)
+	String timeOutStr;
+	try
 	{
-	    timeout = Integer.valueOf(timeOutStr);
-	    log.info("Setting custom timeout : " + timeout);
-	}
+	    timeOutStr = configBean.getSessionTimeOut();
+	    if (timeOutStr != null)
+	    {
+		timeout = Integer.valueOf(timeOutStr);
+	    }
 
-	event.getSession().setMaxInactiveInterval(timeout);
-	log.info("Max active timeout: "
-		+ event.getSession().getMaxInactiveInterval());
+	    event.getSession().setMaxInactiveInterval(timeout);
+	    
+	    log.info("Setting custom timeout: "
+		    + event.getSession().getMaxInactiveInterval());
+	} catch (Exception e)
+	{
+	    log.warn(e.getMessage());
+	}
     }
 
     @Override
