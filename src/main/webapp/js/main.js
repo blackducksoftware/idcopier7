@@ -13,7 +13,7 @@ jQuery(document).ready(
 			var source = "Source";
 			var target = "Target";
 			// Constants
-			var ROOT = "ROOT";
+			var ROOT = "root";
 			/**
 			 * Init the trees. They will be empty, but will not look ugly, so
 			 * that's nice.
@@ -140,27 +140,42 @@ jQuery(document).ready(
 			}
 			function loadDynaTree(sender, serverName, projectId) {
 				if (projectId !== null) {
-					var path = serverName + '/' + projectId + '/' + ROOT;
+					var path = serverName + '/' + projectId;
 
-					$('.' + sender.toLowerCase() + 'CodeTree').dynatree({
-						title : "Lazy loading sample",
-						fx : {
-							height : "toggle",
-							duration : 200
-						},
-						autoFocus : false,
-						initAjax : {
-							url : path
-						},
+					$('.' + sender.toLowerCase() + 'CodeTree').dynatree(
+							{
+								title : "Source Code Tree",
+								fx : {
+									height : "toggle",
+									duration : 200
+								},
+								clickFolderMode : 3,
+								autoFocus : false,
+								initAjax : {
+									url : path + '/' + ROOT
+								},
 
-						onActivate : function(node) {
-							console.error("Path = " + path + node.data.key);
-							node.appendAjax({
-								url : path + node.data.key,
-								debugLazyDelay : 750
+								onActivate : function(node) {
+
+									if (!node.hasChildren()) {
+
+										console.error("Path = " + path + '/'
+												+ node.data.key);
+										node.expand();
+										node.appendAjax({
+											url : path + '/' + node.data.key,
+											data : {
+												"mode" : "all"
+											},
+											success : function(node) {
+												node.expand();
+											},
+											debugLazyDelay : 750
+										});
+
+									}
+								}
 							});
-						}
-					});
 				}
 			}
 
