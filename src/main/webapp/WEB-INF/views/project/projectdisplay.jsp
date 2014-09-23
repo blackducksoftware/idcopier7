@@ -64,13 +64,8 @@
 							</tr>
 						</tbody>
 					</table>
-					<div id="sourceCodeTree"
-						style="float: left; width: 100%; height: 200px;">
-						<ul>
-							<li class="isLazy isFolder sourceRootNode" name="sourceRootNode"
-								id="sourceRootNode"></li>
-						</ul>
-					</div>
+					<div id="sourceCodeTree" class="sourceCodeTree"
+						style="float: left; width: 100%; height: 200px;"></div>
 				</div>
 			</div>
 			<div class="col-sm-2 col-lg-2">
@@ -92,35 +87,35 @@
 					<table class="table">
 						<tbody>
 							<tr>
-								<h4>Destination Project</h4>
+								<h4>Target Project</h4>
 							</tr>
 							<tr>
-								<td><select id="selectDestinationServer"
-									name="selectDestinationServer"
-									class="form-control selectDestinationServer">
+								<td><select id="selectTargetServer"
+									name="selectTargetServer"
+									class="form-control selectTargetServer">
 								</select></td>
 							</tr>
 							<tr>
-								<td><select id="selectDestinationProject"
-									name="selectDestinationProject"
-									class="form-control selectDestinationProject">
+								<td><select id="selectTargetProject"
+									name="selectTargetProject"
+									class="form-control selectTargetProject">
 										<option value="1">No Projects</option>
 								</select></td>
 							<tr>
-								<td><input class="form-control userDestinationPathInput"
-									id="userDestinationPathInput" name="userDestinationPathInput"
-									placeholder="Destination Path"></input></td>
+								<td><input class="form-control userTargetPathInput"
+									id="userTargetPathInput" name="userTargetPathInput"
+									placeholder="Target Path"></input></td>
 							</tr>
 							<tr>
 								<td><i>Selected:</i>
-									<h5 class="destinationSelectedPath"></h5></td>
+									<h5 class="targetSelectedPath"></h5></td>
 							</tr>
 							<tr>
 								<td></td>
 							</tr>
 						</tbody>
 					</table>
-					<div id="destinationCodeTree"
+					<div id="targetCodeTree" class="targetCodeTree"
 						style="float: left; width: 100%; height: 200px;"></div>
 				</div>
 			</div>
