@@ -12,8 +12,17 @@ public class IDCTree {
 	public IDCTree(String key, String title, boolean isFolder) {
 		super();
 		this.key = key;
-		this.title = title;
+		this.title = cleanName(title);
 		this.isFolder = isFolder;
+	}
+
+	private String cleanName(String original) {
+		if (original.contains("/")) {
+			String[] values = original.split("/");
+			return values[values.length - 1];
+		}
+
+		return original;
 	}
 
 	public String getKey() {
@@ -24,11 +33,11 @@ public class IDCTree {
 		this.key = key;
 	}
 
-	public String getText() {
+	public String getTitle() {
 		return title;
 	}
 
-	public void setText(String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
