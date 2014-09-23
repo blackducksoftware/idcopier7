@@ -8,6 +8,7 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.sdk.protex.project.ProjectInfo;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewConstants;
@@ -32,6 +34,7 @@ import com.blackducksoftware.soleng.idcopier.model.IDCConfig;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
+import com.blackducksoftware.soleng.idcopier.service.ProjectService;
 import com.google.gson.Gson;
 
 /**
@@ -44,126 +47,197 @@ import com.google.gson.Gson;
 
 @RestController
 @SessionAttributes(IDCViewModelConstants.IDC_SESSION)
-public class IDCLoginController {
-	static Logger log = Logger.getLogger(IDCLoginController.class);
+public class IDCLoginController
+{
+    static Logger log = Logger.getLogger(IDCLoginController.class);
 
-	// This injects the configuration file
-	@Autowired
-	private IDCConfig config;
+    // This injects the configuration file
+    @Autowired
+    private IDCConfig config;
+    @Autowired
+    private LoginService loginService;
 
-	// Internal
-	private static LoginService loginService = null;
-	private static List<IDCServer> servers = null;
-	private static List<ProjectInfo> sourceProjects = null;
-	private static List<ProjectInfo> destinationProjects = null;
+    // Internal
+    private static List<IDCServer> servers = null;
+    private static List<ProjectInfo> sourceProjects = null;
+    private static List<ProjectInfo> destinationProjects = null;
 
-	@RequestMapping(value = IDCPathConstants.LOGIN_MAIN_PATH)
-	public ModelAndView displayLoginPage(
-			@CookieValue(value = IDCViewModelConstants.IDC_COOKIE_SERVER, required = false) String serverCookie,
-			@CookieValue(value = IDCViewModelConstants.IDC_COOKIE_USER, required = false) String userNameCookie,
-			@CookieValue(value = IDCViewModelConstants.IDC_COOKIE_PASSWORD, required = false) String passwordCookie) {
+    @RequestMapping(value = IDCPathConstants.LOGIN_MAIN_PATH)
+    public ModelAndView displayLoginPage(
+	    @CookieValue(value = IDCViewModelConstants.IDC_COOKIE_SERVER, required = false) String serverCookie,
+	    @CookieValue(value = IDCViewModelConstants.IDC_COOKIE_USER, required = false) String userNameCookie,
+	    @CookieValue(value = IDCViewModelConstants.IDC_COOKIE_PASSWORD, required = false) String passwordCookie)
+    {
 
-		IDCSession session = new IDCSession();
-
-		config.getProperty("somekey");
-
-		/**
-		 * This seems like a painful way to handle cookies...:-/ TODO: Find an alternate way -- AK
-		 */
-		if (serverCookie != null) {
-			session.setServerName(serverCookie);
-		}
-		if (userNameCookie != null) {
-			session.setUserName(userNameCookie);
-		}
-		if (passwordCookie != null) {
-			session.setPassword(passwordCookie);
-		}
-
-		return new ModelAndView(IDCViewConstants.LOGIN_FORM, IDCViewModelConstants.IDC_SESSION, session);
-	}
-
-	@RequestMapping(value = IDCPathConstants.LOGIN_REDIRECT)
-	public ModelAndView redirect() {
-		return new ModelAndView(IDCViewConstants.LOGIN_REDIRECT);
-	}
+	IDCSession session = new IDCSession();
 
 	/**
-	 * Login method, grabs the user's inputs, calls the loginserver and redirects to server info
-	 * 
-	 * @param student
-	 * @param model
-	 * @return
+	 * This seems like a painful way to handle cookies...:-/ TODO: Find an
+	 * alternate way -- AK
 	 */
-	@RequestMapping(value = IDCPathConstants.LOGIN_PROCESS_PATH)
-	public ModelAndView processLogin(
-			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-			@RequestParam(value = IDCViewModelConstants.REMEMBER_COOKIES, required = false, defaultValue = "false") Boolean rememberCookie,
-			HttpServletResponse response) {
-		ModelAndView modelAndView = new ModelAndView();
-
-		log.info("Logging in...: " + session.getServerName());
-		servers = new ArrayList<IDCServer>();
-		servers.add(new IDCServer(session.getServerName()));
-
-		// Login
-		loginService = getLoginService(session);
-		session = loginService.getSessionObject();
-
-		// Process cookie information
-		processCookies(rememberCookie, session, response);
-
-		modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
-		modelAndView.addObject(IDCViewModelConstants.PROJECT_LIST, session.getProjects());
-
-		sourceProjects = session.getProjects();
-		destinationProjects = session.getProjects();
-
-		modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
-		return modelAndView;
+	if (serverCookie != null)
+	{
+	    session.setServerURI(serverCookie);
+	}
+	if (userNameCookie != null)
+	{
+	    session.setUserName(userNameCookie);
+	}
+	if (passwordCookie != null)
+	{
+	    session.setPassword(passwordCookie);
 	}
 
-	@RequestMapping("/servers")
-	public String processServers() {
-		return new Gson().toJson(servers);
+	return new ModelAndView(IDCViewConstants.LOGIN_FORM,
+		IDCViewModelConstants.IDC_SESSION, session);
+    }
+
+    @RequestMapping(value = IDCPathConstants.LOGIN_REDIRECT)
+    public ModelAndView redirect()
+    {
+	return new ModelAndView(IDCViewConstants.LOGIN_REDIRECT);
+    }
+
+    /**
+     * Login method, grabs the user's inputs, calls the loginserver and
+     * redirects to server info
+     * 
+     * @param student
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = IDCPathConstants.LOGIN_PROCESS_PATH)
+    public ModelAndView processLogin(
+	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
+	    @RequestParam(value = IDCViewModelConstants.REMEMBER_COOKIES, required = false, defaultValue = "false") Boolean rememberCookie,
+	    HttpServletResponse response)
+    {
+	ModelAndView modelAndView = new ModelAndView();
+
+	// Before we log in, process the servers
+	servers = processServerListConfiguration(session);
+
+	log.info("Logging in...: " + session.getServerURI());
+	ProtexServerProxy proxy;
+	try
+	{
+	    /***
+	     * This is the one time where a Proxy is received via server URI
+	     * This is because the login page, at this time, does not provide aliases/names
+	     */
+	    proxy = loginService.getProxyByServerURI(session.getServerURI());
+	    ProjectService projectService = new ProjectService(proxy);
+
+	    List<ProjectInfo> projects = projectService.getProjects(session
+		    .getUserName());
+
+	    // Process cookie information
+	    processCookies(rememberCookie, session, response);
+
+	    modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
+	    modelAndView.addObject(IDCViewModelConstants.SERVER_LIST, servers);
+	    modelAndView
+		    .addObject(IDCViewModelConstants.PROJECT_LIST, projects);
+
+	    // TODO: Is there a better way to do this?
+	    sourceProjects = projects;
+	    destinationProjects = projects;
+	} catch (Exception e)
+	{
+	    log.error("Error logging in", e);
 	}
 
-	@RequestMapping("/sourceProjects")
-	public String processSourceProjects() {
-		System.out.println(new Gson().toJson(sourceProjects));
+	modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
+	return modelAndView;
+    }
 
-		return new Gson().toJson(sourceProjects);
+    /**
+     * Invokes the XML parser to process the server configuration file If
+     * parsing fails or is missing Session is defaulted and transformed into a
+     * server object
+     * 
+     * @param session
+     * @return
+     */
+    private List<IDCServer> processServerListConfiguration(IDCSession session)
+    {
+	servers = new ArrayList<IDCServer>();
+	log.info("Processing server configuration");
+	String serverListLocation = config.getServerListLocation();
+
+	if (serverListLocation != null)
+	{
+	    File f = new File(serverListLocation);
+	    if (f.exists())
+	    {
+
+	    } else
+	    {
+		log.warn("Server configuration file does not exist at: " + f);
+	    }
+	} else
+	{
+	    log.warn("No server list location available");
 	}
 
-	@RequestMapping("/destinationProjects")
-	public String processDestinationProjects() {
-		return new Gson().toJson(destinationProjects);
+	if (servers.size() == 0)
+	{
+	    log.warn("No server configurations determined, defaulting...");
+	    IDCServer server = new IDCServer(session.getServerURI(),
+		    session.getUserName(), session.getPassword());
+	    servers.add(server);
 	}
 
-	/**
-	 * @param server
-	 * @return
-	 */
-	private LoginService getLoginService(IDCSession session) {
-		loginService = new LoginService(session);
-		return loginService;
+	// Key step!
+	loginService.setServers(servers);
+
+	return servers;
+    }
+
+    @RequestMapping(IDCPathConstants.SERVERS)
+    public String processServers()
+    {
+	return new Gson().toJson(servers);
+    }
+
+    @RequestMapping(IDCPathConstants.SOURCE_PROJECTS)
+    public String processSourceProjects()
+    {
+	System.out.println(new Gson().toJson(sourceProjects));
+
+	return new Gson().toJson(sourceProjects);
+    }
+
+    @RequestMapping(IDCPathConstants.TARGET_PROJECTS)
+    public String processDestinationProjects()
+    {
+	return new Gson().toJson(destinationProjects);
+    }
+
+    /**
+     * @param rememberCookie
+     * @param session
+     * @param response
+     */
+    private void processCookies(Boolean rememberCookie, IDCSession session,
+	    HttpServletResponse response)
+    {
+	// User logged in, save it
+	if (rememberCookie)
+	{
+	    Cookie serverCookie = new Cookie(
+		    IDCViewModelConstants.IDC_COOKIE_SERVER,
+		    session.getServerURI());
+	    response.addCookie(serverCookie);
+	    Cookie userCookie = new Cookie(
+		    IDCViewModelConstants.IDC_COOKIE_USER,
+		    session.getUserName());
+	    response.addCookie(userCookie);
+	    Cookie passwordCookie = new Cookie(
+		    IDCViewModelConstants.IDC_COOKIE_PASSWORD,
+		    session.getPassword());
+	    response.addCookie(passwordCookie);
 	}
 
-	/**
-	 * @param rememberCookie
-	 * @param session
-	 * @param response
-	 */
-	private void processCookies(Boolean rememberCookie, IDCSession session, HttpServletResponse response) {
-		// User logged in, save it
-		if (rememberCookie) {
-			Cookie serverCookie = new Cookie(IDCViewModelConstants.IDC_COOKIE_SERVER, session.getServerName());
-			response.addCookie(serverCookie);
-			Cookie userCookie = new Cookie(IDCViewModelConstants.IDC_COOKIE_USER, session.getUserName());
-			response.addCookie(userCookie);
-			Cookie passwordCookie = new Cookie(IDCViewModelConstants.IDC_COOKIE_PASSWORD, session.getPassword());
-			response.addCookie(passwordCookie);
-		}
-
-	}
+    }
 }

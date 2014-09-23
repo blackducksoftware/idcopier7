@@ -12,6 +12,8 @@ import org.springframework.web.servlet.DispatcherServlet;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
 import com.blackducksoftware.soleng.idcopier.controller.IDCLoginController;
 import com.blackducksoftware.soleng.idcopier.model.IDCConfig;
+import com.blackducksoftware.soleng.idcopier.service.LoginService;
+import com.blackducksoftware.soleng.idcopier.service.ProjectService;
 
 public class WebInitializer implements WebApplicationInitializer
 {
@@ -25,6 +27,8 @@ public class WebInitializer implements WebApplicationInitializer
 	AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 	ctx.register(IDCWebConfig.class);
 	ctx.register(IDCConfig.class);
+	ctx.register(LoginService.class);
+	ctx.register(ProjectService.class);
 	ctx.setServletContext(servletContext);
 
 	Dynamic servlet = servletContext.addServlet(IDCViewModelConstants.IDC_WEB_CONTEXT,

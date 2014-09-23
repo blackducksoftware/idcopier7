@@ -29,6 +29,10 @@ public class IDCViewModelConstants
      */
     // Session object
     public static final String IDC_SESSION = "server";
+    
+    // This is the name of the server against which all connections are to be established
+    public static final String IDC_SERVER_NAME = "server-name";
+    
     // User select to remember or not remember cookies
     public static final String REMEMBER_COOKIES = "remember-cookies";
     // Cookie to remember the login information
@@ -39,8 +43,11 @@ public class IDCViewModelConstants
     /**
      * Project related variables
      */
+
+    // List of servers defined by the user
+    public static final String SERVER_LIST = "serverList";
     // List of projects belonging to a particular server
-    public static final String PROJECT_LIST = "project-list";
+    public static final String PROJECT_LIST = "projectList";
     public static final String PROJECT_SOURCE_ID = "selected-project-source-id";
     // Tree representing a particular project
     public static final String PROJECT_JSON_TREE = "projectJsonTree";

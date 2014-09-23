@@ -57,12 +57,24 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.3</version>
 		</dependency>
-
+		<!--  URL Processing -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.1</version>
+		</dependency>
 		<!--  For data binding back to the views -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>1.7.1</version>
+		</dependency>
+		
+		<!--  Parsing the XML -->
+				<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.1</version>
 		</dependency>
 
 		<!-- Servlet -->

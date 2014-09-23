@@ -28,11 +28,11 @@
 				<fieldset>
 					<!-- Server input-->
 					<div class="form-group">
-						<label control-label" for="serverName">Server:</label>
+						<label control-label" for="serverURI">Server:</label>
 						<div>
-							<input id="serverName" name="serverName" placeholder="Server"
+							<input id="serverURI" name="serverURI" placeholder="Server"
 								class="form-control input-md" required="" type="text"
-								path="serverName" value=${server.serverName}>
+								path="serverURI" value=${server.serverURI}>
 						</div>
 					</div>
 

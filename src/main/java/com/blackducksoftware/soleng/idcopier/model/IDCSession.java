@@ -19,67 +19,83 @@ import com.blackducksoftware.sdk.protex.project.ProjectInfo;
  * 
  * @author Ari Kamen
  * @date Sep 15, 2014
- *
+ * 
  */
-public class IDCSession implements Serializable {
-	private String serverName;
-	private String userName;
-	private String password;
-	private String error;
-	private List<ProjectInfo> projects;
-	private ProtexServerProxy proxy;
-	
-	public IDCSession() {
+public class IDCSession implements Serializable
+{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -797003971186382394L;
+    private String serverURI;
+    private String userName;
+    private String password;
+    private String error;
+    private IDCServer sourceServer;
+    private IDCServer targetServer;
 
-	}
+    public IDCSession()
+    {
 
-	public String getPassword() {
-		return password;
-	}
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getPassword()
+    {
+	return password;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public void setPassword(String password)
+    {
+	this.password = password;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public String getUserName()
+    {
+	return userName;
+    }
 
-	public String getServerName() {
-		return serverName;
-	}
+    public void setUserName(String userName)
+    {
+	this.userName = userName;
+    }
 
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
-	}
+    public String getServerURI()
+    {
+	return serverURI;
+    }
 
-	public String getError() {
-		return error;
-	}
+    public void setServerURI(String serverURI)
+    {
+	this.serverURI = serverURI;
+    }
 
-	public void setError(String error) {
-		this.error = error;
-	}
+    public String getError()
+    {
+	return error;
+    }
 
-	public List<ProjectInfo> getProjects() {
-		return projects;
-	}
+    public void setError(String error)
+    {
+	this.error = error;
+    }
 
-	public void setProjects(List<ProjectInfo> projects) {
-		this.projects = projects;
-	}
+    public IDCServer getSourceServer()
+    {
+	return sourceServer;
+    }
 
-	public ProtexServerProxy getProxy()
-	{
-	    return proxy;
-	}
+    public void setSourceServer(IDCServer sourceServer)
+    {
+	this.sourceServer = sourceServer;
+    }
 
-	public void setProxy(ProtexServerProxy proxy)
-	{
-	    this.proxy = proxy;
-	}
+    public IDCServer getTargetServer()
+    {
+	return targetServer;
+    }
+
+    public void setTargetServer(IDCServer targetServer)
+    {
+	this.targetServer = targetServer;
+    }
 }
