@@ -34,6 +34,7 @@ public class IDCPathConstants {
 	 */
 	public static final String SERVERS = "/servers";
 	public static final String SOURCE_PROJECTS = "/sourceProjects";
-	public static final String DESTINATION_PROJECTS = "/destinationProjects";
-	public static final String TREE_NODES = "/treeNodes";
+	public static final String TARGET_PROJECTS = "/targetProjects";
+	public static final String TREE_NODES = "/targetNodes";
+	public static final String BASE = "/se-menger/{projectId}/{path}";
 }
