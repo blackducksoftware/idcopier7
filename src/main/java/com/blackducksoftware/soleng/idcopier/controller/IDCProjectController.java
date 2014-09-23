@@ -51,12 +51,13 @@ public class IDCProjectController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/projet/{projectId}")
-	public String getProjectNodes(@PathVariable String projectId, @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
-		log.info("Generating: /projet/" + projectId);
-
+	@RequestMapping(value = IDCPathConstants.BASE)
+	public String getProjectNodes(@PathVariable String projectId, @PathVariable String path,
+			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
+		path = path.replaceFirst("ROOT", "/");
+		log.info("Generating: /se-menger/" + projectId + path);
 		ProjectService ps = new ProjectService(session);
-		String jsonTree = ps.getProjectJSON(projectId);
+		String jsonTree = ps.getFolderJSON(projectId, path);
 
 		return jsonTree;
 	}
