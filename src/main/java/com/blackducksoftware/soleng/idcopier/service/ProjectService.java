@@ -118,15 +118,15 @@ public class ProjectService {
 		try {
 			CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
 			ctrRequest.setDepth(1);
-			ctrRequest.setIncludeParentNode(true);
+			ctrRequest.setIncludeParentNode(false);
 			List<CodeTreeNodeType> nodeTypes = ctrRequest.getIncludedNodeTypes();
 
 			nodeTypes.add(CodeTreeNodeType.FILE);
 			nodeTypes.add(CodeTreeNodeType.FOLDER);
 
-			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, "/", ctrRequest);
+			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, path, ctrRequest);
 
-			log.info("Got top level nodes, count: " + nodes.size());
+			log.info("Got nodes for " + path + " (count: " + nodes.size() + ")");
 
 			List<String> folderNodes = new ArrayList<String>();
 			List<String> fileNodes = new ArrayList<String>();
@@ -153,27 +153,31 @@ public class ProjectService {
 
 			List<IDCTree> treeNodes = new ArrayList<IDCTree>();
 
+			CodeTreeNode currentTreeNode;
+			String name;
+			String filePath;
+
 			for (String currentNodeString : folderNodes) {
-				CodeTreeNode currentTreeNode = folderLookup.get(currentNodeString);
-				String name = currentTreeNode.getName();
-				String filePath = path + name;
+				currentTreeNode = folderLookup.get(currentNodeString);
+				name = currentTreeNode.getName();
+				filePath = constructPath(path, name);
 
-				IDCTree node = new IDCTree(filePath, name, true);
-
-				treeNodes.add(node);
+				treeNodes.add(new IDCTree(filePath, name, true));
 			}
 
 			for (String currentNodeString : fileNodes) {
-				CodeTreeNode currentTreeNode = fileLookup.get(currentNodeString);
-				String name = currentTreeNode.getName();
-				String filePath = path + name;
+				currentTreeNode = fileLookup.get(currentNodeString);
+				name = currentTreeNode.getName();
+				filePath = constructPath(path, name);
+
+				System.out.println("name = " + name);
 
 				treeNodes.add(new IDCTree(filePath, name, false));
 			}
 
 			Gson gson = new Gson();
 
-			if (path.equals(ROOT)) {
+			if (path == "/") {
 				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
 
 				IDCTree rootNode = new IDCTree(ROOT, getProjectName(projectID), true);
@@ -188,6 +192,18 @@ public class ProjectService {
 		}
 
 		return json;
+	}
+
+	public String constructPath(String path, String name) {
+		String out = "";
+
+		if (path.endsWith("/")) {
+			out = path + name;
+		} else {
+			out = path + "/" + name;
+		}
+
+		return out;
 	}
 
 	public String getProjectName(String projectID) {
