@@ -70,7 +70,12 @@ public class IDCProjectController {
 	@RequestMapping(value = "/{serverName}/{projectId}/{path}")
 	public String getProjectNodes(@PathVariable String serverName, @PathVariable String projectId, @PathVariable String path,
 			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
-		log.info("Generating for path: " + path);
+
+		if (!path.startsWith("/")) {
+			path = "/" + path.replaceAll("root", "");
+		}
+
+		log.info("Generating for path: '" + path + "'");
 
 		String jsonTree = "";
 		try {
