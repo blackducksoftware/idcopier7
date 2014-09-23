@@ -9,7 +9,7 @@ All rights reserved. **/
 package com.blackducksoftware.soleng.idcopier.constants;
 
 /**
- *  View defines
+ *  View definitions (the jsp pages)
  *  
  *  @author Ari Kamen
  *  @date Sep 17, 2014

@@ -30,10 +30,10 @@ public class LoginService
 
     private boolean loggedIn = false;
 
-    // Map of servers by their names
+    // Map of servers by their names, where names are hostnames
     private HashMap<String, IDCServer> serverMap = new HashMap<String, IDCServer>();
     // Map of established proxies, a proxy is established upon a successful
-    // login
+
     private HashMap<String, ProtexServerProxy> proxyMap = new HashMap<String, ProtexServerProxy>();
 
     public LoginService()
@@ -41,6 +41,15 @@ public class LoginService
 
     }
 
+    
+    public IDCServer getServerByName(String serverName) throws Exception
+    {
+	IDCServer server = serverMap.get(serverName);
+	if(server == null)
+	    throw new Exception("Unable to find server with name: " + serverName);
+	return server;
+    }
+    
     /**
      * Retrieves a connection for that server
      * 
@@ -77,16 +86,11 @@ public class LoginService
     {
 	IDCServer ourServer = null;
 	ProtexServerProxy proxy = null;
-	for (IDCServer server : serverMap.values())
-	{
-	    String potentialURI = server.getServerURI();
-	    if(serverURI.equals(potentialURI))
-	    {
-		ourServer = server;
-		break;
-	    }
-	}
-
+	String hostName = IDCServer.getHostFromURI(serverURI);
+	ourServer = serverMap.get(hostName);
+	
+	if(ourServer == null)
+	    throw new Exception("Could not find server with name: " + ourServer);
 	proxy = proxyMap.get(ourServer.getServerName());
 	if (proxy == null)
 	{

@@ -9,6 +9,8 @@ All rights reserved. **/
 package com.blackducksoftware.soleng.idcopier.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.sdk.protex.project.ProjectInfo;
+import com.blackducksoftware.soleng.idcopier.config.IDCServerParser;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
@@ -100,7 +104,9 @@ public class IDCLoginController
 
     /**
      * Login method, grabs the user's inputs, calls the loginserver and
-     * redirects to server info
+     * redirects to the project display page
+     * 
+     * This is the first and only login process that uses the user credentials
      * 
      * @param student
      * @param model
@@ -151,6 +157,50 @@ public class IDCLoginController
 	return modelAndView;
     }
 
+    
+    /**
+     * Processes a server change from the dropdown
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = IDCPathConstants.LOGIN_NEW_SERVER + IDCPathConstants.LOCATION + IDCPathConstants.SERVER_NAME)
+    public ModelAndView processLoginForServer(
+	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
+	    @PathVariable String serverName,
+	    @PathVariable String location,
+	    HttpServletResponse response)
+    {
+	ModelAndView modelAndView = new ModelAndView();
+	log.info("Processing a new login for server: " + serverName);
+	
+	try
+	{
+	    IDCServer server = loginService.getServerByName(serverName);
+	    ProtexServerProxy proxy = loginService.getProxy(server.getServerName());
+	    ProjectService ps = new ProjectService(proxy);
+	    List<ProjectInfo> projects = ps.getProjects(server.getUserName());
+
+	    if(location.equalsIgnoreCase(IDCViewModelConstants.LOCATION_SOURCE))
+	    {
+		session.setSourceServer(server);
+	    }
+	    else if(location.equalsIgnoreCase(IDCViewModelConstants.LOCATION_TARGET))
+	    {
+		session.setTargetServer(server);
+	    }
+	    modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
+	    modelAndView
+		    .addObject(IDCViewModelConstants.PROJECT_LIST, projects);
+	    
+	} catch (Exception e)
+	{
+	    log.error("Unable to get proxy for server: " + serverName);
+	}
+	
+	modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
+	return modelAndView;
+    }
+    
     /**
      * Invokes the XML parser to process the server configuration file If
      * parsing fails or is missing Session is defaulted and transformed into a
@@ -170,7 +220,15 @@ public class IDCLoginController
 	    File f = new File(serverListLocation);
 	    if (f.exists())
 	    {
-
+		IDCServerParser parser = new IDCServerParser();
+		try
+		{
+		    FileReader fr = new FileReader(f);
+		    servers = parser.processServerConfiguration(fr);
+		} catch (FileNotFoundException e)
+		{
+		    log.warn("Parsing error", e);
+		}
 	    } else
 	    {
 		log.warn("Server configuration file does not exist at: " + f);

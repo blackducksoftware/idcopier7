@@ -29,18 +29,16 @@ public class IDCServer implements Serializable
     private String userName;
     @XStreamAlias(IDCConfigurationConstants.SERVER_CONFIG_SERVER_PASSWORD)
     private String password;
-    @XStreamAlias(IDCConfigurationConstants.SERVER_CONFIG_SERVER_ALIAS)
-    private String alias;
 
     /**
      * This is the name that will displayed on the UI
      */
-    private String serverName = null;
+    private String serverName =  null;
     // Once established, this is flipped to true
     private Boolean loggedIn = false;
     // In case an error happens, we capture it here.
     private String loginError = null;
-    
+
     public IDCServer()
     {
 
@@ -55,7 +53,7 @@ public class IDCServer implements Serializable
      */
     public IDCServer(String server, String user, String password)
     {
-	setServerUI(server);
+	setServerURI(server);
 	setUserName(user);
 	setPassword(password);
     }
@@ -70,11 +68,31 @@ public class IDCServer implements Serializable
 	return serverURI;
     }
 
-    public void setServerUI(String serverURI)
+    public void setServerURI(String serverURI)
     {
 	this.serverURI = serverURI;
     }
 
+    /**
+     * Helper method to retrieve host name
+     * @param serverURI
+     * @return
+     */
+    public static String getHostFromURI(String serverURI)
+    {
+	String hostName = null;
+	try
+	{
+	    URIBuilder builder = new URIBuilder(serverURI);
+	    hostName = builder.getHost();
+	} catch (Exception e)
+	{
+	    log.warn("Trouble parsing server URI: " + e.getMessage());
+	}
+	
+	return hostName;
+    }
+    
     public String getUserName()
     {
 	return userName;
@@ -95,37 +113,24 @@ public class IDCServer implements Serializable
 	this.password = password;
     }
 
-    public String getAlias()
-    {
-	return alias;
-    }
-
-    public void setAlias(String alias)
-    {
-	this.alias = alias;
-    }
 
     /**
-     * Will attempt to return the alias if one is available otherwise defaults
-     * to UI
-     * 
+     * Returns the hostName by parsing the URI
      * @return
      */
     public String getServerName()
     {
-	if (this.alias != null)
-	    serverName = alias;
-	else
+	// Because we want to just use the host name, parse this URI
+	try
 	{
-	  
-	    // Because we want to just use the host name, parse this URI
-	    try{
-		  URIBuilder builder = new URIBuilder(serverURI);
-		  serverName = builder.getHost();
-	    } catch(Exception e)
-	    {
-		log.warn("Trouble parsing server URI: " + e.getMessage());
-	    }
+	    if(serverName != null)
+		return serverName;
+	    
+	    URIBuilder builder = new URIBuilder(serverURI);
+	    serverName = builder.getHost();
+	} catch (Exception e)
+	{
+	    log.warn("Trouble parsing server URI: " + e.getMessage());
 	}
 	return serverName;
     }
@@ -139,7 +144,7 @@ public class IDCServer implements Serializable
 	sb.append("\n");
 	sb.append("User Name: " + getUserName());
 	sb.append("\n");
-	sb.append("Alias: " + this.getAlias());
+	sb.append("Server Name: " + getServerName());
 	sb.append("\n");
 
 	return sb.toString();

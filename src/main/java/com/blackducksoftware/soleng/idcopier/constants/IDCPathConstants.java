@@ -23,7 +23,7 @@ public class IDCPathConstants {
 	public static final String LOGIN_MAIN_PATH = "/login";
 	public static final String LOGIN_PROCESS_PATH = "/login.do";
 	public static final String LOGIN_REDIRECT = "/redirect";
-
+	public static final String LOGIN_NEW_SERVER = "/reloginServer";
 	/**
 	 * Projects
 	 */
@@ -36,5 +36,8 @@ public class IDCPathConstants {
 	public static final String SOURCE_PROJECTS = "/sourceProjects";
 	public static final String TARGET_PROJECTS = "/targetProjects";
 	public static final String TREE_NODES = "/targetNodes";
-	public static final String BASE = "/se-menger/{projectId}/{path}";
+	public static final String SERVER = "/server";
+	public static final String SERVER_NAME = "/{serverName}";
+	// Either source or target
+	public static final String LOCATION = "/{location}";
 }

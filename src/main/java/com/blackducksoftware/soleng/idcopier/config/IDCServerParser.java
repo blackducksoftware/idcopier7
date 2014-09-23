@@ -11,9 +11,9 @@ package com.blackducksoftware.soleng.idcopier.config;
 import java.io.FileReader;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
+import com.blackducksoftware.soleng.idcopier.controller.IDCLoginController;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCServerList;
 import com.thoughtworks.xstream.XStream;
@@ -26,11 +26,11 @@ import com.thoughtworks.xstream.XStream;
 public class IDCServerParser
 {
 
-    static Logger log = LoggerFactory.getLogger(IDCServerParser.class);
+    static Logger log = Logger.getLogger(IDCServerParser.class);
 
     public List<IDCServer> processServerConfiguration(FileReader fileReader)
     {
-	IDCServerList serverList = null;
+	IDCServerList serverList = new IDCServerList();
 
 	XStream xstream = new XStream();
 

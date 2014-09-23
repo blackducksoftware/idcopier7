@@ -32,13 +32,20 @@ public class IDCViewModelConstants
     
     // This is the name of the server against which all connections are to be established
     public static final String IDC_SERVER_NAME = "server-name";
-    
+        
     // User select to remember or not remember cookies
     public static final String REMEMBER_COOKIES = "remember-cookies";
     // Cookie to remember the login information
     public static final String IDC_COOKIE_SERVER = "idcServerCookie";
     public static final String IDC_COOKIE_USER = "idcUserCookie";
     public static final String IDC_COOKIE_PASSWORD = "idcPasswordCookie";
+    
+    /**
+     * Server related variables
+     */
+    
+    public static final String LOCATION_SOURCE = "source";
+    public static final String LOCATION_TARGET = "target";
     
     /**
      * Project related variables
