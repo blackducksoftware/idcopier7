@@ -4,42 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IDCTree {
-	private String id;
-	private String text;
-	private String liClass;
+	private String key;
+	private String title;
 	private boolean isFolder;
-	private boolean isExpanded;
 	private List<IDCTree> children;
 
-	public IDCTree(String id, String text, boolean isFolder) {
+	public IDCTree(String key, String title, boolean isFolder) {
 		super();
-		this.id = id;
-		this.text = text;
+		this.key = key;
+		this.title = title;
 		this.isFolder = isFolder;
 	}
 
-	public String getId() {
-		return id;
+	public String getKey() {
+		return key;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getText() {
-		return text;
+		return title;
 	}
 
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public String getLiClass() {
-		return liClass;
-	}
-
-	public void setLiClass(String liClass) {
-		this.liClass = liClass;
+	public void setText(String title) {
+		this.title = title;
 	}
 
 	public boolean isFolder() {
@@ -48,14 +38,6 @@ public class IDCTree {
 
 	public void setFolder(boolean isFolder) {
 		this.isFolder = isFolder;
-	}
-
-	public boolean isExpanded() {
-		return isExpanded;
-	}
-
-	public void setExpanded(boolean isExpanded) {
-		this.isExpanded = isExpanded;
 	}
 
 	public List<IDCTree> getChildren() {

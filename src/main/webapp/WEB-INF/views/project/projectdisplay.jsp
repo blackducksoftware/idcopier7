@@ -20,7 +20,8 @@
 <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.css">
-<link rel="stylesheet" href="css/EasyTree/skin-win8/ui.easytree.css">
+<!-- <link rel="stylesheet" href="css/EasyTree/skin-win8/ui.easytree.css">  -->
+<link rel="stylesheet" href="css/Dynatree/skin/ui.dynatree.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 
 </head>
@@ -64,8 +65,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div id="sourceCodeTree" class="sourceCodeTree"
-						style="float: left; width: 100%; height: 200px;"></div>
+					<div id="sourceCodeTree" class="sourceCodeTree"></div>
 				</div>
 			</div>
 			<div class="col-sm-2 col-lg-2">
@@ -123,9 +123,14 @@
 	</div>
 </body>
 
-<script src="js/libs/jquery/jquery.js"></script>
-<script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
-<script src="js/libs/EasyTree/jquery.easytree.js"></script>
-<script src="js/main.js"></script>
-</html>
-
+<script src="js/libs/jquery/jquery.js" type="text/javascript"></script>
+<script src="js/libs/twitter-bootstrap/js/bootstrap.js"
+	type="text/javascript"></script>
+<script src="js/libs/jquery-ui/jquery-ui.custom.js"
+	type="text/javascript"></script>
+<script src="js/libs/jquery-cookie/jquery.cookie.js"
+	type="text/javascript"></script>
+<script src="js/libs/Dynatree/jquery.dynatree.js" type="text/javascript"></script>
+<!-- <script src="js/libs/EasyTree/jquery.easytree.js"></script>  -->
+<script src="js/main.js" type="text/javascript"></script>
+</ html>

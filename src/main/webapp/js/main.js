@@ -18,8 +18,8 @@ jQuery(document).ready(
 			 * Init the trees. They will be empty, but will not look ugly, so
 			 * that's nice.
 			 */
-			var sourceTree = $('#sourceCodeTree').easytree();
-			var targetTree = $('#targetCodeTree').easytree();
+			// var sourceTree = $('#sourceCodeTree').easytree();
+			// var targetTree = $('#targetCodeTree').easytree();
 			/**
 			 * Skipping a bunch in here for now, because we are only working
 			 * with one server. So I am going to just load all of the projects
@@ -94,6 +94,15 @@ jQuery(document).ready(
 				}
 				// node.lazyUrlJson = node.id;
 			}
+			function loadSelectBox(sender) {
+				// alert($('.' + sender.toLowerCase() + 'CodeTree
+				// :selected').val());
+
+				var currentlySelected = $(
+						'.' + sender.toLowerCase() + 'CodeTree :selected')
+						.val();
+				console.log(sourceTree.getNode(currentlySelected));
+			}
 			/**
 			 * Loads the project for a: - Specific server - Specific project ID
 			 */
@@ -106,32 +115,63 @@ jQuery(document).ready(
 					$('.' + sender.toLowerCase() + 'SelectedPath').empty();
 					$('.' + sender.toLowerCase() + 'SelectedPath').text('/');
 					// Set the EasyTree
+					var tree;
 					if (sender == source) {
-						sourceTree = $('.' + sender.toLowerCase() + 'CodeTree')
-								.easytree({
-									allowActivate : true,
-									dataUrl : path,
-									openLazyNode : openLazyNode,
-									lazyUrl : path
-								});
+						tree = sourceTree;
 					} else {
-						targetTree = $('.' + sender.toLowerCase() + 'CodeTree')
-								.easytree({
-									allowActivate : true,
-									dataUrl : path,
-									openLazyNode : openLazyNode,
-									lazyUrl : path
-								});
+						tree = targetTree
 					}
+
+					// var currentlySelected = $('#lstNodes :selected').val();
+
+					tree = $('.' + sender.toLowerCase() + 'CodeTree').easytree(
+							{
+								allowActivate : true,
+								dataUrl : path,
+								openLazyNode : openLazyNode,
+								lazyUrl : path
+							});
+
+					$('.' + sender.toLowerCase() + 'CodeTree').click(
+							function() {
+								loadSelectBox(sender);
+							});
 				}
 			}
+			function loadDynaTree(sender, serverName, projectId) {
+				if (projectId !== null) {
+					var path = serverName + '/' + projectId + '/' + ROOT;
+
+					$('.' + sender.toLowerCase() + 'CodeTree').dynatree({
+						title : "Lazy loading sample",
+						fx : {
+							height : "toggle",
+							duration : 200
+						},
+						autoFocus : false,
+						initAjax : {
+							url : path
+						},
+
+						onActivate : function(node) {
+							console.error("Path = " + path + node.data.key);
+							node.appendAjax({
+								url : path + node.data.key,
+								debugLazyDelay : 750
+							});
+						}
+					});
+				}
+			}
+
 			$(".selectSourceProject").change(
 					function() {
 						var projectId = $(this).children(":selected")
 								.attr("id");
 						var sourceServerName = $('.selectSourceServer')
 								.children(":selected").text();
-						loadProject(source, sourceServerName, projectId);
+						// loadProject(source, sourceServerName, projectId);
+						loadDynaTree(source, sourceServerName, projectId);
 					});
 			$(".selectTargetProject").change(
 					function() {
@@ -139,7 +179,7 @@ jQuery(document).ready(
 								.attr("id");
 						var targetServerName = $('.selectTargetServer')
 								.children(":selected").text();
-						loadProject(target, targetServerName, projectId);
+						loadDynaTree(target, targetServerName, projectId);
 					});
 
 			$(".userSourcePathInput").tooltip({
