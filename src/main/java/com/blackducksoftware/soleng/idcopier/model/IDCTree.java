@@ -6,7 +6,9 @@ import java.util.List;
 public class IDCTree {
 	private String id;
 	private String text;
+	private String liClass;
 	private boolean isFolder;
+	private boolean isExpanded;
 	private List<IDCTree> children;
 
 	public IDCTree(String id, String text, boolean isFolder) {
@@ -32,12 +34,28 @@ public class IDCTree {
 		this.text = text;
 	}
 
+	public String getLiClass() {
+		return liClass;
+	}
+
+	public void setLiClass(String liClass) {
+		this.liClass = liClass;
+	}
+
 	public boolean isFolder() {
 		return isFolder;
 	}
 
 	public void setFolder(boolean isFolder) {
 		this.isFolder = isFolder;
+	}
+
+	public boolean isExpanded() {
+		return isExpanded;
+	}
+
+	public void setExpanded(boolean isExpanded) {
+		this.isExpanded = isExpanded;
 	}
 
 	public List<IDCTree> getChildren() {
