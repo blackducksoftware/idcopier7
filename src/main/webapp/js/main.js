@@ -6,12 +6,15 @@ jQuery(document).ready(
 			// UI text
 			var selectSourceServer = "Select Source Server";
 			var selectTargetServer = "Select Target Server";
+			
 			var selectSourceProject = "Select Source Project";
 			var selectTargetProject = "Select Target Project";
 			// Variables
 			var servers = "servers";
 			var source = "Source";
 			var target = "Target";
+			// The locations array will be used to auto trigger internal jQuery functions
+			var locations = [source, target];
 			// Constants
 			var ROOT = "root";
 			/**
@@ -52,10 +55,13 @@ jQuery(document).ready(
 					});
 				}
 			});
+			
+			/**
+			 * Populate the project pulldown
+			 */
 			function setProjects(sender, message, data) {
 				$('.select' + sender + 'Project').empty();
-				$('.select' + sender + 'Project').append(
-						"<option>" + message + "</option>");
+				$('.select' + sender + 'Project').append("<option>" + message + "</option>");
 				$.each(data, function(index, value) {
 					console.log("Outputting project: " + value);
 					$('.select' + sender + 'Project').append(
@@ -64,43 +70,52 @@ jQuery(document).ready(
 				});
 			}
 			/**
-			 * Set the projects
+			 * Populates the pulldowns
+			 * Assign onChange behavior
 			 */
-			$.getJSON('sourceProjects', function(data) {
-				setProjects(source, selectSourceProject, data)
-			});
-			/**
-			 * Set the target projects
-			 */
-			$.getJSON('targetProjects', function(data) {
-				setProjects(target, selectTargetProject, data)
-			});
-			
-			/**
-			 * TODO: Combine select + target
-			 */
-			$(".selectSourceServer").change(function() {
-						var sourceServer = $('.selectSourceServer').children(
+			var populateWidgets = (function()
+			{			
+				console.log("Populating project pulldows");
+				$.each(locations, function (index, locationValue)
+				{
+					console.log("Processing location: " + locationValue);
+					
+					/**
+					 * Populate the projects
+					 */
+					// Build the path, lower case it to match Controller
+					var projectPath = locationValue.toLowerCase() + "Projects";
+					var messageProject = "Select " + locationValue + " Project";
+					$.getJSON(projectPath, function(data) 
+					{
+						console.log("Invoking path: " + projectPath);
+						setProjects(locationValue, messageProject, data)
+					});
+					
+					/**
+					 * Assign server pulldown behavior
+					 */
+					// This is the div id of the pulldown
+					var serverSelectorDiv = ".select" + locationValue + "Server";
+					// This is the default non-value message of the selector
+					var messageServer = "Select " + locationValue + " Server";
+					$(serverSelectorDiv).change(function() {
+						var serverName = $(serverSelectorDiv).children(
 								":selected").text();
 						var path = "reloginServer/" + source + "/?server-name="
-								+ sourceServer;
+								+ serverName;
 
-						console.log("Sending source relogin path: " + path);
+						console.log("Sending  relogin path: " + path);
 						$.getJSON(path, function(data) {
-							setProjects(source, selectSourceProject, data)
+							setProjects(locationValue, messageServer, data)
 						});
 						// Wipe out code tree
 
 					});
-	
+				});
+			})(); // populateWidgets
+
 			
-			$(".selectTargetServer").change(function() {
-				// Wont do anything since we're only working with one
-				// server so no change will happen
-				if (this.value !== selectTargetServer) {
-					console.log("target server = " + this.value);
-				}
-			});
 			function openLazyNode(event, nodes, node, hasChildren) {
 				if (hasChildren) {
 					return false;
