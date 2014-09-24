@@ -126,7 +126,7 @@ public class ProjectService {
 
 			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, path, ctrRequest);
 
-			log.info("Got nodes for " + path + " (count: " + nodes.size() + ")");
+			log.info("Got nodes for '" + path + "' (count: " + nodes.size() + ")");
 
 			List<String> folderNodes = new ArrayList<String>();
 			List<String> fileNodes = new ArrayList<String>();
@@ -137,14 +137,12 @@ public class ProjectService {
 			for (CodeTreeNode codeTreeNode : nodes) {
 				String name = codeTreeNode.getName().toLowerCase();
 
-				if (!name.isEmpty()) {
-					if (codeTreeNode.getNodeType() == CodeTreeNodeType.FILE) {
-						fileNodes.add(name);
-						fileLookup.put(name, codeTreeNode);
-					} else {
-						folderNodes.add(name);
-						folderLookup.put(name, codeTreeNode);
-					}
+				if (codeTreeNode.getNodeType() == CodeTreeNodeType.FILE) {
+					fileNodes.add(name);
+					fileLookup.put(name, codeTreeNode);
+				} else {
+					folderNodes.add(name);
+					folderLookup.put(name, codeTreeNode);
 				}
 			}
 
@@ -160,7 +158,7 @@ public class ProjectService {
 			for (String currentNodeString : folderNodes) {
 				currentTreeNode = folderLookup.get(currentNodeString);
 				name = currentTreeNode.getName();
-				filePath = constructPath(path, name);
+				filePath = name;
 
 				treeNodes.add(new IDCTree(filePath, name, true));
 			}
@@ -168,9 +166,7 @@ public class ProjectService {
 			for (String currentNodeString : fileNodes) {
 				currentTreeNode = fileLookup.get(currentNodeString);
 				name = currentTreeNode.getName();
-				filePath = constructPath(path, name);
-
-				System.out.println("name = " + name);
+				filePath = name;
 
 				treeNodes.add(new IDCTree(filePath, name, false));
 			}
@@ -180,7 +176,7 @@ public class ProjectService {
 			if (path.equals("/")) {
 				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
 
-				IDCTree rootNode = new IDCTree(ROOT, getProjectName(projectID), true);
+				IDCTree rootNode = new IDCTree("", getProjectName(projectID), true);
 				rootNode.addChildren(treeNodes);
 				projectNodes.add(rootNode);
 				json = gson.toJson(projectNodes);
