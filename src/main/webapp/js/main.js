@@ -74,13 +74,26 @@ jQuery(document).ready(
 			$.getJSON('targetProjects', function(data) {
 				setProjects(target, selectTargetProject, data)
 			});
-			$(".selectSourceServer").change(function() {
-				// Wont do anything since we're only working with one
-				// server so no change will happen
-				if (this.value !== selectSourceServer) {
-					console.log("source server = " + this.value);
-				}
+			
+			
+			$(".selectSourceServer").change(function() 
+			{
+				var sourceServer = $('.selectSourceServer')
+				.children(":selected").text();
+				var path = "reloginServer/" + source; 	
+				// Send the request to IDCLoginController
+				$.get(path,
+						  { "server-name": sourceServer }, 
+						  function(data) { 
+							  // Load the project jSON into the dropdown
+							  console.log('Got project list from new server:' + data); 
+							  setProjects(source, selectSourceProject, data);
+					
+							  // Wipe out tree
+						  
+						});
 			});
+			
 			$(".selectTargetServer").change(function() {
 				// Wont do anything since we're only working with one
 				// server so no change will happen

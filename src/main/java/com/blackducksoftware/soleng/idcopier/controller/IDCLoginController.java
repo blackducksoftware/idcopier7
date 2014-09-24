@@ -64,7 +64,7 @@ public class IDCLoginController
     // Internal
     private static List<IDCServer> servers = null;
     private static List<ProjectInfo> sourceProjects = null;
-    private static List<ProjectInfo> destinationProjects = null;
+    private static List<ProjectInfo> targetProjects = null;
 
     @RequestMapping(value = IDCPathConstants.LOGIN_MAIN_PATH)
     public ModelAndView displayLoginPage(
@@ -147,7 +147,7 @@ public class IDCLoginController
 
 	    // TODO: Is there a better way to do this?
 	    sourceProjects = projects;
-	    destinationProjects = projects;
+	    targetProjects = projects;
 	} catch (Exception e)
 	{
 	    log.error("Error logging in", e);
@@ -163,42 +163,44 @@ public class IDCLoginController
      * @param session
      * @return
      */
-    @RequestMapping(value = IDCPathConstants.LOGIN_NEW_SERVER + IDCPathConstants.LOCATION + IDCPathConstants.SERVER_NAME)
-    public ModelAndView processLoginForServer(
+    @RequestMapping(value = IDCPathConstants.LOGIN_NEW_SERVER + IDCPathConstants.LOCATION)
+    public String processLoginForServer(
 	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-	    @PathVariable String serverName,
+	    @RequestParam(value= IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
 	    @PathVariable String location,
 	    HttpServletResponse response)
     {
-	ModelAndView modelAndView = new ModelAndView();
+
 	log.info("Processing a new login for server: " + serverName);
 	
+	List<ProjectInfo> projects = null;
 	try
 	{
 	    IDCServer server = loginService.getServerByName(serverName);
 	    ProtexServerProxy proxy = loginService.getProxy(server.getServerName());
 	    ProjectService ps = new ProjectService(proxy);
-	    List<ProjectInfo> projects = ps.getProjects(server.getUserName());
+	    projects = ps.getProjects(server.getUserName());
 
 	    if(location.equalsIgnoreCase(IDCViewModelConstants.LOCATION_SOURCE))
 	    {
+		sourceProjects = projects;
 		session.setSourceServer(server);
 	    }
 	    else if(location.equalsIgnoreCase(IDCViewModelConstants.LOCATION_TARGET))
 	    {
+		targetProjects = projects;
 		session.setTargetServer(server);
 	    }
-	    modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
-	    modelAndView
-		    .addObject(IDCViewModelConstants.PROJECT_LIST, projects);
+
 	    
 	} catch (Exception e)
 	{
 	    log.error("Unable to get proxy for server: " + serverName);
 	}
 	
-	modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
-	return modelAndView;
+	String projectJson = new Gson().toJson(projects);
+	log.debug("Sending project JSON:" + projectJson);
+	return projectJson;
     }
     
     /**
@@ -261,7 +263,7 @@ public class IDCLoginController
     @RequestMapping(IDCPathConstants.SOURCE_PROJECTS)
     public String processSourceProjects()
     {
-	System.out.println(new Gson().toJson(sourceProjects));
+	log.info(new Gson().toJson(sourceProjects));
 
 	return new Gson().toJson(sourceProjects);
     }
@@ -269,7 +271,7 @@ public class IDCLoginController
     @RequestMapping(IDCPathConstants.TARGET_PROJECTS)
     public String processDestinationProjects()
     {
-	return new Gson().toJson(destinationProjects);
+	return new Gson().toJson(targetProjects);
     }
 
     /**
