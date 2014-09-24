@@ -45,7 +45,8 @@ public class IDCProjectController {
 	private ProjectService projectService;
 
 	@RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
-	public ModelAndView displayProjectTree(@RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
+	public ModelAndView displayProjectTree(
+			@RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
 			@RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
 			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -68,11 +69,14 @@ public class IDCProjectController {
 	}
 
 	@RequestMapping(value = "/{serverName}/{projectId}/{path}")
-	public String getProjectNodes(@PathVariable String serverName, @PathVariable String projectId, @PathVariable String path,
-			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
+	public String getProjectNodes(@PathVariable String serverName, @PathVariable String projectId,
+			@PathVariable String path, @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
+			Model model) {
+
+		path = path.replaceAll("root", "");
 
 		if (!path.startsWith("/")) {
-			path = "/" + path.replaceAll("root", "");
+			path = "/" + path;
 		}
 
 		log.info("Generating for path: '" + path + "'");
