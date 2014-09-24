@@ -177,7 +177,7 @@ public class ProjectService {
 
 			Gson gson = new Gson();
 
-			if (path == "/") {
+			if (path.equals("/")) {
 				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
 
 				IDCTree rootNode = new IDCTree(ROOT, getProjectName(projectID), true);
@@ -197,11 +197,15 @@ public class ProjectService {
 	public String constructPath(String path, String name) {
 		String out = "";
 
+		log.info(path + name);
+
 		if (path.endsWith("/")) {
 			out = path + name;
 		} else {
 			out = path + "/" + name;
 		}
+
+		log.info(out);
 
 		return out;
 	}
