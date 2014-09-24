@@ -57,6 +57,7 @@ jQuery(document).ready(
 				$('.select' + sender + 'Project').append(
 						"<option>" + message + "</option>");
 				$.each(data, function(index, value) {
+					console.log("Outputting project: " + value);
 					$('.select' + sender + 'Project').append(
 							"<option id=\"" + value.projectId + "\">"
 									+ value.name + "</option>");
@@ -76,25 +77,22 @@ jQuery(document).ready(
 			});
 			
 			/**
-			 * TODO:  Combine select + target
+			 * TODO: Combine select + target
 			 */
-			$(".selectSourceServer").change(function() 
-			{
-				var sourceServer = $('.selectSourceServer')
-				.children(":selected").text();
-				var path = "reloginServer/" + source; 	
-				// Send the request to IDCLoginController
-				$.get(path,
-						  { "server-name": sourceServer }, 
-						  function(data) { 
-							  // Load the project jSON into the dropdown
-							  console.log('Got project list from new server:' + data); 
-							  setProjects(source, selectSourceProject, data);
-					
-							  // Wipe out tree
-						  
+			$(".selectSourceServer").change(function() {
+						var sourceServer = $('.selectSourceServer').children(
+								":selected").text();
+						var path = "reloginServer/" + source + "/?server-name="
+								+ sourceServer;
+
+						console.log("Sending source relogin path: " + path);
+						$.getJSON(path, function(data) {
+							setProjects(source, selectSourceProject, data)
 						});
-			});
+						// Wipe out code tree
+
+					});
+	
 			
 			$(".selectTargetServer").change(function() {
 				// Wont do anything since we're only working with one

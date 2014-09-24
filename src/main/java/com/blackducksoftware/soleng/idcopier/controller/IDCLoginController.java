@@ -263,7 +263,7 @@ public class IDCLoginController
     @RequestMapping(IDCPathConstants.SOURCE_PROJECTS)
     public String processSourceProjects()
     {
-	log.info(new Gson().toJson(sourceProjects));
+	log.info("Returning JSON of source projects: " + new Gson().toJson(sourceProjects));
 
 	return new Gson().toJson(sourceProjects);
     }
