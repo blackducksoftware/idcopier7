@@ -75,7 +75,9 @@ jQuery(document).ready(
 				setProjects(target, selectTargetProject, data)
 			});
 			
-			
+			/**
+			 * TODO:  Combine select + target
+			 */
 			$(".selectSourceServer").change(function() 
 			{
 				var sourceServer = $('.selectSourceServer')
