@@ -1,14 +1,9 @@
 jQuery(document).ready(
 		function() {
+			
 			/**
 			 * String constants for the JS
 			 */
-			// UI text
-			var selectSourceServer = "Select Source Server";
-			var selectTargetServer = "Select Target Server";
-			
-			var selectSourceProject = "Select Source Project";
-			var selectTargetProject = "Select Target Project";
 			// Variables
 			var servers = "servers";
 			var source = "Source";
@@ -17,44 +12,7 @@ jQuery(document).ready(
 			var locations = [source, target];
 			// Constants
 			var ROOT = "root";
-			/**
-			 * Init the trees. They will be empty, but will not look ugly, so
-			 * that's nice.
-			 */
-			// var sourceTree = $('#sourceCodeTree').easytree();
-			// var targetTree = $('#targetCodeTree').easytree();
-			/**
-			 * Skipping a bunch in here for now, because we are only working
-			 * with one server. So I am going to just load all of the projects
-			 * to the drop downs and worry about the rest later
-			 * 
-			 * -NM
-			 */
-			$.getJSON(servers, function(data) {
-				if (data.length === 1) {
-					$('.selectSourceServer').empty();
-					$('.selectTargetServer').empty();
-					$.each(data, function(index, value) {
-						$('.selectSourceServer').append(
-								"<option>" + value.serverName + "</option>");
-						$('.selectTargetServer').append(
-								"<option>" + value.serverName + "</option>");
-					});
-				} else {
-					$('.selectSourceServer').empty();
-					$('.selectTargetServer').empty();
-					$('.selectSourceServer').append(
-							"<option>" + selectSourceServer + "</option>");
-					$('.selectTargetServer').append(
-							"<option>" + selectTargetServer + "</option>");
-					$.each(data, function(index, value) {
-						$('.selectSourceServer').append(
-								"<option>" + value.serverName + "</option>");
-						$('.selectTargetServer').append(
-								"<option>" + value.serverName + "</option>");
-					});
-				}
-			});
+
 			
 			/**
 			 * Populate the project pulldown
@@ -81,24 +39,26 @@ jQuery(document).ready(
 					console.log("Processing location: " + locationValue);
 					
 					/**
-					 * Populate the projects
-					 */
-					// Build the path, lower case it to match Controller
-					var projectPath = locationValue.toLowerCase() + "Projects";
-					var messageProject = "Select " + locationValue + " Project";
-					$.getJSON(projectPath, function(data) 
-					{
-						console.log("Invoking path: " + projectPath);
-						setProjects(locationValue, messageProject, data)
-					});
-					
-					/**
-					 * Assign server pulldown behavior
+					 * Populate server pulldown
 					 */
 					// This is the div id of the pulldown
 					var serverSelectorDiv = ".select" + locationValue + "Server";
 					// This is the default non-value message of the selector
 					var messageServer = "Select " + locationValue + " Server";
+					
+					$.getJSON(servers, function(data) {
+						$(serverSelectorDiv).empty();
+						$(serverSelectorDiv).append(
+								"<option>" + messageServer + "</option>");
+						$.each(data, function(index, value) {
+							$(serverSelectorDiv).append(
+									"<option>" + value.serverName + "</option>");
+						});					
+					});
+					
+					/**
+					 * Assign server pulldown behavior
+					 */
 					$(serverSelectorDiv).change(function() {
 						var serverName = $(serverSelectorDiv).children(
 								":selected").text();
@@ -110,7 +70,18 @@ jQuery(document).ready(
 							setProjects(locationValue, messageServer, data)
 						});
 						// Wipe out code tree
-
+					});
+					
+					/**
+					 * Populate the projects
+					 */
+					// Build the path, lower case it to match Controller
+					var projectPath = locationValue.toLowerCase() + "Projects";
+					var messageProject = "Select " + locationValue + " Project";
+					$.getJSON(projectPath, function(data) 
+					{
+						console.log("Invoking path: " + projectPath);
+						setProjects(locationValue, messageProject, data)
 					});
 				});
 			})(); // populateWidgets
