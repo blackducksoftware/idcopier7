@@ -145,7 +145,6 @@ jQuery(document).ready(function() {
 					$('.' + sender.toLowerCase() + 'SelectedPath').text(selKeys.join(", ") + ", " + '/' + node.data.key);
 					if (node.data.isFolder) {
 						if (!node.hasChildren()) {
-							console.log("Path = " + "http://localhost:8080/protex-idcopier/" + path + '/' + buildPassablePath(node.data.key));
 							node.expand();
 							node.appendAjax({
 								url : path + '/' + buildPassablePath(node.data.key),
