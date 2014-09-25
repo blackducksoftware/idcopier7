@@ -7,6 +7,7 @@ public class IDCTree {
 	private String key;
 	private String title;
 	private boolean isFolder;
+	private boolean expand;
 	private List<IDCTree> children;
 
 	public IDCTree(String key, String title, boolean isFolder) {
@@ -47,6 +48,14 @@ public class IDCTree {
 
 	public void setFolder(boolean isFolder) {
 		this.isFolder = isFolder;
+	}
+
+	public boolean isExpand() {
+		return expand;
+	}
+
+	public void setExpand(boolean expand) {
+		this.expand = expand;
 	}
 
 	public List<IDCTree> getChildren() {

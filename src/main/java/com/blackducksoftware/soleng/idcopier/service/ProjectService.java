@@ -177,6 +177,7 @@ public class ProjectService {
 				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
 
 				IDCTree rootNode = new IDCTree("", getProjectName(projectID), true);
+				rootNode.setExpand(true);
 				rootNode.addChildren(treeNodes);
 				projectNodes.add(rootNode);
 				json = gson.toJson(projectNodes);
