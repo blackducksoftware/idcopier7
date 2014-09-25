@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <!-- <link rel="stylesheet" href="css/EasyTree/skin-win8/ui.easytree.css">  -->
-<link rel="stylesheet" href="css/Dynatree/skin/ui.dynatree.css">
+<link rel="stylesheet" href="css/Dynatree/skin-vista/ui.dynatree.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 
 </head>
