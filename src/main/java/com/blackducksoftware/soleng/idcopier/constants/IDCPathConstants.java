@@ -33,8 +33,7 @@ public class IDCPathConstants {
 	 * RESTful
 	 */
 	public static final String SERVERS = "/servers";
-	public static final String SOURCE_PROJECTS = "/sourceProjects";
-	public static final String TARGET_PROJECTS = "/targetProjects";
+	public static final String GET_PROJECTS = "/getProjects";
 	public static final String TREE_NODES = "/targetNodes";
 	public static final String SERVER = "/server";
 	public static final String SERVER_NAME = "/{serverName}";

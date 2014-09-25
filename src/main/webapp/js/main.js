@@ -37,13 +37,16 @@ jQuery(document).ready(function() {
 		console.log("Populating project pulldows");
 		$.each(locations, function(index, locationValue) {
 			console.log("Processing location: " + locationValue);
-			/**
-			 * Populate server pulldown
-			 */
+			
+			// Variables used for all processes
 			// This is the div id of the pulldown
 			var serverSelectorDiv = ".select" + locationValue + "Server";
 			// This is the default non-value message of the selector
 			var messageServer = "Select " + locationValue + " Server";
+			
+			/**
+			 * Populate server pulldown
+			 */	
 			$.getJSON(servers, function(data) {
 				$(serverSelectorDiv).empty();
 				$(serverSelectorDiv).append("<option>" + messageServer + "</option>");
@@ -54,7 +57,7 @@ jQuery(document).ready(function() {
 			/**
 			 * Assign server pulldown behavior
 			 */
-			$(serverSelectorDiv).change(function() {
+			$(serverSelectorDiv).change(function() {	
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				var path = "reloginServer/" + source + "/?server-name=" + serverName;
 				console.log("Sending  relogin path: " + path);
@@ -67,7 +70,8 @@ jQuery(document).ready(function() {
 			 * Populate the projects
 			 */
 			// Build the path, lower case it to match Controller
-			var projectPath = locationValue.toLowerCase() + "Projects";
+			var serverName = $(serverSelectorDiv).children(":selected").text();
+			var projectPath = locationValue.toLowerCase() + "Projects" + "/?server-name="+serverName;
 			var messageProject = "Select " + locationValue + " Project";
 			$.getJSON(projectPath, function(data) {
 				console.log("Invoking path: " + projectPath);
@@ -159,6 +163,7 @@ jQuery(document).ready(function() {
 						}
 					}
 				},
+
 				onSelect : function(select, node) {
 					if (sender === target) {
 						// Display list of selected nodes

@@ -60,11 +60,11 @@ public class IDCLoginController
     private IDCConfig config;
     @Autowired
     private LoginService loginService;
-
+    @Autowired
+    private ProjectService projectService;
+    
     // Internal
     private static List<IDCServer> servers = null;
-    private static List<ProjectInfo> sourceProjects = null;
-    private static List<ProjectInfo> targetProjects = null;
 
     @RequestMapping(value = IDCPathConstants.LOGIN_MAIN_PATH)
     public ModelAndView displayLoginPage(
@@ -132,22 +132,13 @@ public class IDCLoginController
 	     * This is because the login page, at this time, does not provide aliases/names
 	     */
 	    proxy = loginService.getProxyByServerURI(session.getServerURI());
-	    ProjectService projectService = new ProjectService(proxy);
-
-	    List<ProjectInfo> projects = projectService.getProjects(session
-		    .getUserName());
+	    List<ProjectInfo> projects = projectService.getProjectsByUser(proxy, session.getUserName());
 
 	    // Process cookie information
 	    processCookies(rememberCookie, session, response);
 
 	    modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
 	    modelAndView.addObject(IDCViewModelConstants.SERVER_LIST, servers);
-	    modelAndView
-		    .addObject(IDCViewModelConstants.PROJECT_LIST, projects);
-
-	    // TODO: Is there a better way to do this?
-	    sourceProjects = projects;
-	    targetProjects = projects;
 	} catch (Exception e)
 	{
 	    log.error("Error logging in", e);
@@ -160,6 +151,8 @@ public class IDCLoginController
     
     /**
      * Processes a server change from the dropdown
+     * Return JSON project list
+     * TODO:  This actually retreives a project list, consider refactoring?
      * @param session
      * @return
      */
@@ -178,24 +171,11 @@ public class IDCLoginController
 	{
 	    IDCServer server = loginService.getServerByName(serverName);
 	    ProtexServerProxy proxy = loginService.getProxy(server.getServerName());
-	    ProjectService ps = new ProjectService(proxy);
-	    projects = ps.getProjects(server.getUserName());
-
-	    if(location.equalsIgnoreCase(IDCViewModelConstants.LOCATION_SOURCE))
-	    {
-		sourceProjects = projects;
-		session.setSourceServer(server);
-	    }
-	    else if(location.equalsIgnoreCase(IDCViewModelConstants.LOCATION_TARGET))
-	    {
-		targetProjects = projects;
-		session.setTargetServer(server);
-	    }
-
+	    projects = projectService.getProjectsByServer(proxy, server);
 	    
 	} catch (Exception e)
 	{
-	    log.error("Unable to get proxy for server: " + serverName);
+	    log.error("Unable to authenticate new server: " + serverName);
 	}
 	
 	String projectJson = new Gson().toJson(projects);
@@ -258,20 +238,6 @@ public class IDCLoginController
     public String processServers()
     {
 	return new Gson().toJson(servers);
-    }
-
-    @RequestMapping(IDCPathConstants.SOURCE_PROJECTS)
-    public String processSourceProjects()
-    {
-	log.info("Returning JSON of source projects: " + new Gson().toJson(sourceProjects));
-
-	return new Gson().toJson(sourceProjects);
-    }
-
-    @RequestMapping(IDCPathConstants.TARGET_PROJECTS)
-    public String processDestinationProjects()
-    {
-	return new Gson().toJson(targetProjects);
     }
 
     /**
