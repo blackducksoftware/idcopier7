@@ -33,33 +33,25 @@
 		</div>
 		<div>
 			<nav class="animate">
-				<div class="menu-header">
-					Mouse0270 created this snippet on <strong>Bootsnipp</strong>
-					network.
-				</div>
+				<h1>Menu</h1>
+				<div class="divider"></div>
+
 				<ul>
-					<li><a href="https://twitter.com/mouse0270">@mouse0270 on
-							twitter</a></li>
-					<li><a href="https://facebook.com/rem.mcintosh">Learn More
-							about me on Facebook</a></li>
-					<li><a href="http://bootsnipp.com/mouse0270">Snippets</a></li>
-					<li><a href="https://github.com/mouse0270">Projects</a></li>
-					<li><a
-						href="http://bootsnipp.com/user/snippets/www.linkedin.com/in/remcintosh/">Résumé</a>
-					</li>
+					<li><a href="log" target="_blank"><h4>
+								View Log <span class="glyphicon glyphicon-list-alt"></span>
+							</h4> </a></li>
+					<li><a href="https://twitter.com/mouse0270" target="_blank"><h4>
+								Logout <span class="glyphicon glyphicon-user"></span>
+							</h4> </a></li>
 				</ul>
 			</nav>
 			<div class="nav-controller">
 				<table>
 					<tbody>
 						<tr>
-							<td><span id="sideMenuButton"
-								class="[ glyphicon glyphicon-chevron-down ] controller-open"></span>
-								<span class="[ glyphicon glyphicon-remove ] controller-close"></span>
+							<td><span
+								class="[ glyphicon glyphicon-align-justify ] controller-open"></span>
 							</td>
-						</tr>
-						<tr>
-							<td><h4>Menu</h4></td>
 						</tr>
 					</tbody>
 				</table>
