@@ -42,6 +42,12 @@ public class IDCPathConstants {
 	public static final String LOG_PATH = "/log";
 
 	/**
+	 *  Copying
+	 */
+	public static final String COPY_IDS = "/copyIDs";
+	
+	
+	/**
 	 * RESTful
 	 */
 	public static final String SERVERS = "/servers";

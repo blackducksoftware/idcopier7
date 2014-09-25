@@ -8,8 +8,14 @@ jQuery(document).ready(function() {
 	var target = "Target";
 	// The locations array will be used to auto trigger internal jQuery functions
 	var locations = [ source, target ];
+	
+	/**
+	 * Internal variables 
+	 */
+
 	// The list of selected target paths
 	var targetPaths;
+	var sourcePath;
 	/**
 	 * Populate the project pulldown
 	 */
@@ -150,6 +156,10 @@ jQuery(document).ready(function() {
 					if (source === target) {
 						targetPaths = selectedPaths;
 					}
+					else
+					{
+						sourcePath = selectedPaths;
+					}
 					$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 					if (node.data.isFolder) {
 						if (!node.hasChildren()) {
@@ -192,6 +202,48 @@ jQuery(document).ready(function() {
 			});
 		}
 	}
+	
+	/**
+	 * Submit copy button 
+	 * Note the # lookup for non-div
+	 */
+	$("#submitCopyButton").on('click', function()
+	{
+		console.log("Submitting copy IDs...");
+		
+		var sourceServer = $('.selectSourceServer').children(":selected").text();
+		var targetServer = $('.selectTargetServer').children(":selected").text();
+		var sourceProjectId = $('.selectSourceProject').children(":selected").text();
+		var targetProjectId = $('.selectTargetProject').children(":selected").text();
+		
+		var params = {
+				'copy-source-server' : sourceServer,
+				'copy-target-server' : targetServer,
+				'copy-source-project-id' : sourceProjectId,
+				'copy-target-project-id' : targetProjectId,
+				'copy-source-path' : sourcePath,
+				'copy-target-paths' : targetPaths,
+		};
+			
+		$.ajax({
+		    type: 'POST',
+		    url: 'copyIDs',
+		    data: params,
+		    success: function(msg)
+		    {
+		    	console.log(msg);
+		        alert('Copy Result: ' + msg);
+		    },
+			error: function(msg)
+			{
+				console.log(msg);
+				alert("General error: " + msg)
+			}
+		});
+		
+	});
+	
+	
 	$(".selectSourceProject").change(function() {
 		var projectId = $(this).children(":selected").attr("id");
 		var sourceServerName = $('.selectSourceServer').children(":selected").text();

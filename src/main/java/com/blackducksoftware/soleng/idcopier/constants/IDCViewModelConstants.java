@@ -60,6 +60,17 @@ public class IDCViewModelConstants
     public static final String PROJECT_JSON_TREE = "projectJsonTree";
     
     /**
+     * Copy related variables
+     */
+ 
+    public static final String COPY_SOURCE_SERVER = "copy-source-server";
+    public static final String COPY_TARGET_SERVER = "copy-target-server";
+    public static final String COPY_SOURCE_PROJECT_ID= "copy-source-project-id";
+    public static final String COPY_TARGET_PROJECT_ID = "copy-target-project-id";
+    public static final String COPY_SOURCE_PATH = "copy-source-path";
+    public static final String COPY_TARGET_PATHS = "copy-target-paths";
+    
+    /**
      * Tree related variables
      */
     public static final String TREE_NODE_PATH = "tree-node-path";

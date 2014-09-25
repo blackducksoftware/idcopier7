@@ -107,6 +107,11 @@
 							<td><h4>Recursive</h4></td>
 							<td></td>
 						</tr>
+						<tr>
+							<td>					
+								<input type="button" id="submitCopyButton" value="Perform Copy" />
+							</td>
+						</tr>
 						<!--
 						<tr>
 							<td colspan="2">
