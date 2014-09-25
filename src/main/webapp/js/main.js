@@ -13,6 +13,15 @@ jQuery(document).ready(function() {
 	/**
 	 * Populate the project pulldown
 	 */
+	function buildPassablePath(string) {
+		if (string.indexOf("/") != -1) {
+			string = buildPassablePath(string.replace("/", "&="));
+		}
+		if (string.indexOf(".") != -1) {
+			string = buildPassablePath(string.replace(".", "P="));
+		}
+		return string;
+	}
 	function setProjects(sender, message, data) {
 		$('.select' + sender + 'Project').empty();
 		$('.select' + sender + 'Project').append("<option>" + message + "</option>");
@@ -124,19 +133,21 @@ jQuery(document).ready(function() {
 				},
 				onActivate : function(node) {
 					$('.' + sender.toLowerCase() + 'SelectedPath').text('/' + node.data.key);
-					if (!node.hasChildren()) {
-						// console.error("Path = " + path + '/' + node.data.key);
-						node.expand();
-						node.appendAjax({
-							url : path + '/' + node.data.key,
-							data : {
-								"mode" : "all"
-							},
-							success : function(node) {
-								node.expand();
-							},
-							debugLazyDelay : 750
-						});
+					if (node.data.isFolder) {
+						if (!node.hasChildren()) {
+							console.log("Path = " + "http://localhost:8080/protex-idcopier/" + path + '/' + buildPassablePath(node.data.key));
+							node.expand();
+							node.appendAjax({
+								url : path + '/' + buildPassablePath(node.data.key),
+								data : {
+									"mode" : "all"
+								},
+								success : function(node) {
+									node.expand();
+								},
+								debugLazyDelay : 750
+							});
+						}
 					}
 				}
 			});

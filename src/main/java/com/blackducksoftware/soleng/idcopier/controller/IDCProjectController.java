@@ -35,74 +35,65 @@ import com.blackducksoftware.soleng.idcopier.service.ProjectService;
 
 @RestController
 @SessionAttributes(IDCViewModelConstants.IDC_SESSION)
-public class IDCProjectController
-{
-    static Logger log = Logger.getLogger(IDCProjectController.class);
+public class IDCProjectController {
+	static Logger log = Logger.getLogger(IDCProjectController.class);
 
-    @Autowired
-    private LoginService loginService;
+	@Autowired
+	private LoginService loginService;
 
-    @Autowired
-    private ProjectService projectService;
+	@Autowired
+	private ProjectService projectService;
 
-    @RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
-    public ModelAndView displayProjectTree(
-	    @RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
-	    @RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
-	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-	    Model model)
-    {
-	ModelAndView modelAndView = new ModelAndView();
+	@RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
+	public ModelAndView displayProjectTree(
+			@RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
+			@RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
+			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
+		ModelAndView modelAndView = new ModelAndView();
 
-	log.info("Processing project: " + projectId);
+		log.info("Processing project: " + projectId);
 
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    ProjectService ps = new ProjectService(proxy);
-	    String jsonTree = ps.getProjectJSON(projectId);
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			ProjectService ps = new ProjectService(proxy);
+			String jsonTree = ps.getProjectJSON(projectId);
 
-	    modelAndView.addObject(IDCViewModelConstants.PROJECT_JSON_TREE,
-		    jsonTree);
+			modelAndView.addObject(IDCViewModelConstants.PROJECT_JSON_TREE, jsonTree);
 
-	    modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
-	} catch (Exception e)
-	{
-	    log.error("Unable to display project tree", e);
+			modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
+		} catch (Exception e) {
+			log.error("Unable to display project tree", e);
+		}
+
+		return modelAndView;
 	}
 
-	return modelAndView;
-    }
+	@RequestMapping(value = "/{serverName}/{projectId}/{path}")
+	public String getProjectNodes(@PathVariable String serverName, @PathVariable String projectId,
+			@PathVariable String path, @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
+			Model model) {
 
-    @RequestMapping(value = "/{serverName}/{projectId}/{path}")
-    public String getProjectNodes(
-	    @PathVariable String serverName,
-	    @PathVariable String projectId,
-	    @PathVariable String path,
-	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-	    Model model)
-    {
+		if (path.equalsIgnoreCase("root")) {
+			path = path.replaceAll("root", "");
+		}
 
-	path = path.replaceAll("root", "");
+		path = path.replaceAll("&=", "/").replaceAll("P=", ".");
 
-	if (!path.startsWith("/"))
-	{
-	    path = "/" + path;
+		if (!path.startsWith("/")) {
+			path = "/" + path;
+		}
+
+		log.info("Generating for path: '" + path + "'");
+
+		String jsonTree = "";
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			ProjectService ps = new ProjectService(proxy);
+			jsonTree = ps.getFolderJSON(projectId, path);
+		} catch (Exception e) {
+			log.error("Connection not established");
+		}
+
+		return jsonTree;
 	}
-
-	log.info("Generating for path: '" + path + "'");
-
-	String jsonTree = "";
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    ProjectService ps = new ProjectService(proxy);
-	    jsonTree = ps.getFolderJSON(projectId, path);
-	} catch (Exception e)
-	{
-	    log.error("Connection not established");
-	}
-
-	return jsonTree;
-    }
 }
