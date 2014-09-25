@@ -185,7 +185,13 @@ public class ProjectService {
 				json = gson.toJson(treeNodes);
 			}
 		} catch (Exception e) {
-			log.error("Could not convert project tree to JSON", e);
+			// log.error("Could not convert project tree to JSON", e);
+
+			List<IDCTree> projectNodes = new ArrayList<IDCTree>();
+			IDCTree rootNode = new IDCTree("", getProjectName(projectID), true);
+			projectNodes.add(rootNode);
+
+			return new Gson().toJson(projectNodes);
 		}
 
 		return json;

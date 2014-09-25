@@ -79,6 +79,13 @@
 							<td><h4>Recursive</h4></td>
 							<td></td>
 						</tr>
+						<tr>
+							<td colspan="2">
+								<div id="droppableSample" class="ui-widget-content">
+									<p>Drop something here</p>
+								</div>
+							</td>
+						</tr>
 						<!--
 						<tr>
 							<td>
@@ -99,7 +106,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="col-sm-5 col-lg-5">
+			<div class="col-sm-5 col-lg-5 col-mx-5">
 				<div class="container well">
 					<table class="table">
 						<tbody>
@@ -132,8 +139,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div id="targetCodeTree" class="targetCodeTree"
-						style="float: left; width: 100%; height: 200px;"></div>
+					<div id="targetCodeTree" class="targetCodeTree"></div>
 				</div>
 			</div>
 		</div>

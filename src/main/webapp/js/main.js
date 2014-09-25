@@ -120,19 +120,29 @@ jQuery(document).ready(function() {
 	function loadDynaTree(sender, serverName, projectId) {
 		if (projectId !== null) {
 			var path = serverName + '/' + projectId;
+			var setAsCheckBox = false;
+			if (sender === target) {
+				setAsCheckBox = true;
+			}
 			$('.' + sender.toLowerCase() + 'CodeTree').dynatree({
 				title : "Source Code Tree",
 				fx : {
 					height : "toggle",
 					duration : 200
 				},
-				clickFolderMode : 3,
+				checkbox : setAsCheckBox,
+				selectMode : 2,
 				autoFocus : false,
 				initAjax : {
 					url : path + '/' + ROOT
 				},
 				onActivate : function(node) {
-					$('.' + sender.toLowerCase() + 'SelectedPath').text('/' + node.data.key);
+					var selNodes = node.tree.getSelectedNodes();
+					// convert to title/key array
+					var selKeys = $.map(selNodes, function(node) {
+						return "/" + node.data.key;
+					});
+					$('.' + sender.toLowerCase() + 'SelectedPath').text(selKeys.join(", ") + ", " + '/' + node.data.key);
 					if (node.data.isFolder) {
 						if (!node.hasChildren()) {
 							console.log("Path = " + "http://localhost:8080/protex-idcopier/" + path + '/' + buildPassablePath(node.data.key));
@@ -149,7 +159,18 @@ jQuery(document).ready(function() {
 							});
 						}
 					}
-				}
+				},
+				onSelect : function(select, node) {
+					if (sender === target) {
+						// Display list of selected nodes
+						var selNodes = node.tree.getSelectedNodes();
+						// convert to title/key array
+						var selKeys = $.map(selNodes, function(node) {
+							return "/" + node.data.key;
+						});
+						$('.' + sender.toLowerCase() + 'SelectedPath').text(selKeys.join(", "));
+					}
+				},
 			});
 		}
 	}

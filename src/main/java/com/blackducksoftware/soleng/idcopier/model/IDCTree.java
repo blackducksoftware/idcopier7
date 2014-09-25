@@ -8,6 +8,7 @@ public class IDCTree {
 	private String title;
 	private boolean isFolder;
 	private boolean expand;
+	private boolean isLazy;
 	private List<IDCTree> children;
 
 	public IDCTree(String key, String title, boolean isFolder) {
@@ -15,6 +16,7 @@ public class IDCTree {
 		this.key = key;
 		this.title = cleanName(title);
 		this.isFolder = isFolder;
+		this.isLazy = isFolder;
 	}
 
 	private String cleanName(String original) {
