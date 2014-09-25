@@ -10,6 +10,7 @@ jQuery(document).ready(function() {
 	var locations = [ source, target ];
 	// Constants
 	var ROOT = "root";
+	var targetPaths;
 	/**
 	 * Populate the project pulldown
 	 */
@@ -146,7 +147,16 @@ jQuery(document).ready(function() {
 					var selKeys = $.map(selNodes, function(node) {
 						return "/" + node.data.key;
 					});
-					$('.' + sender.toLowerCase() + 'SelectedPath').text(selKeys.join(", ") + ", " + '/' + node.data.key);
+					var selectedPaths;
+					if (selKeys.length > 0) {
+						selectedPaths = selKeys.join(", ") + ", " + '/' + node.data.key;
+					} else {
+						selectedPaths = '/' + node.data.key;
+					}
+					if (source === target) {
+						targetPaths = selectedPaths;
+					}
+					$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 					if (node.data.isFolder) {
 						if (!node.hasChildren()) {
 							node.expand();
@@ -166,13 +176,19 @@ jQuery(document).ready(function() {
 
 				onSelect : function(select, node) {
 					if (sender === target) {
-						// Display list of selected nodes
 						var selNodes = node.tree.getSelectedNodes();
 						// convert to title/key array
 						var selKeys = $.map(selNodes, function(node) {
 							return "/" + node.data.key;
 						});
-						$('.' + sender.toLowerCase() + 'SelectedPath').text(selKeys.join(", "));
+						var selectedPaths;
+						if (selKeys.length > 0) {
+							selectedPaths = selKeys.join(", ") + ", " + '/' + node.data.key;
+						} else {
+							selectedPaths = '/' + node.data.key;
+						}
+						targetPaths = selectedPaths;
+						$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 					}
 				},
 			});
@@ -205,6 +221,13 @@ jQuery(document).ready(function() {
 	});
 	$(".userTargetPathInput").keyup(function() {
 		$('.targetSelectedPath').empty();
-		$('.targetSelectedPath').text(this.value);
+		// $('.targetSelectedPath').text(this.value);
+		if (targetPaths.length === 0) {
+			$('.targetSelectedPath').text(this.value);
+		} else if (this.value.length === 0) {
+			$('.targetSelectedPath').text(targetPaths);
+		} else {
+			$('.targetSelectedPath').text(targetPaths + ", " + this.value);
+		}
 	});
 });
