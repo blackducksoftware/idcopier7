@@ -23,12 +23,48 @@
 <!-- <link rel="stylesheet" href="css/EasyTree/skin-win8/ui.easytree.css">  -->
 <link rel="stylesheet" href="css/Dynatree/skin-vista/ui.dynatree.css">
 <link rel="stylesheet" href="css/justified-nav.css">
+<link rel="stylesheet" href="css/menu.css">
 
 </head>
 <body>
 	<div class="main">
 		<div class="header-logo">
 			<img src="images/tempIcon.gif">
+		</div>
+		<div>
+			<nav class="animate">
+				<div class="menu-header">
+					Mouse0270 created this snippet on <strong>Bootsnipp</strong>
+					network.
+				</div>
+				<ul>
+					<li><a href="https://twitter.com/mouse0270">@mouse0270 on
+							twitter</a></li>
+					<li><a href="https://facebook.com/rem.mcintosh">Learn More
+							about me on Facebook</a></li>
+					<li><a href="http://bootsnipp.com/mouse0270">Snippets</a></li>
+					<li><a href="https://github.com/mouse0270">Projects</a></li>
+					<li><a
+						href="http://bootsnipp.com/user/snippets/www.linkedin.com/in/remcintosh/">Résumé</a>
+					</li>
+				</ul>
+			</nav>
+			<div class="nav-controller">
+				<table>
+					<tbody>
+						<tr>
+							<td><span id="sideMenuButton"
+								class="[ glyphicon glyphicon-chevron-down ] controller-open"></span>
+								<span class="[ glyphicon glyphicon-remove ] controller-close"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><h4>Menu</h4></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
 		</div>
 		<hr>
 		<div class="project-container">
@@ -79,14 +115,14 @@
 							<td><h4>Recursive</h4></td>
 							<td></td>
 						</tr>
+						<!--
 						<tr>
 							<td colspan="2">
 								<div id="droppableSample" class="ui-widget-content">
 									<p>Drop something here</p>
 								</div>
 							</td>
-						</tr>
-						<!--
+						</tr>						
 						<tr>
 							<td>
 								<div>
@@ -143,6 +179,9 @@
 				</div>
 			</div>
 		</div>
+		<div id="footer">
+			<div class="container"></div>
+		</div>
 	</div>
 </body>
 
@@ -155,6 +194,7 @@
 	type="text/javascript"></script>
 <script src="js/libs/Dynatree/jquery.dynatree.js" type="text/javascript"></script>
 <!-- <script src="js/libs/EasyTree/jquery.easytree.js"></script>  -->
+<script src="js/menu.js" type="text/javascript"></script>
 <script src="js/main.js" type="text/javascript"></script>
 
 </ html>

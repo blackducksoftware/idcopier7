@@ -6,6 +6,11 @@ h2 {
 	text-transform: uppercase;
 }
 
+.menu-header{
+	color: white;
+	font-size: 32pt;
+}
+
 .animate {
 	-webkit-transition: all 0.5s ease-in-out;
 	-moz-transition: all 0.5s ease-in-out;
