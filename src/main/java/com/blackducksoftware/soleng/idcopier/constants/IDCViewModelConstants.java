@@ -50,13 +50,18 @@ public class IDCViewModelConstants
     /**
      * Project related variables
      */
-
     // List of servers defined by the user
     public static final String SERVER_LIST = "serverList";
     // List of projects belonging to a particular server
     public static final String PROJECT_LIST = "projectList";
+    public static final String PROJECT_ID = "project-id";
     public static final String PROJECT_SOURCE_ID = "selected-project-source-id";
     // Tree representing a particular project
     public static final String PROJECT_JSON_TREE = "projectJsonTree";
-
+    
+    /**
+     * Tree related variables
+     */
+    public static final String TREE_NODE_PATH = "tree-node-path";
+    
 }

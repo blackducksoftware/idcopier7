@@ -90,31 +90,34 @@ public class IDCProjectController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/{serverName}/{projectId}/{path}")
-	public String getProjectNodes(@PathVariable String serverName, @PathVariable String projectId,
-			@PathVariable String path, @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-			Model model) {
+	/**
+	 * Gets the children for a specific path
+	 * @param serverName
+	 * @param projectId
+	 * @param path - The node in the tree that needs expansion
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+    @RequestMapping(IDCPathConstants.TREE_EXPAND_NODE + "/{serverName}/{projectId}")
+    public String expandPathNode(
+	    @PathVariable String serverName,
+	    @PathVariable String projectId,
+	    @RequestParam(value = IDCViewModelConstants.TREE_NODE_PATH, required=true) String path,
+	    Model model)
+    {
+	log.info("Generating for path: '" + path + "'");
 
-		if (path.equalsIgnoreCase("root")) {
-			path = path.replaceAll("root", "");
-		}
-
-		path = path.replaceAll("&=", "/").replaceAll("P=", ".");
-
-		if (!path.startsWith("/")) {
-			path = "/" + path;
-		}
-
-		log.info("Generating for path: '" + path + "'");
-
-		String jsonTree = "";
-		try {
-			ProtexServerProxy proxy = loginService.getProxy(serverName);
-			jsonTree = projectService.getFolderJSON(proxy, projectId, path);
-		} catch (Exception e) {
-			log.error("Connection not established");
-		}
-
-		return jsonTree;
+	String jsonTree = "";
+	try
+	{
+	    ProtexServerProxy proxy = loginService.getProxy(serverName);
+	    jsonTree = projectService.getFolderJSON(proxy, projectId, path);
+	} catch (Exception e)
+	{
+	    log.error("Connection not established", e);
 	}
+
+	return jsonTree;
+    }
 }

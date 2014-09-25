@@ -2,27 +2,18 @@ jQuery(document).ready(function() {
 	/**
 	 * String constants for the JS
 	 */
-	// Variables
+	// Constants
 	var servers = "servers";
 	var source = "Source";
 	var target = "Target";
 	// The locations array will be used to auto trigger internal jQuery functions
 	var locations = [ source, target ];
-	// Constants
-	var ROOT = "root";
+	// The list of selected target paths
 	var targetPaths;
 	/**
 	 * Populate the project pulldown
 	 */
-	function buildPassablePath(string) {
-		if (string.indexOf("/") != -1) {
-			string = buildPassablePath(string.replace("/", "&="));
-		}
-		if (string.indexOf(".") != -1) {
-			string = buildPassablePath(string.replace(".", "P="));
-		}
-		return string;
-	}
+
 	function setProjects(sender, message, data) {
 		$('.select' + sender + 'Project').empty();
 		$('.select' + sender + 'Project').append("<option>" + message + "</option>");
@@ -124,7 +115,9 @@ jQuery(document).ready(function() {
 	}
 	function loadDynaTree(sender, serverName, projectId) {
 		if (projectId !== null) {
-			var path = serverName + '/' + projectId;
+			// Active the IDCProjectController.expandPathNode() 
+			// Pass in an argument representing the node
+			var path = "treeExpandNode/" + serverName + '/' + projectId + "/?tree-node-path=";
 			var setAsCheckBox = false;
 			if (sender === target) {
 				setAsCheckBox = true;
@@ -139,7 +132,8 @@ jQuery(document).ready(function() {
 				selectMode : 2,
 				autoFocus : false,
 				initAjax : {
-					url : path + '/' + ROOT
+					// Gets the root node for the project
+					url : path + '/'
 				},
 				onActivate : function(node) {
 					var selNodes = node.tree.getSelectedNodes();
@@ -160,8 +154,12 @@ jQuery(document).ready(function() {
 					if (node.data.isFolder) {
 						if (!node.hasChildren()) {
 							node.expand();
+							// This is the full Controller path with the node attached to the end
+							var finalPath = path + node.data.key;
+							console.log("Passing in final RESTful path for node expansion: " + finalPath);
 							node.appendAjax({
-								url : path + '/' + buildPassablePath(node.data.key),
+				
+								url : finalPath,
 								data : {
 									"mode" : "all"
 								},

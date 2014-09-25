@@ -28,12 +28,18 @@ public class IDCPathConstants {
 	 * Projects
 	 */
 	public static final String PROJECT_DISPLAY_TREE = "/processProject.do";
-
+	public static final String GET_PROJECTS = "/getProjects";
+	
+	/**
+	 * Tree
+	 */
+	public static final String TREE_EXPAND_NODE = "/treeExpandNode";
+	
 	/**
 	 * RESTful
 	 */
 	public static final String SERVERS = "/servers";
-	public static final String GET_PROJECTS = "/getProjects";
+	
 	public static final String TREE_NODES = "/targetNodes";
 	public static final String SERVER = "/server";
 	public static final String SERVER_NAME = "/{serverName}";
