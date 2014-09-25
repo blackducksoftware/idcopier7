@@ -40,100 +40,81 @@ import com.google.gson.Gson;
 
 @RestController
 @SessionAttributes(IDCViewModelConstants.IDC_SESSION)
-public class IDCProjectController
-{
-    static Logger log = Logger.getLogger(IDCProjectController.class);
+public class IDCProjectController {
+	static Logger log = Logger.getLogger(IDCProjectController.class);
 
-    @Autowired
-    private LoginService loginService;
+	@Autowired
+	private LoginService loginService;
 
-    @Autowired
-    private ProjectService projectService;
+	@Autowired
+	private ProjectService projectService;
 
-    @RequestMapping(IDCPathConstants.GET_PROJECTS)
-    public String getProjectJSONList(
-	    @RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName)
-    {
-	log.info("Getting project list for server: " + serverName);
-	List<ProjectInfo> projects = null;
-	try
-	{
-	    IDCServer server = loginService.getServerByName(serverName);
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    projectService.getProjectsByServer(proxy, server);
-	    
-	} catch (Exception e)
-	{
-	    log.error("Error getting projects", e);
+	@RequestMapping(IDCPathConstants.GET_PROJECTS)
+	public String getProjectJSONList(@RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName) {
+		log.info("Getting project list for server: " + serverName);
+		List<ProjectInfo> projects = null;
+		try {
+			IDCServer server = loginService.getServerByName(serverName);
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			projectService.getProjectsByServer(proxy, server);
+
+		} catch (Exception e) {
+			log.error("Error getting projects", e);
+		}
+
+		log.info("Returning JSON projects: " + new Gson().toJson(projects));
+
+		return new Gson().toJson(projects);
 	}
 
-	log.info("Returning JSON projects: "
-		+ new Gson().toJson(projects));
+	@RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
+	public ModelAndView displayProjectTree(
+			@RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
+			@RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
+			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
+		ModelAndView modelAndView = new ModelAndView();
 
-	return new Gson().toJson(projects);
-    }
+		log.info("Processing project: " + projectId);
 
-    @RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
-    public ModelAndView displayProjectTree(
-	    @RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
-	    @RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
-	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-	    Model model)
-    {
-	ModelAndView modelAndView = new ModelAndView();
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			String jsonTree = projectService.getProjectJSON(proxy, projectId);
 
-	log.info("Processing project: " + projectId);
+			modelAndView.addObject(IDCViewModelConstants.PROJECT_JSON_TREE, jsonTree);
 
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    String jsonTree = projectService.getProjectJSON(proxy, projectId);
+			modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
+		} catch (Exception e) {
+			log.error("Unable to display project tree", e);
+		}
 
-	    modelAndView.addObject(IDCViewModelConstants.PROJECT_JSON_TREE,
-		    jsonTree);
-
-	    modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
-	} catch (Exception e)
-	{
-	    log.error("Unable to display project tree", e);
+		return modelAndView;
 	}
 
-	return modelAndView;
-    }
+	@RequestMapping(value = "/{serverName}/{projectId}/{path}")
+	public String getProjectNodes(@PathVariable String serverName, @PathVariable String projectId,
+			@PathVariable String path, @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
+			Model model) {
 
-    @RequestMapping(value = "/{serverName}/{projectId}/{path}")
-    public String getProjectNodes(
-	    @PathVariable String serverName,
-	    @PathVariable String projectId,
-	    @PathVariable String path,
-	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-	    Model model)
-    {
+		if (path.equalsIgnoreCase("root")) {
+			path = path.replaceAll("root", "");
+		}
 
-	if (path.equalsIgnoreCase("root"))
-	{
-	    path = path.replaceAll("root", "");
+		path = path.replaceAll("&=", "/").replaceAll("P=", ".");
+
+		if (!path.startsWith("/")) {
+			path = "/" + path;
+		}
+
+		log.info("Generating for path: '" + path + "'");
+
+		String jsonTree = "";
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			jsonTree = projectService.getFolderJSON(proxy, projectId, path);
+		} catch (Exception e) {
+			log.error("Connection not established");
+		}
+
+		return jsonTree;
 	}
-
-	path = path.replaceAll("&=", "/").replaceAll("P=", ".");
-
-	if (!path.startsWith("/"))
-	{
-	    path = "/" + path;
-	}
-
-	log.info("Generating for path: '" + path + "'");
-
-	String jsonTree = "";
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    jsonTree = projectService.getFolderJSON(proxy, projectId, path);
-	} catch (Exception e)
-	{
-	    log.error("Connection not established");
-	}
-
-	return jsonTree;
-    }
 }
