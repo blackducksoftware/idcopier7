@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
+<html>
 <head>
 <title>Protex ID Copier | Login</title>
 
@@ -24,8 +24,8 @@
 
 		<br />
 		<div class="container">
-			<form class="well" method="POST" commandName="protex-server"
-				action="login.do">
+			<form id="loginForm" class="well" method="POST"
+				commandName="protex-server" action="login.do">
 				<legend> Please Login </legend>
 				<fieldset>
 					<!-- Server input-->
@@ -77,7 +77,7 @@
 						<div>
 							<button id="submitButton" name="submitButton"
 								class="btn btn-primary pull-right ladda-button"
-								data-style="zoom-in">
+								>
 								<span class="ladda-label">Submit</span>
 							</button>
 							<!-- <label id="spinner"></label>  -->
@@ -93,3 +93,6 @@
 <script src="js/libs/Ladda/ladda.js"></script>
 <script src="js/libs/jquery/jquery.js"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
+<script src="js/libs/Bootstrap-growl/jquery.bootstrap-growl.js"></script>
+<script src="js/login.js"></script>
+</html>
