@@ -8,18 +8,15 @@ jQuery(document).ready(function() {
 	var target = "Target";
 	// The locations array will be used to auto trigger internal jQuery functions
 	var locations = [ source, target ];
-	
 	/**
-	 * Internal variables 
+	 * Internal variables
 	 */
-
 	// The list of selected target paths
 	var targetPaths;
 	var sourcePath;
 	/**
 	 * Populate the project pulldown
 	 */
-
 	function setProjects(sender, message, data) {
 		$('.select' + sender + 'Project').empty();
 		$('.select' + sender + 'Project').append("<option>" + message + "</option>");
@@ -35,16 +32,14 @@ jQuery(document).ready(function() {
 		console.log("Populating project pulldows");
 		$.each(locations, function(index, locationValue) {
 			console.log("Processing location: " + locationValue);
-			
 			// Variables used for all processes
 			// This is the div id of the pulldown
 			var serverSelectorDiv = ".select" + locationValue + "Server";
 			// This is the default non-value message of the selector
 			var messageServer = "Select " + locationValue + " Server";
-			
 			/**
 			 * Populate server pulldown
-			 */	
+			 */
 			$.getJSON(servers, function(data) {
 				$(serverSelectorDiv).empty();
 				$(serverSelectorDiv).append("<option>" + messageServer + "</option>");
@@ -55,7 +50,7 @@ jQuery(document).ready(function() {
 			/**
 			 * Assign server pulldown behavior
 			 */
-			$(serverSelectorDiv).change(function() {	
+			$(serverSelectorDiv).change(function() {
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				var path = "reloginServer/" + source + "/?server-name=" + serverName;
 				console.log("Sending  relogin path: " + path);
@@ -69,7 +64,7 @@ jQuery(document).ready(function() {
 			 */
 			// Build the path, lower case it to match Controller
 			var serverName = $(serverSelectorDiv).children(":selected").text();
-			var projectPath = locationValue.toLowerCase() + "Projects" + "/?server-name="+serverName;
+			var projectPath = locationValue.toLowerCase() + "Projects" + "/?server-name=" + serverName;
 			var messageProject = "Select " + locationValue + " Project";
 			$.getJSON(projectPath, function(data) {
 				console.log("Invoking path: " + projectPath);
@@ -121,7 +116,7 @@ jQuery(document).ready(function() {
 	}
 	function loadDynaTree(sender, serverName, projectId) {
 		if (projectId !== null) {
-			// Active the IDCProjectController.expandPathNode() 
+			// Active the IDCProjectController.expandPathNode()
 			// Pass in an argument representing the node
 			var path = "treeExpandNode/" + serverName + '/' + projectId + "/?tree-node-path=";
 			var setAsCheckBox = false;
@@ -142,25 +137,6 @@ jQuery(document).ready(function() {
 					url : path + '/'
 				},
 				onActivate : function(node) {
-					var selNodes = node.tree.getSelectedNodes();
-					// convert to title/key array
-					var selKeys = $.map(selNodes, function(node) {
-						return "/" + node.data.key;
-					});
-					var selectedPaths;
-					if (selKeys.length > 0) {
-						selectedPaths = selKeys.join(", ") + ", " + '/' + node.data.key;
-					} else {
-						selectedPaths = '/' + node.data.key;
-					}
-					if (source === target) {
-						targetPaths = selectedPaths;
-					}
-					else
-					{
-						sourcePath = selectedPaths;
-					}
-					$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 					if (node.data.isFolder) {
 						if (!node.hasChildren()) {
 							node.expand();
@@ -168,7 +144,6 @@ jQuery(document).ready(function() {
 							var finalPath = path + node.data.key;
 							console.log("Passing in final RESTful path for node expansion: " + finalPath);
 							node.appendAjax({
-				
 								url : finalPath,
 								data : {
 									"mode" : "all"
@@ -181,7 +156,6 @@ jQuery(document).ready(function() {
 						}
 					}
 				},
-
 				onSelect : function(select, node) {
 					if (sender === target) {
 						var selNodes = node.tree.getSelectedNodes();
@@ -189,61 +163,45 @@ jQuery(document).ready(function() {
 						var selKeys = $.map(selNodes, function(node) {
 							return "/" + node.data.key;
 						});
-						var selectedPaths;
-						if (selKeys.length > 0) {
-							selectedPaths = selKeys.join(", ") + ", " + '/' + node.data.key;
-						} else {
-							selectedPaths = '/' + node.data.key;
-						}
-						targetPaths = selectedPaths;
+						targetPaths = selectedPaths = selKeys.join(", ");
 						$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 					}
 				},
 			});
+			$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").reload();
 		}
 	}
-	
 	/**
-	 * Submit copy button 
-	 * Note the # lookup for non-div
+	 * Submit copy button Note the # lookup for non-div
 	 */
-	$("#submitCopyButton").on('click', function()
-	{
+	$("#submitCopyButton").on('click', function() {
 		console.log("Submitting copy IDs...");
-		
 		var sourceServer = $('.selectSourceServer').children(":selected").text();
 		var targetServer = $('.selectTargetServer').children(":selected").text();
 		var sourceProjectId = $('.selectSourceProject').children(":selected").attr("id");
 		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
-		
 		var params = {
-				'copy-source-server' : sourceServer,
-				'copy-target-server' : targetServer,
-				'copy-source-project-id' : sourceProjectId,
-				'copy-target-project-id' : targetProjectId,
-				'copy-source-path' : sourcePath,  // Set inside the dynatree behavior
-				'copy-target-paths' : targetPaths, // Also inside the dynatree behavior
+			'copy-source-server' : sourceServer,
+			'copy-target-server' : targetServer,
+			'copy-source-project-id' : sourceProjectId,
+			'copy-target-project-id' : targetProjectId,
+			'copy-source-path' : sourcePath, // Set inside the dynatree behavior
+			'copy-target-paths' : targetPaths, // Also inside the dynatree behavior
 		};
-			
 		$.ajax({
-		    type: 'POST',
-		    url: 'copyIDs',
-		    data: params,
-		    success: function(msg)
-		    {
-		    	console.log(msg);
-		        alert('Copy Result: ' + msg);
-		    },
-			error: function(msg)
-			{
+			type : 'POST',
+			url : 'copyIDs',
+			data : params,
+			success : function(msg) {
+				console.log(msg);
+				alert('Copy Result: ' + msg);
+			},
+			error : function(msg) {
 				console.log(msg);
 				alert("General error: " + msg)
 			}
 		});
-		
 	});
-	
-	
 	$(".selectSourceProject").change(function() {
 		var projectId = $(this).children(":selected").attr("id");
 		var sourceServerName = $('.selectSourceServer').children(":selected").text();

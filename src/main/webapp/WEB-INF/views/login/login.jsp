@@ -77,7 +77,7 @@
 						<div>
 							<button id="submitButton" name="submitButton"
 								class="btn btn-primary pull-right ladda-button"
-								>
+								data-style="zoom-in">
 								<span class="ladda-label">Submit</span>
 							</button>
 							<!-- <label id="spinner"></label>  -->
