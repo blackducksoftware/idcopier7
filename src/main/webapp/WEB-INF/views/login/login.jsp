@@ -85,9 +85,7 @@
 					</div>
 				</fieldset>
 			</form>
-			<div class="errorLoginMsg">
-				${loginErrorMsg}
-			</div>
+			<div class="errorLoginMsg">${loginErrorMsg}</div>
 		</div>
 	</div>
 </body>

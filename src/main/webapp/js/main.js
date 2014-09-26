@@ -136,6 +136,7 @@ jQuery(document).ready(function() {
 					// Gets the root node for the project
 					url : path + '/'
 				},
+				// onActivate: function(node)
 				onClick : function(dtnode) {
 					if (dtnode.data.isFolder && !dtnode.hasChildren()) {
 						dtnode.expand();
@@ -152,6 +153,9 @@ jQuery(document).ready(function() {
 							},
 							debugLazyDelay : 750
 						});
+					}
+					if (sender === source) {
+						$('.' + sender.toLowerCase() + 'SelectedPath').text("/" + dtnode.data.key);
 					}
 				},
 				onSelect : function(select, node) {

@@ -204,6 +204,8 @@
 <script src="js/libs/jquery-cookie/jquery.cookie.js"
 	type="text/javascript"></script>
 <script src="js/libs/Dynatree/jquery.dynatree.js" type="text/javascript"></script>
+<script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"
+	type="text/javascript"></script>
 <!-- <script src="js/libs/EasyTree/jquery.easytree.js"></script>  -->
 <script src="js/menu.js" type="text/javascript"></script>
 <script src="js/main.js" type="text/javascript"></script>

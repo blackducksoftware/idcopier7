@@ -209,7 +209,7 @@ public class ProjectService {
 			if (path.equals("/")) {
 				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
 
-				IDCTree rootNode = new IDCTree("/", getProjectName(projectID), true, pendingCount);
+				IDCTree rootNode = new IDCTree("", getProjectName(projectID), true, pendingCount);
 				rootNode.setExpand(true);
 				rootNode.addChildren(treeNodes);
 				projectNodes.add(rootNode);
