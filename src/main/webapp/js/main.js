@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 	/**
 	 * String constants for the JS
 	 */
@@ -6,8 +6,9 @@ jQuery(document).ready(function() {
 	var servers = "servers";
 	var source = "Source";
 	var target = "Target";
-	// The locations array will be used to auto trigger internal jQuery functions
-	var locations = [ source, target ];
+	// The locations array will be used to auto trigger internal jQuery
+	// functions
+	var locations = [source, target];
 	/**
 	 * Internal variables
 	 */
@@ -20,7 +21,7 @@ jQuery(document).ready(function() {
 	function setProjects(sender, message, data) {
 		$('.select' + sender + 'Project').empty();
 		$('.select' + sender + 'Project').append("<option>" + message + "</option>");
-		$.each(data, function(index, value) {
+		$.each(data, function (index, value) {
 			console.log("Outputting project: " + value);
 			$('.select' + sender + 'Project').append("<option id=\"" + value.projectId + "\">" + value.name + "</option>");
 		});
@@ -28,9 +29,9 @@ jQuery(document).ready(function() {
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
-	var populateWidgets = (function() {
+	var populateWidgets = (function () {
 		console.log("Populating project pulldows");
-		$.each(locations, function(index, locationValue) {
+		$.each(locations, function (index, locationValue) {
 			console.log("Processing location: " + locationValue);
 			// Variables used for all processes
 			// This is the div id of the pulldown
@@ -40,21 +41,21 @@ jQuery(document).ready(function() {
 			/**
 			 * Populate server pulldown
 			 */
-			$.getJSON(servers, function(data) {
+			$.getJSON(servers, function (data) {
 				$(serverSelectorDiv).empty();
 				$(serverSelectorDiv).append("<option>" + messageServer + "</option>");
-				$.each(data, function(index, value) {
+				$.each(data, function (index, value) {
 					$(serverSelectorDiv).append("<option>" + value.serverName + "</option>");
 				});
 			});
 			/**
 			 * Assign server pulldown behavior
 			 */
-			$(serverSelectorDiv).change(function() {
+			$(serverSelectorDiv).change(function () {
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				var path = "reloginServer/" + source + "/?server-name=" + serverName;
 				console.log("Sending  relogin path: " + path);
-				$.getJSON(path, function(data) {
+				$.getJSON(path, function (data) {
 					setProjects(locationValue, messageServer, data)
 				});
 				// Wipe out code tree
@@ -66,7 +67,7 @@ jQuery(document).ready(function() {
 			var serverName = $(serverSelectorDiv).children(":selected").text();
 			var projectPath = locationValue.toLowerCase() + "Projects" + "/?server-name=" + serverName;
 			var messageProject = "Select " + locationValue + " Project";
-			$.getJSON(projectPath, function(data) {
+			$.getJSON(projectPath, function (data) {
 				console.log("Invoking path: " + projectPath);
 				setProjects(locationValue, messageProject, data)
 			});
@@ -104,12 +105,12 @@ jQuery(document).ready(function() {
 			}
 			// var currentlySelected = $('#lstNodes :selected').val();
 			tree = $('.' + sender.toLowerCase() + 'CodeTree').easytree({
-				allowActivate : true,
-				dataUrl : path,
-				openLazyNode : openLazyNode,
-				lazyUrl : path
-			});
-			$('.' + sender.toLowerCase() + 'CodeTree').click(function() {
+					allowActivate : true,
+					dataUrl : path,
+					openLazyNode : openLazyNode,
+					lazyUrl : path
+				});
+			$('.' + sender.toLowerCase() + 'CodeTree').click(function () {
 				loadSelectBox(sender);
 			});
 		}
@@ -137,10 +138,11 @@ jQuery(document).ready(function() {
 					url : path + '/'
 				},
 				// onActivate: function(node)
-				onClick : function(dtnode) {
+				onClick : function (dtnode) {
 					if (dtnode.data.isFolder && !dtnode.hasChildren()) {
 						dtnode.expand();
-						// This is the full Controller path with the node attached to the end
+						// This is the full Controller path with the node
+						// attached to the end
 						var finalPath = path + dtnode.data.key;
 						console.log("Passing in final RESTful path for node expansion: " + finalPath);
 						dtnode.appendAjax({
@@ -148,7 +150,7 @@ jQuery(document).ready(function() {
 							data : {
 								"mode" : "all"
 							},
-							success : function(node) {
+							success : function (node) {
 								node.expand();
 							},
 							debugLazyDelay : 750
@@ -158,13 +160,60 @@ jQuery(document).ready(function() {
 						$('.' + sender.toLowerCase() + 'SelectedPath').text("/" + dtnode.data.key);
 					}
 				},
-				onSelect : function(select, node) {
+				onSelect : function (select, node) {
 					if (sender === target) {
 						var selNodes = node.tree.getSelectedNodes();
+						var uniqueNodes = [];
+						var key = node.data.key;
+						
+						/*
+						 * This doesn't do what we wanted, and I realized the
+						 * flaw in my thinking. I was doing a simple check to
+						 * see if one path contained the other, but that won't
+						 * be correct.
+						 * 
+						 * In reality what we want is to:
+						 * 
+						 * 1. Check to make sure that the selected path we are
+						 * looking at, isn't he path being checked against in
+						 * the selected paths.
+						 * 
+						 * 2. If there is a file name, strip that out. We only
+						 * want to deal with folder names. If we try for file
+						 * names, we will run into situations where we uncheck
+						 * items with very similar names
+						 * 
+						 * Path 1: /com/niles/test/path/README Path 2:
+						 * /com/niles/test/path/README2
+						 * 
+						 * Path 2 will contain Path 1, but not be an accurate
+						 * check.
+						 * 
+						 * So we need to check to see if the node type is a file
+						 * or a folder. If it is a folder, we can just do the
+						 * check as is. If it's a file, then we will have to
+						 * take off the file name and then compare the folder
+						 * that we are checking against. This should make it
+						 * more accurate.
+						 */
+
+						for (var i = 0; i < selNodes.length; ++i) {
+							// Look to see if the newly selected node lives
+							// inside of an old node, or if an old node
+							// lives inside the selected node
+							if (((key.lastIndexOf(selNodes[i].data.key, 0) === 0) || (selNodes[i].data.key.lastIndexOf(key, 0) === 0)) && node.data.key !== selNodes[i].data.key) {
+								if ($('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).isSelected()) {
+									console.log("Unchecking: "+selNodes[i].data.key);
+									$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).toggleSelect();
+								}
+							}
+						}
+
+						selNodes = node.tree.getSelectedNodes();
 						// convert to title/key array
-						var selKeys = $.map(selNodes, function(node) {
-							return "/" + node.data.key;
-						});
+						var selKeys = $.map(selNodes, function (node) {
+								return "/" + node.data.key;
+							});
 						targetPaths = selectedPaths = selKeys.join(", ");
 						$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 					}
@@ -176,7 +225,7 @@ jQuery(document).ready(function() {
 	/**
 	 * Submit copy button Note the # lookup for non-div
 	 */
-	$("#submitCopyButton").on('click', function() {
+	$("#submitCopyButton").on('click', function () {
 		console.log("Submitting copy IDs...");
 		var sourceServer = $('.selectSourceServer').children(":selected").text();
 		var targetServer = $('.selectTargetServer').children(":selected").text();
@@ -187,30 +236,32 @@ jQuery(document).ready(function() {
 			'copy-target-server' : targetServer,
 			'copy-source-project-id' : sourceProjectId,
 			'copy-target-project-id' : targetProjectId,
-			'copy-source-path' : sourcePath, // Set inside the dynatree behavior
-			'copy-target-paths' : targetPaths, // Also inside the dynatree behavior
+			'copy-source-path' : sourcePath, // Set inside the dynatree
+			// behavior
+			'copy-target-paths' : targetPaths, // Also inside the dynatree
+			// behavior
 		};
 		$.ajax({
 			type : 'POST',
 			url : 'copyIDs',
 			data : params,
-			success : function(msg) {
+			success : function (msg) {
 				console.log(msg);
 				alert('Copy Result: ' + msg);
 			},
-			error : function(msg) {
+			error : function (msg) {
 				console.log(msg);
 				alert("General error: " + msg)
 			}
 		});
 	});
-	$(".selectSourceProject").change(function() {
+	$(".selectSourceProject").change(function () {
 		var projectId = $(this).children(":selected").attr("id");
 		var sourceServerName = $('.selectSourceServer').children(":selected").text();
 		// loadProject(source, sourceServerName, projectId);
 		loadDynaTree(source, sourceServerName, projectId);
 	});
-	$(".selectTargetProject").change(function() {
+	$(".selectTargetProject").change(function () {
 		var projectId = $(this).children(":selected").attr("id");
 		var targetServerName = $('.selectTargetServer').children(":selected").text();
 		loadDynaTree(target, targetServerName, projectId);
@@ -220,7 +271,7 @@ jQuery(document).ready(function() {
 		'placement' : 'bottom',
 		'title' : "Type source path here"
 	});
-	$(".userSourcePathInput").keyup(function() {
+	$(".userSourcePathInput").keyup(function () {
 		$('.sourceSelectedPath').empty();
 		$('.sourceSelectedPath').text(this.value);
 	});
@@ -229,7 +280,7 @@ jQuery(document).ready(function() {
 		'placement' : 'bottom',
 		'title' : "Type target path here"
 	});
-	$(".userTargetPathInput").keyup(function() {
+	$(".userTargetPathInput").keyup(function () {
 		$('.targetSelectedPath').empty();
 		// $('.targetSelectedPath').text(this.value);
 		if (targetPaths.length === 0) {

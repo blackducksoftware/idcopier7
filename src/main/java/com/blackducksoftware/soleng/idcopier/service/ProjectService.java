@@ -153,6 +153,8 @@ public class ProjectService {
 
 			nodeTypes.add(CodeTreeNodeType.FILE);
 			nodeTypes.add(CodeTreeNodeType.FOLDER);
+			nodeTypes.add(CodeTreeNodeType.EXPANDED_ARCHIVE); // Added this in as it's a requirement for NetApp, and useful for us as well. It will be treaded
+																// as a folder
 
 			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, path, ctrRequest);
 
