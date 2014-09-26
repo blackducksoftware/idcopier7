@@ -20,6 +20,10 @@
 	margin: 0 auto;
 }
 
+.errorLoginMsg {
+	color: red;
+}
+
 .body {
 	max-width: 90%;
 	margin: 0 auto;

@@ -14,8 +14,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
-import com.blackducksoftware.sdk.protex.project.ProjectApi;
-import com.blackducksoftware.sdk.protex.project.ProjectInfo;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 
@@ -41,6 +39,28 @@ public class LoginService
 
     }
 
+    /**
+     * The first login
+     * @param session
+     */
+    public void loginSession(IDCSession session) throws Exception
+    {
+	try
+	{
+	    ProtexServerProxy proxy = new ProtexServerProxy(session.getServerURI(),
+		    session.getUserName(), session.getPassword());
+
+	    proxy.validateCredentials();
+
+	    log.info("Login successful");
+	    proxy.close();
+	} catch (Exception e)
+	{
+	    log.error("Error logging in: " + e.getMessage());
+	    throw new Exception(e.getCause().getMessage());
+	}
+    }
+    
     
     public IDCServer getServerByName(String serverName) throws Exception
     {

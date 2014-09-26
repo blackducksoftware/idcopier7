@@ -35,6 +35,10 @@ public class IDCViewModelConstants
         
     // User select to remember or not remember cookies
     public static final String REMEMBER_COOKIES = "remember-cookies";
+    
+    // An error if there is one
+    public static final String LOGIN_ERROR_MSG = "loginErrorMsg";
+    
     // Cookie to remember the login information
     public static final String IDC_COOKIE_SERVER = "idcServerCookie";
     public static final String IDC_COOKIE_USER = "idcUserCookie";

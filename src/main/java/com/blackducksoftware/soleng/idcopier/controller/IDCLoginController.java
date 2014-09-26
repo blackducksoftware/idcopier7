@@ -94,46 +94,58 @@ public class IDCLoginController {
 		return new ModelAndView(IDCViewConstants.LOGIN_REDIRECT);
 	}
 
-	/**
-	 * Login method, grabs the user's inputs, calls the loginserver and redirects to the project display page
-	 * 
-	 * This is the first and only login process that uses the user credentials
-	 * 
-	 * @param student
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = IDCPathConstants.LOGIN_PROCESS_PATH)
-	public ModelAndView processLogin(
-			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-			@RequestParam(value = IDCViewModelConstants.REMEMBER_COOKIES, required = false, defaultValue = "false") Boolean rememberCookie,
-			HttpServletResponse response) {
-		ModelAndView modelAndView = new ModelAndView();
+    /**
+     * Login method, grabs the user's inputs, calls the loginserver and
+     * redirects to the project display page
+     * 
+     * This is the first and only login process that uses the user credentials
+     * 
+     * @param student
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = IDCPathConstants.LOGIN_PROCESS_PATH)
+    public ModelAndView processLogin(
+	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
+	    @RequestParam(value = IDCViewModelConstants.REMEMBER_COOKIES, required = false, defaultValue = "false") Boolean rememberCookie,
+	    HttpServletResponse response)
+    {
+	ModelAndView modelAndView = new ModelAndView();
 
-		// Before we log in, process the servers
-		servers = processServerListConfiguration(session);
+	// Before we log in, process the servers
+	servers = processServerListConfiguration(session);
 
-		log.info("Logging in...: " + session.getServerURI());
-		ProtexServerProxy proxy;
-		try {
-			/***
-			 * This is the one time where a Proxy is received via server URI This is because the login page, at this time, does not provide aliases/names
-			 */
-			proxy = loginService.getProxyByServerURI(session.getServerURI());
-			List<ProjectInfo> projects = projectService.getProjectsByUser(proxy, session.getUserName());
+	log.info("Logging in...: " + session.getServerURI());
+	ProtexServerProxy proxy;
+	try
+	{
+	    /***
+	     * This is the one time where a Proxy is received via server URI
+	     * This is because the login page, at this time, does not provide
+	     * aliases/names
+	     */
+	    loginService.loginSession(session);
 
-			// Process cookie information
-			processCookies(rememberCookie, session, response);
+	    // Process cookie information
+	    processCookies(rememberCookie, session, response);
 
-			modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
-			modelAndView.addObject(IDCViewModelConstants.SERVER_LIST, servers);
-		} catch (Exception e) {
-			log.error("Error logging in", e);
-		}
-
-		modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
-		return modelAndView;
+	    modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
+	    modelAndView.addObject(IDCViewModelConstants.SERVER_LIST, servers);
+	} catch (Exception e)
+	{
+	    /**
+	     * Capture login errors and redirect back to the form
+	     */
+	    modelAndView.addObject(IDCViewModelConstants.LOGIN_ERROR_MSG,
+		    e.getMessage());
+	    log.error("Error logging in", e);
+	    modelAndView.setViewName(IDCViewConstants.LOGIN_FORM);
+	    return modelAndView;
 	}
+
+	modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
+	return modelAndView;
+    }
 
 	/**
 	 * Processes a server change from the dropdown Return JSON project list TODO: This actually retreives a project list, consider refactoring?
