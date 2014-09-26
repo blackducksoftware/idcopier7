@@ -25,4 +25,7 @@ public class IDCViewConstants {
 
 	// Logging
 	public static final String LOG_FORM = "logging/log";
+
+	// Logging
+	public static final String ADMIN_FORM = "admin/admin";
 }

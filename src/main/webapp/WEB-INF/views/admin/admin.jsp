@@ -4,7 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <head>
-<title>Protex ID Copier | Application Log</title>
+<title>Protex ID Copier | Administration</title>
 
 <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
 <link rel="stylesheet" href="css/main.css">
@@ -23,7 +23,7 @@
 		<br /> <br /> <br />
 		<div class="container well">
 			<br />
-			<h1>This is where the logging will load!!!</h1>
+			<h1>There will be admin options on this page!!!</h1>
 			<br />
 		</div>
 </body>

@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/justified-nav.css">
+<link rel="stylesheet" href="css/Ladda/ladda-themeless.css">
+
 </head>
 <body>
 
@@ -64,8 +66,7 @@
 
 						<div>
 							Remember me: <input id="remember-cookies" name="remember-cookies"
-								placeholder="RememberMe" class="checkbox" 
-								type="checkbox">
+								placeholder="RememberMe" class="checkbox" type="checkbox">
 						</div>
 
 					</div>
@@ -75,8 +76,11 @@
 						<label class="control-label" for="submitButton"></label>
 						<div>
 							<button id="submitButton" name="submitButton"
-								class="btn btn-primary pull-right">Submit</button>
-							<label id="spinner"></label>
+								class="btn btn-primary pull-right ladda-button"
+								data-style="zoom-in">
+								<span class="ladda-label">Submit</span>
+							</button>
+							<!-- <label id="spinner"></label>  -->
 						</div>
 					</div>
 				</fieldset>
@@ -85,5 +89,7 @@
 	</div>
 </body>
 
+<script src="js/libs/Ladda/spin.js"></script>
+<script src="js/libs/Ladda/ladda.js"></script>
 <script src="js/libs/jquery/jquery.js"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>

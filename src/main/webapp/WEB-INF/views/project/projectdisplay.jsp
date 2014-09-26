@@ -40,7 +40,14 @@
 					<li><a href="log" target="_blank"><h4>
 								View Log <span class="glyphicon glyphicon-list-alt"></span>
 							</h4> </a></li>
-					<li><a href="https://twitter.com/mouse0270" target="_blank"><h4>
+					<li><a href="admin" target="_blank"><h4>
+								Admin <span class="glyphicon glyphicon-cog"></span>
+							</h4> </a></li>
+				</ul>
+
+				<div class="divider"></div>
+				<ul>
+					<li><a href="login" target="_blank"><h4>
 								Logout <span class="glyphicon glyphicon-user"></span>
 							</h4> </a></li>
 				</ul>
@@ -101,16 +108,26 @@
 					<tbody>
 						<tr>
 							<td><h4>Defer BOM refresh</h4></td>
-							<td></td>
+							<td><input id="deferBomRefreshCheckBox"
+								name="deferBomRefreshCheckBox" class="checkbox" type="checkbox"></td>
 						</tr>
 						<tr>
-							<td><h4>Recursive</h4></td>
-							<td></td>
+							<td><h4>Option 2</h4></td>
+							<td><input id="optionTwoCheckBox" name="optionTwoCheckBox"
+								class="checkbox" type="checkbox"></td>
 						</tr>
 						<tr>
-							<td>					
-								<input type="button" id="submitCopyButton" value="Perform Copy" />
-							</td>
+							<td><h4>Option 3</h4></td>
+							<td><input id="optionThreeCheckBox"
+								name="optionThreeCheckBox" class="checkbox" type="checkbox"></td>
+						</tr>
+						<tr>
+							<td colspan="2"><input type="button" id="submitCopyButton"
+								value="Perform Copy" class="btn btn-primary perform-copy-button" /></td>
+						</tr>
+						<tr>
+							<td><h4></h4></td>
+							<td></td>
 						</tr>
 						<!--
 						<tr>
