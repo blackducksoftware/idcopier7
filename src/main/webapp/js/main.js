@@ -213,16 +213,16 @@ jQuery(document).ready(function() {
 		
 		var sourceServer = $('.selectSourceServer').children(":selected").text();
 		var targetServer = $('.selectTargetServer').children(":selected").text();
-		var sourceProjectId = $('.selectSourceProject').children(":selected").text();
-		var targetProjectId = $('.selectTargetProject').children(":selected").text();
+		var sourceProjectId = $('.selectSourceProject').children(":selected").attr("id");
+		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
 		
 		var params = {
 				'copy-source-server' : sourceServer,
 				'copy-target-server' : targetServer,
 				'copy-source-project-id' : sourceProjectId,
 				'copy-target-project-id' : targetProjectId,
-				'copy-source-path' : sourcePath,
-				'copy-target-paths' : targetPaths,
+				'copy-source-path' : sourcePath,  // Set inside the dynatree behavior
+				'copy-target-paths' : targetPaths, // Also inside the dynatree behavior
 		};
 			
 		$.ajax({

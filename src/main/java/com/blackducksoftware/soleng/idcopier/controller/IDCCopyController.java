@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
+import com.blackducksoftware.soleng.idcopier.model.IDCConfig;
+import com.blackducksoftware.soleng.idcopier.service.CopyService;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
 import com.blackducksoftware.soleng.idcopier.service.ProjectService;
 
@@ -37,6 +40,9 @@ public class IDCCopyController
     static Logger log = Logger.getLogger(IDCCopyController.class);
 
     @Autowired
+    private IDCConfig config;
+    
+    @Autowired
     private LoginService loginService;
 
     @Autowired
@@ -49,31 +55,53 @@ public class IDCCopyController
 	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PROJECT_ID) String sourceProjectId,
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_PROJECT_ID) String targetProjectId,
 	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PATH) String sourcePath,
-	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_PATHS) String targetPath,
+	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_PATHS) String targetPaths,
 	    Model model)
     {
 	String returnMsg = null;
-	
+
 	StringBuilder sb = new StringBuilder();
+	sb.append("Preparing ID Copy with the following parameters: ");
 	sb.append("\n Source server: " + sourceServer);
 	sb.append("\n Target server: " + targetServer);
 	sb.append("\n Source project: " + sourceProjectId);
 	sb.append("\n Target project: " + targetProjectId);
 	sb.append("\n Source path: " + sourcePath);
-	sb.append("\n Target path(s): " + targetPath);
-	
-	if(!sourceServer.equalsIgnoreCase(targetServer))
+	sb.append("\n Target path(s): " + targetPaths);
+
+	if (!sourceServer.equalsIgnoreCase(targetServer))
 	{
 	    log.error("Functionality not supported");
 	    returnMsg = "Servers mismatch, functionality not supported!";
 	    return returnMsg;
-	}
-	
-	log.info("Attempting to copy: " + sb.toString());
+	} else
+	{
+	    log.info("Attempting to copy: " + sb.toString());
 
-	returnMsg = "Success!!!";
-	
+	    try
+	    {
+		ProtexServerProxy sourceProxy = loginService.getProxy(sourceServer);
+		CopyService copyService = new CopyService(config);
+		
+		String[] targetPathArray = targetPaths.split(",");
+		
+		for(String targetPath : targetPathArray)
+		{
+		    targetPath = targetPath.trim();
+		    log.info("Preparing to copy to target path: " + targetPath);
+		    copyService.performCopy(sourceProxy, sourceProjectId, targetProjectId, sourcePath, targetPath);
+		    log.info("Finished copying to target path: " + targetPath);
+		}
+		
+		returnMsg = "Success!!!";
+	    } catch (Exception e)
+	    {
+		returnMsg = e.getMessage();
+	    }
+
+	}
+
 	return returnMsg;
-	
+
     }
 }

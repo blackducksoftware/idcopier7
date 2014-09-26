@@ -64,4 +64,28 @@ public class IDCConfig
 
 	return someprop;
     }
+
+    /**
+     * @return
+     */
+    public Boolean isOverWrite()
+    {
+	return true;
+    }
+
+    /**
+     * @return
+     */
+    public Boolean isBomRefresh()
+    {
+	return true;
+    }
+
+    /**
+     * @return
+     */
+    public Boolean isRecursive()
+    {
+	return true;
+    }
 }
