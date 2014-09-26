@@ -136,24 +136,22 @@ jQuery(document).ready(function() {
 					// Gets the root node for the project
 					url : path + '/'
 				},
-				onActivate : function(node) {
-					if (node.data.isFolder) {
-						if (!node.hasChildren()) {
-							node.expand();
-							// This is the full Controller path with the node attached to the end
-							var finalPath = path + node.data.key;
-							console.log("Passing in final RESTful path for node expansion: " + finalPath);
-							node.appendAjax({
-								url : finalPath,
-								data : {
-									"mode" : "all"
-								},
-								success : function(node) {
-									node.expand();
-								},
-								debugLazyDelay : 750
-							});
-						}
+				onClick : function(dtnode) {
+					if (dtnode.data.isFolder && !dtnode.hasChildren()) {
+						dtnode.expand();
+						// This is the full Controller path with the node attached to the end
+						var finalPath = path + dtnode.data.key;
+						console.log("Passing in final RESTful path for node expansion: " + finalPath);
+						dtnode.appendAjax({
+							url : finalPath,
+							data : {
+								"mode" : "all"
+							},
+							success : function(node) {
+								node.expand();
+							},
+							debugLazyDelay : 750
+						});
 					}
 				},
 				onSelect : function(select, node) {
