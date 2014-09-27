@@ -137,7 +137,50 @@ jQuery(document).ready(function () {
 					// Gets the root node for the project
 					url : path + '/'
 				},
-				// onActivate: function(node)
+				onActivate : function (dtnode) {
+					if (dtnode.data.isFolder && !dtnode.hasChildren()) {
+						dtnode.expand();
+						// This is the full Controller path with the node
+						// attached to the end
+						var finalPath = path + dtnode.data.key;
+						console.log("Passing in final RESTful path for node expansion: " + finalPath);
+						dtnode.appendAjax({
+							url : finalPath,
+							data : {
+								"mode" : "all"
+							},
+							success : function (node) {
+								node.expand();
+							},
+							debugLazyDelay : 750
+						});
+					}
+					if (sender === source) {
+						$('.' + sender.toLowerCase() + 'SelectedPath').text("/" + dtnode.data.key);
+					}
+				},
+				onExpand : function (dtnode) {
+					if (dtnode.data.isFolder && !dtnode.hasChildren()) {
+						dtnode.expand();
+						// This is the full Controller path with the node
+						// attached to the end
+						var finalPath = path + dtnode.data.key;
+						console.log("Passing in final RESTful path for node expansion: " + finalPath);
+						dtnode.appendAjax({
+							url : finalPath,
+							data : {
+								"mode" : "all"
+							},
+							success : function (node) {
+								node.expand();
+							},
+							debugLazyDelay : 750
+						});
+					}
+					if (sender === source) {
+						$('.' + sender.toLowerCase() + 'SelectedPath').text("/" + dtnode.data.key);
+					}
+				},
 				onClick : function (dtnode) {
 					if (dtnode.data.isFolder && !dtnode.hasChildren()) {
 						dtnode.expand();
@@ -165,7 +208,7 @@ jQuery(document).ready(function () {
 						var selNodes = node.tree.getSelectedNodes();
 						var uniqueNodes = [];
 						var key = node.data.key;
-						
+
 						/*
 						 * This doesn't do what we wanted, and I realized the
 						 * flaw in my thinking. I was doing a simple check to
@@ -203,7 +246,7 @@ jQuery(document).ready(function () {
 							// lives inside the selected node
 							if (((key.lastIndexOf(selNodes[i].data.key, 0) === 0) || (selNodes[i].data.key.lastIndexOf(key, 0) === 0)) && node.data.key !== selNodes[i].data.key) {
 								if ($('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).isSelected()) {
-									console.log("Unchecking: "+selNodes[i].data.key);
+									console.log("Unchecking: " + selNodes[i].data.key);
 									$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).toggleSelect();
 								}
 							}
@@ -218,6 +261,7 @@ jQuery(document).ready(function () {
 						$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 					}
 				},
+				debugLevel : 0 // 0:quiet, 1:normal, 2:debug
 			});
 			$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").reload();
 		}
@@ -271,24 +315,75 @@ jQuery(document).ready(function () {
 		'placement' : 'bottom',
 		'title' : "Type source path here"
 	});
-	$(".userSourcePathInput").keyup(function () {
+	$(".userSourcePathInput").keyup(function (event) {
 		$('.sourceSelectedPath').empty();
 		$('.sourceSelectedPath').text(this.value);
-	});
-	$(".userTargetPathInput").tooltip({
-		'show' : true,
-		'placement' : 'bottom',
-		'title' : "Type target path here"
-	});
-	$(".userTargetPathInput").keyup(function () {
-		$('.targetSelectedPath').empty();
-		// $('.targetSelectedPath').text(this.value);
-		if (targetPaths.length === 0) {
-			$('.targetSelectedPath').text(this.value);
-		} else if (this.value.length === 0) {
-			$('.targetSelectedPath').text(targetPaths);
-		} else {
-			$('.targetSelectedPath').text(targetPaths + ", " + this.value);
-		}
-	});
-});
+		console.log("this.value = " + this.value);
+
+		if (event.which == 13 || event.keyCode == 13) {
+			var path = $('.userSourcePathInput').val();
+			console.log("Loading tree for user entered path: " + path);
+
+			var pathParts = path.split("/");
+			var runningPaths = [];
+			var currentPath = "";
+
+			for (i = 0; i < pathParts.length; i++) {
+				if (!currentPath) {
+					currentPath = pathParts[i];
+				} else {
+					currentPath += "/" + pathParts[i];
+				}
+				runningPaths.push(currentPath);
+			}
+
+			for (i = runningPaths.length-1; i >=0; i--) {
+				// console.log("Running path: " + runningPaths[i]);
+				var testName = $('.sourceCodeTree').dynatree("getTree").getNodeByKey(runningPaths[i]);
+
+				if (testName != null) {
+					testName.activate();
+					testName.expand(true);
+
+					console.log("Name: " + testName.data.title + " (" + path + ")");
+				}
+			}
+
+			/*
+			 * $('.sourceCodeTree').dynatree("getTree").loadKeyPath(path,
+			 * 
+			 * function (node, status) { if (status == "loaded") { // 'node' is
+			 * a parent that was just traversed.// If we call expand() // here,
+			 * then all nodes will be // expanded // as we go // node.expand(); }
+			 * else if (status == "ok") { // 'node' is the end node of our //
+			 * path. // If we call activate()or makeVisible()here, then the //
+			 * whole branch will be exoanded now node.activate(); } else if
+			 * (status == "notfound") { var seg = arguments[2], isEndNode =
+			 * arguments[3];
+			 * 
+			 * var testName =
+			 * $('.sourceCodeTree').dynatree("getTree").getNodeByKey(path);
+			 * 
+			 * console.log("Name: " + testName + " (" + path + ")");
+			 * console.log("Path doesn't exist! [" + path + "]\r\n" + seg); }
+			 * }); }
+			 */
+
+			});
+			$(".userTargetPathInput").tooltip({
+				'show' : true,
+				'placement' : 'bottom',
+				'title' : "Type target path here"
+			});
+			$(".userTargetPathInput").keyup(function () {
+				$('.targetSelectedPath').empty();
+				// $('.targetSelectedPath').text(this.value);
+				if (targetPaths.length === 0) {
+					$('.targetSelectedPath').text(this.value);
+				} else if (this.value.length === 0) {
+					$('.targetSelectedPath').text(targetPaths);
+				} else {
+					$('.targetSelectedPath').text(targetPaths + ", " + this.value);
+				}
+			});
+		});
