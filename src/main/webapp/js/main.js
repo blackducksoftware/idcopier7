@@ -214,24 +214,24 @@ jQuery(document).ready(function () {
 						 * flaw in my thinking. I was doing a simple check to
 						 * see if one path contained the other, but that won't
 						 * be correct.
-						 * 
+						 *
 						 * In reality what we want is to:
-						 * 
+						 *
 						 * 1. Check to make sure that the selected path we are
 						 * looking at, isn't he path being checked against in
 						 * the selected paths.
-						 * 
+						 *
 						 * 2. If there is a file name, strip that out. We only
 						 * want to deal with folder names. If we try for file
 						 * names, we will run into situations where we uncheck
 						 * items with very similar names
-						 * 
+						 *
 						 * Path 1: /com/niles/test/path/README Path 2:
 						 * /com/niles/test/path/README2
-						 * 
+						 *
 						 * Path 2 will contain Path 1, but not be an accurate
 						 * check.
-						 * 
+						 *
 						 * So we need to check to see if the node type is a file
 						 * or a folder. If it is a folder, we can just do the
 						 * check as is. If it's a file, then we will have to
@@ -337,7 +337,7 @@ jQuery(document).ready(function () {
 				runningPaths.push(currentPath);
 			}
 
-			for (i = runningPaths.length-1; i >=0; i--) {
+			for (i = runningPaths.length - 1; i >= 0; i--) {
 				// console.log("Running path: " + runningPaths[i]);
 				var testName = $('.sourceCodeTree').dynatree("getTree").getNodeByKey(runningPaths[i]);
 
@@ -351,7 +351,7 @@ jQuery(document).ready(function () {
 
 			/*
 			 * $('.sourceCodeTree').dynatree("getTree").loadKeyPath(path,
-			 * 
+			 *
 			 * function (node, status) { if (status == "loaded") { // 'node' is
 			 * a parent that was just traversed.// If we call expand() // here,
 			 * then all nodes will be // expanded // as we go // node.expand(); }
@@ -360,30 +360,30 @@ jQuery(document).ready(function () {
 			 * whole branch will be exoanded now node.activate(); } else if
 			 * (status == "notfound") { var seg = arguments[2], isEndNode =
 			 * arguments[3];
-			 * 
+			 *
 			 * var testName =
 			 * $('.sourceCodeTree').dynatree("getTree").getNodeByKey(path);
-			 * 
+			 *
 			 * console.log("Name: " + testName + " (" + path + ")");
 			 * console.log("Path doesn't exist! [" + path + "]\r\n" + seg); }
-			 * }); }
+			 * });
 			 */
-
-			});
-			$(".userTargetPathInput").tooltip({
-				'show' : true,
-				'placement' : 'bottom',
-				'title' : "Type target path here"
-			});
-			$(".userTargetPathInput").keyup(function () {
-				$('.targetSelectedPath').empty();
-				// $('.targetSelectedPath').text(this.value);
-				if (targetPaths.length === 0) {
-					$('.targetSelectedPath').text(this.value);
-				} else if (this.value.length === 0) {
-					$('.targetSelectedPath').text(targetPaths);
-				} else {
-					$('.targetSelectedPath').text(targetPaths + ", " + this.value);
-				}
-			});
-		});
+		}
+	});
+	$(".userTargetPathInput").tooltip({
+		'show' : true,
+		'placement' : 'bottom',
+		'title' : "Type target path here"
+	});
+	$(".userTargetPathInput").keyup(function () {
+		$('.targetSelectedPath').empty();
+		// $('.targetSelectedPath').text(this.value);
+		if (targetPaths.length === 0) {
+			$('.targetSelectedPath').text(this.value);
+		} else if (this.value.length === 0) {
+			$('.targetSelectedPath').text(targetPaths);
+		} else {
+			$('.targetSelectedPath').text(targetPaths + ", " + this.value);
+		}
+	});
+});
