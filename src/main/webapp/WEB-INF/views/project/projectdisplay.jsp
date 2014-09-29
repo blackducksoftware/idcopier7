@@ -133,6 +133,12 @@
 								class="btn btn-primary perform-refresh-button" /></td>
 						</tr>
 						<tr>
+						<!--  Progress Bar For Refresh -->
+						<td>
+						<center>
+						<div id="progressBar" class="easyui-progressbar"></div> </td>
+						</tr>
+						<tr>
 							<td><h4></h4></td>
 							<td></td>
 						</tr>
@@ -206,8 +212,8 @@
 <script src="js/libs/jquery/jquery.js" type="text/javascript"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"
 	type="text/javascript"></script>
-<script src="js/libs/jquery-ui/jquery-ui.custom.js"
-	type="text/javascript"></script>
+<script src="js/libs/jquery-ui/jquery-ui.custom.js"	type="text/javascript"></script>
+<script src="js/libs/progress/p-loader.js"	type="text/javascript"></script>
 <script src="js/libs/jquery-cookie/jquery.cookie.js"
 	type="text/javascript"></script>
 <script src="js/libs/Dynatree/jquery.dynatree.js" type="text/javascript"></script>

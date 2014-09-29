@@ -25,6 +25,14 @@ jQuery(document).ready(function () {
 			$('.select' + sender + 'Project').append("<option id=\"" + value.projectId + "\">" + value.name + "</option>");
 		});
 	}
+	
+	/**
+	 * Init progress bar
+	 */
+	var progressLoader = $("#progressBar").percentageLoader({
+	    width : 180, height : 180, progress : 0, value : '0%'})
+	
+	
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
@@ -79,6 +87,9 @@ jQuery(document).ready(function () {
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				// Wipe out selected paths
 				loadDynaTree(locationValue, serverName, projectId);
+				// Wipe out refresh progres
+				progressLoader.setValue('0%');
+				progressLoader.setProgress(0);
 			});
 		});
 	})(); // populateWidgets
@@ -308,23 +319,50 @@ jQuery(document).ready(function () {
 			}
 		});
 		// Grab the status
+		getRefreshStatusForProject(targetServer, targetProjectId);
+	});
+		
+	function getRefreshStatusForProject(targetServer, targetProjectId)
+	{
 		var statusPath = 'bomRefreshStatus' + '/' + targetServer + '/' + targetProjectId;
 		$.ajax({
 			type : 'GET',
 			url : statusPath,
-			success : function (msg) {
-				console.log('Status result: ' + msg);
+			success : function (jsonStatusResult) 
+			{
+				console.log('Status result: ' + jsonStatusResult);
+				updateRefreshProgress(jsonStatusResult, targetServer, targetProjectId);
 			},
 			error : function (msg) {
 				console.log(msg);
 			}
 		});
-	});
+	}
 
+	function updateRefreshProgress(jsonStatusString, server, projectId) 
+	{
+		var jsonObj = JSON.parse(jsonStatusString);
+		if(jsonObj == null)
+		{
+			console.log("WARN: No JSON status information");
+			return false;
+		}
+		
+		var percentComplete = jsonObj.percentComplete;
+		
+		progressLoader.setValue(percentComplete + '%');
+		progressLoader.setProgress(percentComplete);
+				
+		if(percentComplete < 100)
+		{
+			getRefreshStatusForProject(server, projectId);
+		}
+		
+	}
+		
 	/**
-	 * Submit copy button Note the # lookup for non-div
-	 * Grab the options on the main page as they are part
-	 * of the copy functionality.
+	 * Submit copy button Note the # lookup for non-div Grab the options on the
+	 * main page as they are part of the copy functionality.
 	 */
 	$("#submitCopyButton").on('click', function () {
 		console.log("Submitting copy IDs...");
