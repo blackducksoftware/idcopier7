@@ -66,7 +66,7 @@ public class IDCViewModelConstants
     /**
      * Copy related variables
      */
- 
+    // These are required
     public static final String COPY_SOURCE_SERVER = "copy-source-server";
     public static final String COPY_TARGET_SERVER = "copy-target-server";
     public static final String COPY_SOURCE_PROJECT_ID= "copy-source-project-id";
@@ -74,6 +74,14 @@ public class IDCViewModelConstants
     public static final String COPY_SOURCE_PATH = "copy-source-path";
     public static final String COPY_TARGET_PATHS = "copy-target-paths";
     
+    //// These are optional
+    // Should the copying recursively traverse the children
+    public static final String COPY_RECURSIVE_OPTION = "recursive-option";
+    // Do we defer the BOM Refresh?
+    public static final String COPY_DEFER_BOM_REFRESH_OPTION = "defer-bom-option";
+    // Do existing identifications get overwritten?
+    public static final String COPY_OVERWRITE_OPTION = "overwrite-option";
+
     /**
      * Tree related variables
      */

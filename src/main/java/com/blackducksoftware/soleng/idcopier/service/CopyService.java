@@ -42,8 +42,17 @@ public class CopyService
 	{
 	    IdentificationApi iApi = sourceProxy.getIdentificationApi();
 
+	    BomRefreshMode refreshMode = null;
+	    if(config.isBomRefreshDefer())
+		refreshMode = BomRefreshMode.SKIP;
+	    else
+	    {
+		log.info("Non-defer BOM Refresh mode, setting to asyncronous");
+		refreshMode = BomRefreshMode.ASYNCHRONOUS;
+	    }
+	    
 	    iApi.copyIdentifications(sourceProjectId, sourcePath, targetProjectId,
-		    targetPath, config.isRecursive(), config.isOverWrite(), BomRefreshMode.SKIP);
+		    targetPath, config.isRecursive(), config.isOverwriteIDs(), refreshMode);
 	    
 	    log.info("Finished copying");
 	    

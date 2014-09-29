@@ -56,6 +56,10 @@ public class IDCCopyController
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_PROJECT_ID) String targetProjectId,
 	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PATH) String sourcePath,
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_PATHS) String targetPaths,
+	    // Optional
+	    @RequestParam(value = IDCViewModelConstants.COPY_OVERWRITE_OPTION) Boolean overWriteOption,
+	    @RequestParam(value = IDCViewModelConstants.COPY_DEFER_BOM_REFRESH_OPTION) Boolean deferBomRefreshOption,
+	    @RequestParam(value = IDCViewModelConstants.COPY_RECURSIVE_OPTION) Boolean recursiveOption,
 	    Model model)
     {
 	String returnMsg = null;
@@ -68,6 +72,10 @@ public class IDCCopyController
 	sb.append("\n Target project: " + targetProjectId);
 	sb.append("\n Source path: " + sourcePath);
 	sb.append("\n Target path(s): " + targetPaths);
+	sb.append("\n OPTIONS: " );
+	sb.append("\n Over-write : " + overWriteOption);
+	sb.append("\n Defer BOM Refresh: " + deferBomRefreshOption);
+	sb.append("\n Recursive: " + recursiveOption);
 
 	if (!sourceServer.equalsIgnoreCase(targetServer))
 	{
@@ -80,20 +88,27 @@ public class IDCCopyController
 
 	    try
 	    {
+		// Set the options
+		config.setBomRefreshDefer(deferBomRefreshOption);
+		config.setOverwriteIDs(overWriteOption);
+		config.setRecursive(recursiveOption);
+		
 		ProtexServerProxy sourceProxy = loginService.getProxy(sourceServer);
+		
 		CopyService copyService = new CopyService(config);
 		
 		String[] targetPathArray = targetPaths.split(",");
 		
+		// TODO:  Make this multi-threaded
 		for(String targetPath : targetPathArray)
 		{
 		    targetPath = targetPath.trim();
 		    log.info("Preparing to copy to target path: " + targetPath);
 		    copyService.performCopy(sourceProxy, sourceProjectId, targetProjectId, sourcePath, targetPath);
-		    log.info("Finished copying to target path: " + targetPath);
+		    log.info("Finished copying from source path: " + sourcePath + " to  target path: " + targetPath);
 		}
 		
-		returnMsg = "Success!!!";
+		returnMsg = "Finished Copying IDs";
 	    } catch (Exception e)
 	    {
 		returnMsg = e.getMessage();

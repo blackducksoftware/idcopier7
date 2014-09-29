@@ -109,17 +109,17 @@
 						<tr>
 							<td><h4>Defer BOM refresh</h4></td>
 							<td><input id="deferBomRefreshCheckBox"
-								name="deferBomRefreshCheckBox" class="checkbox" type="checkbox"></td>
+								name="deferBomRefreshCheckBox" class="checkbox" type="checkbox" value="deferBomRefreshCheckBox" checked></td>
 						</tr>
 						<tr>
-							<td><h4>Option 2</h4></td>
-							<td><input id="optionTwoCheckBox" name="optionTwoCheckBox"
-								class="checkbox" type="checkbox"></td>
+							<td><h4>Recursive</h4></td>
+							<td><input id="recursiveCopyCheckBox" name="recursiveCopyCheckBox"
+								class="checkbox" type="checkbox" value="recursiveCopy" checked></td>
 						</tr>
 						<tr>
-							<td><h4>Option 3</h4></td>
-							<td><input id="optionThreeCheckBox"
-								name="optionThreeCheckBox" class="checkbox" type="checkbox"></td>
+							<td><h4>Overwrite Identifications</h4></td>
+							<td><input id="overwriteIDsCheckBox"
+								name="overwriteIDsCheckBox" class="checkbox" type="checkbox"></td>
 						</tr>
 						<tr>
 							<td colspan="2"><input type="button" id="submitCopyButton"

@@ -14,7 +14,6 @@ jQuery(document).ready(function () {
 	 */
 	// The list of selected target paths
 	var targetPaths;
-	var sourcePath;
 	/**
 	 * Populate the project pulldown
 	 */
@@ -266,25 +265,47 @@ jQuery(document).ready(function () {
 			$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").reload();
 		}
 	}
+	
 	/**
 	 * Submit copy button Note the # lookup for non-div
+	 * Grab the options on the main page as they are part 
+	 * of the copy functionality.
 	 */
 	$("#submitCopyButton").on('click', function () {
 		console.log("Submitting copy IDs...");
+		
+		// Copy required values
 		var sourceServer = $('.selectSourceServer').children(":selected").text();
 		var targetServer = $('.selectTargetServer').children(":selected").text();
 		var sourceProjectId = $('.selectSourceProject').children(":selected").attr("id");
 		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
+		var selectedSourcePath = $('.sourceSelectedPath').text();
+		// Copy options
+		var deferBOMOption = $('#deferBomRefreshCheckBox').is(':checked'); 
+		var recursiveCopyOption = $('#recursiveCopyCheckBox').is(':checked'); 
+		var overwriteIDsOption = $('#overwriteIDsCheckBox').is(':checked'); 
+		
 		var params = {
 			'copy-source-server' : sourceServer,
 			'copy-target-server' : targetServer,
 			'copy-source-project-id' : sourceProjectId,
 			'copy-target-project-id' : targetProjectId,
-			'copy-source-path' : sourcePath, // Set inside the dynatree
-			// behavior
+			'copy-source-path' : selectedSourcePath,
 			'copy-target-paths' : targetPaths, // Also inside the dynatree
 			// behavior
+			// Check boxes
+			'defer-bom-option' : deferBOMOption,
+			'recursive-option' : recursiveCopyOption,
+			'overwrite-option' : overwriteIDsOption		
 		};
+		
+		var verified = verifyCopyParameters(params);
+		if(!verified)
+		{
+			return false;
+		}
+		
+		
 		$.ajax({
 			type : 'POST',
 			url : 'copyIDs',
@@ -387,3 +408,26 @@ jQuery(document).ready(function () {
 		}
 	});
 });
+
+/**
+ * Little function to test the parameters for some client-side validation
+ * @param params
+ */
+function verifyCopyParameters(params)
+{
+	console.log("Verifying params");
+	for(var key in params)
+	{
+		var parameter = params[key];
+		if(parameter == null)
+		{
+			alert("ERROR: Null value for parameter: " + key);
+			return false;
+		}
+	}
+	
+	return true;
+	
+}
+
+

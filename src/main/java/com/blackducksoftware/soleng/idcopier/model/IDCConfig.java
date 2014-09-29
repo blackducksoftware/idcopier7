@@ -41,6 +41,10 @@ public class IDCConfig
     @Autowired
     ApplicationContext cxt;
 
+    private Boolean bomRefresh = false;
+    private Boolean overwriteIDs = false;
+    private Boolean recursive = false;
+    
     public IDCConfig()
     {
 	log.info("Configuration file has been loaded");
@@ -65,27 +69,34 @@ public class IDCConfig
 	return someprop;
     }
 
-    /**
-     * @return
-     */
-    public Boolean isOverWrite()
+
+    public Boolean isBomRefreshDefer()
     {
-	return true;
+	return bomRefresh;
     }
 
-    /**
-     * @return
-     */
-    public Boolean isBomRefresh()
+    public void setBomRefreshDefer(Boolean bomRefresh)
     {
-	return true;
+	this.bomRefresh = bomRefresh;
     }
 
-    /**
-     * @return
-     */
+    public Boolean isOverwriteIDs()
+    {
+	return overwriteIDs;
+    }
+
+    public void setOverwriteIDs(Boolean overwriteIDs)
+    {
+	this.overwriteIDs = overwriteIDs;
+    }
+
     public Boolean isRecursive()
     {
-	return true;
+	return recursive;
+    }
+
+    public void setRecursive(Boolean recursive)
+    {
+	this.recursive = recursive;
     }
 }
