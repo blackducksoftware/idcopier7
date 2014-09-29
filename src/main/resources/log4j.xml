@@ -54,6 +54,18 @@
 		</layout>
 	</appender>
 
+	<!-- This creates JSON output our log -->
+	<appender name="SW_ROLLING_FILE_TOMCAT_JSON" class="org.apache.log4j.RollingFileAppender">
+		<param name="Name" value="webUtilsJson" />
+		<param name="File" value="${catalina.base}/logs/idcopier_tomcat.json" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="2048KB" />
+		<param name="MaxBackupIndex" value="5" />
+		<layout class="uk.me.mjt.log4jjson.SimpleJsonLayout">
+			<param name="ConversionPattern" value="[%d{ISO8601}] %-5p [%c] %m %n" />
+		</layout>
+	</appender>
+
 	<!-- ** -->
 
 	<root>
