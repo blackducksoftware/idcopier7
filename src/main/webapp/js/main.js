@@ -35,6 +35,8 @@ jQuery(document).ready(function () {
 			// Variables used for all processes
 			// This is the div id of the pulldown
 			var serverSelectorDiv = ".select" + locationValue + "Server";
+			// This is the dev id of the project pulldown
+			var projectSelectorDiv = ".select" + locationValue + "Project";
 			// This is the default non-value message of the selector
 			var messageServer = "Select " + locationValue + " Server";
 			/**
@@ -57,7 +59,6 @@ jQuery(document).ready(function () {
 				$.getJSON(path, function (data) {
 					setProjects(locationValue, messageServer, data)
 				});
-				// Wipe out code tree
 			});
 			/**
 			 * Populate the projects
@@ -69,6 +70,15 @@ jQuery(document).ready(function () {
 			$.getJSON(projectPath, function (data) {
 				console.log("Invoking path: " + projectPath);
 				setProjects(locationValue, messageProject, data)
+			});
+			/**
+			 * Assign project pulldown behavior
+			 */
+			$(projectSelectorDiv).change(function () {
+				var projectId = $(this).children(":selected").attr("id");
+				var serverName = $(serverSelectorDiv).children(":selected").text();
+				// Wipe out selected paths
+				loadDynaTree(locationValue, serverName, projectId);
 			});
 		});
 	})(); // populateWidgets
@@ -116,7 +126,10 @@ jQuery(document).ready(function () {
 	}
 	function loadDynaTree(sender, serverName, projectId) {
 		if (projectId !== null) {
-			// Active the IDCProjectController.expandPathNode()
+			// Clear our the selected paths
+			var selectedPathDiv = "." + sender + "SelectedPath";
+			$(selectedPathDiv).empty();
+			// Activate the IDCProjectController.expandPathNode()
 			// Pass in an argument representing the node
 			var path = "treeExpandNode/" + serverName + '/' + projectId + "/?tree-node-path=";
 			var setAsCheckBox = false;
@@ -130,6 +143,9 @@ jQuery(document).ready(function () {
 					duration : 200
 				},
 				checkbox : setAsCheckBox,
+				// TODO:  This does not appear to be doing anything
+				perist: true,
+				// TODO: What is select mode?  What is '2'?
 				selectMode : 2,
 				autoFocus : false,
 				initAjax : {
@@ -320,17 +336,7 @@ jQuery(document).ready(function () {
 			}
 		});
 	});
-	$(".selectSourceProject").change(function () {
-		var projectId = $(this).children(":selected").attr("id");
-		var sourceServerName = $('.selectSourceServer').children(":selected").text();
-		// loadProject(source, sourceServerName, projectId);
-		loadDynaTree(source, sourceServerName, projectId);
-	});
-	$(".selectTargetProject").change(function () {
-		var projectId = $(this).children(":selected").attr("id");
-		var targetServerName = $('.selectTargetServer').children(":selected").text();
-		loadDynaTree(target, targetServerName, projectId);
-	});
+
 	$(".userSourcePathInput").tooltip({
 		'show' : true,
 		'placement' : 'bottom',

@@ -99,7 +99,13 @@ public class IDCCopyController
 		
 		String[] targetPathArray = targetPaths.split(",");
 		
-		// TODO:  Make this multi-threaded
+		if(targetPathArray.length > 1)
+		{
+		    log.warn("Multiple target paths selected, defering BOM refresh");
+		    config.setBomRefreshDefer(true);
+		}
+		
+		// TODO:  Does this need to be multi-threaded
 		for(String targetPath : targetPathArray)
 		{
 		    targetPath = targetPath.trim();
