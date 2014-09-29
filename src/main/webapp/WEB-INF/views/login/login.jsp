@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 <link rel="stylesheet" href="css/Ladda/ladda-themeless.css">
+<link rel="stylesheet" href="css/Animate/animate.min.css">
 
 </head>
 <body>
@@ -85,15 +86,15 @@
 					</div>
 				</fieldset>
 			</form>
-			<div class="errorLoginMsg">${loginErrorMsg}</div>
+			<div id="errorLoginMsg" class="errorLoginMsg">${loginErrorMsg}</div>
 		</div>
 	</div>
 </body>
 
-<script src="js/libs/Ladda/spin.js"></script>
-<script src="js/libs/Ladda/ladda.js"></script>
 <script src="js/libs/jquery/jquery.js"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
-<script src="js/libs/Bootstrap-growl/jquery.bootstrap-growl.js"></script>
+<script src="js/libs/Ladda/spin.js"></script>
+<script src="js/libs/Ladda/ladda.js"></script>
+<script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script>
 <script src="js/login.js"></script>
 </html>
