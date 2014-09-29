@@ -283,6 +283,44 @@ jQuery(document).ready(function () {
 	}
 	
 	/**
+	 * Performs a refresh on target project
+	 */
+	$("#performRefreshButton").on('click', function () 
+	{
+		var targetServer = $('.selectTargetServer').children(":selected").text();
+		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
+		
+		if(targetProjectId == null)
+		{
+			alert("Please select a target project!");
+			return false;
+		}
+			
+		var refreshPath = 'bomRefresh' + '/' + targetServer + '/' + targetProjectId;
+		console.log("Submitting AJAX request to: " + refreshPath);
+		// Submit the refresh request
+		$.ajax({
+			type : 'POST',
+			url : refreshPath,
+			error : function (msg) {
+				console.log("Error submitting refresh: " + msg);
+			}
+		});
+		// Grab the status
+		var statusPath = 'bomRefreshStatus' + '/' + targetServer + '/' + targetProjectId;
+		$.ajax({
+			type : 'GET',
+			url : statusPath,
+			success : function (msg) {
+				console.log('Status result: ' + msg);
+			},
+			error : function (msg) {
+				console.log(msg);
+			}
+		});
+	});
+	
+	/**
 	 * Submit copy button Note the # lookup for non-div
 	 * Grab the options on the main page as they are part 
 	 * of the copy functionality.

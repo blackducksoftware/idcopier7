@@ -125,6 +125,10 @@
 							<td colspan="2"><input type="button" id="submitCopyButton"
 								value="Perform Copy" class="btn btn-primary perform-copy-button" /></td>
 						</tr>
+								<tr>
+							<td colspan="2"><input type="button" id="performRefreshButton"
+								value="Refresh BOM" class="btn btn-primary perform-refresh-button" /></td>
+						</tr>
 						<tr>
 							<td><h4></h4></td>
 							<td></td>
