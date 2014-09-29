@@ -21,7 +21,11 @@
 }
 
 .errorLoginMsg {
-	color: red;
+	visibility: hidden;
+	display: none;
+	/*
+	 * color: red;
+	*/
 }
 
 .body {
