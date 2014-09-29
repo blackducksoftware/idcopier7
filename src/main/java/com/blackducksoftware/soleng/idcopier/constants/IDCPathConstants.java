@@ -39,6 +39,7 @@ public class IDCPathConstants {
 	 * Logging
 	 */
 	public static final String LOG_PATH = "/log";
+	public static final String LOG_DATA_PATH = "logging/logData";
 
 	/**
 	 * Admin
