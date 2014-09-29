@@ -109,25 +109,28 @@
 						<tr>
 							<td><h4>Defer BOM refresh</h4></td>
 							<td><input id="deferBomRefreshCheckBox"
-								name="deferBomRefreshCheckBox" class="checkbox" type="checkbox" value="deferBomRefreshCheckBox" checked></td>
+								name="deferBomRefreshCheckBox" class="checkbox" type="checkbox"
+								value="deferBomRefreshCheckBox" checked /></td>
 						</tr>
 						<tr>
 							<td><h4>Recursive</h4></td>
-							<td><input id="recursiveCopyCheckBox" name="recursiveCopyCheckBox"
-								class="checkbox" type="checkbox" value="recursiveCopy" checked></td>
+							<td><input id="recursiveCopyCheckBox"
+								name="recursiveCopyCheckBox" class="checkbox" type="checkbox"
+								value="recursiveCopy" checked /></td>
 						</tr>
 						<tr>
 							<td><h4>Overwrite Identifications</h4></td>
 							<td><input id="overwriteIDsCheckBox"
-								name="overwriteIDsCheckBox" class="checkbox" type="checkbox"></td>
+								name="overwriteIDsCheckBox" class="checkbox" type="checkbox" /></td>
 						</tr>
 						<tr>
 							<td colspan="2"><input type="button" id="submitCopyButton"
 								value="Perform Copy" class="btn btn-primary perform-copy-button" /></td>
 						</tr>
-								<tr>
-							<td colspan="2"><input type="button" id="performRefreshButton"
-								value="Refresh BOM" class="btn btn-primary perform-refresh-button" /></td>
+						<tr>
+							<td colspan="2"><input type="button"
+								id="performRefreshButton" value="Refresh BOM"
+								class="btn btn-primary perform-refresh-button" /></td>
 						</tr>
 						<tr>
 							<td><h4></h4></td>

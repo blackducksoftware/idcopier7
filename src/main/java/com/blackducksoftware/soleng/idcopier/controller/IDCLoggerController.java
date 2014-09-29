@@ -30,99 +30,79 @@ import com.google.gson.Gson;
  */
 @RestController
 @SessionAttributes(IDCViewModelConstants.IDC_SESSION)
-public class IDCLoggerController
-{
-    static Logger log = Logger.getLogger(IDCLoginController.class);
+public class IDCLoggerController {
+	static Logger log = Logger.getLogger(IDCLoginController.class);
 
-    @RequestMapping(value = IDCPathConstants.LOG_PATH)
-    public ModelAndView displayLogPage()
-    {
-	return new ModelAndView(IDCViewConstants.LOG_FORM);
-    }
-
-    private Elements getElementsByTag(Element element, String tag)
-    {
-	return element.getElementsByTag(tag);
-    }
-
-    @RequestMapping(value = IDCPathConstants.LOG_DATA_PATH)
-    public String getLogContents()
-    {
-	List<IDCLog> logArray = new ArrayList<IDCLog>();
-
-	FileAppender fileAppender;
-	Enumeration e = Logger.getRootLogger().getAllAppenders();
-	while (e.hasMoreElements())
-	{
-	    Appender app = (Appender) e.nextElement();
-	    if (app instanceof FileAppender)
-	    {
-
-		if (((FileAppender) app).getFile().endsWith(".html"))
-		{
-		    fileAppender = ((FileAppender) app);
-		    String logPath = fileAppender.getFile();
-
-		    log.info("Found web log file [" + logPath + "]");
-
-		    try
-		    {
-			File input = new File(logPath);
-			Document doc = Jsoup.parse(input, "UTF-8");
-
-			Elements bodyElements = doc.getElementsByTag("body");
-
-			for (Element body : bodyElements)
-			{
-			    Elements tables = getElementsByTag(body, "table");
-
-			    for (Element table : tables)
-			    {
-				Elements tableRowElements = getElementsByTag(
-					table, "tr");
-				for (Element tableRow : tableRowElements)
-				{
-				    Elements tableDataElements = getElementsByTag(
-					    tableRow, "td");
-
-				    IDCLog logItem = new IDCLog();
-				    for (int a = 0; a < tableDataElements
-					    .size(); a++)
-				    {
-					// if (a == 0)
-					// logItem.setTime(tableDataElements.get(a).text());
-					// if (a == 1)
-					// logItem.setThread(tableDataElements.get(a).text());
-					if (a == 2)
-					    logItem.setLevel(tableDataElements
-						    .get(a).text());
-					if (a == 3)
-					    logItem.setCategory(tableDataElements
-						    .get(a).text());
-					if (a == 4)
-					    logItem.setMessage(tableDataElements
-						    .get(a).text());
-				    }
-
-				    // Make sure that nothing empty goes in here
-				    if (logItem.getLevel() != null)
-				    {
-					// Moves the newest log item to the top
-					// of the log page
-					logArray.add(0, logItem);
-					// logArray.add(logItem);
-				    }
-				}
-			    }
-			}
-		    } catch (Exception e1)
-		    {
-			e1.printStackTrace();
-		    }
-		}
-	    }
+	@RequestMapping(value = IDCPathConstants.LOG_PATH)
+	public ModelAndView displayLogPage() {
+		return new ModelAndView(IDCViewConstants.LOG_FORM);
 	}
 
-	return new Gson().toJson(logArray);
-    }
+	private Elements getElementsByTag(Element element, String tag) {
+		return element.getElementsByTag(tag);
+	}
+
+	@RequestMapping(value = IDCPathConstants.LOG_DATA_PATH)
+	public String getLogContents() {
+		List<IDCLog> logArray = new ArrayList<IDCLog>();
+
+		FileAppender fileAppender;
+		Enumeration e = Logger.getRootLogger().getAllAppenders();
+		while (e.hasMoreElements()) {
+			Appender app = (Appender) e.nextElement();
+			if (app instanceof FileAppender) {
+
+				if (((FileAppender) app).getFile().endsWith(".html")) {
+					fileAppender = ((FileAppender) app);
+					String logPath = fileAppender.getFile();
+
+					log.info("Found web log file [" + logPath + "]");
+
+					try {
+						File input = new File(logPath);
+						Document doc = Jsoup.parse(input, "UTF-8");
+
+						Elements bodyElements = doc.getElementsByTag("body");
+
+						for (Element body : bodyElements) {
+							Elements tables = getElementsByTag(body, "table");
+
+							for (Element table : tables) {
+								Elements tableRowElements = getElementsByTag(table, "tr");
+								for (Element tableRow : tableRowElements) {
+									Elements tableDataElements = getElementsByTag(tableRow, "td");
+
+									IDCLog logItem = new IDCLog();
+									for (int a = 0; a < tableDataElements.size(); a++) {
+										// if (a == 0)
+										// logItem.setTime(tableDataElements.get(a).text());
+										// if (a == 1)
+										// logItem.setThread(tableDataElements.get(a).text());
+										if (a == 2)
+											logItem.setLevel(tableDataElements.get(a).text());
+										if (a == 3)
+											logItem.setCategory(tableDataElements.get(a).text());
+										if (a == 4)
+											logItem.setMessage(tableDataElements.get(a).text());
+									}
+
+									// Make sure that nothing empty goes in here
+									if (logItem.getLevel() != null) {
+										// Moves the newest log item to the top
+										// of the log page
+										logArray.add(0, logItem);
+										// logArray.add(logItem);
+									}
+								}
+							}
+						}
+					} catch (Exception e1) {
+						// e1.printStackTrace();
+					}
+				}
+			}
+		}
+
+		return new Gson().toJson(logArray);
+	}
 }
