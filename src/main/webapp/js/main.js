@@ -144,7 +144,7 @@ jQuery(document).ready(function () {
 				},
 				checkbox : setAsCheckBox,
 				// TODO:  This does not appear to be doing anything
-				perist: true,
+				perist : true,
 				// TODO: What is select mode?  What is '2'?
 				selectMode : 2,
 				autoFocus : false,
@@ -218,6 +218,7 @@ jQuery(document).ready(function () {
 						$('.' + sender.toLowerCase() + 'SelectedPath').text("/" + dtnode.data.key);
 					}
 				},
+
 				onSelect : function (select, node) {
 					if (sender === target) {
 						var selNodes = node.tree.getSelectedNodes();
@@ -255,17 +256,19 @@ jQuery(document).ready(function () {
 						 * more accurate.
 						 */
 
+						/*
 						for (var i = 0; i < selNodes.length; ++i) {
-							// Look to see if the newly selected node lives
-							// inside of an old node, or if an old node
-							// lives inside the selected node
-							if (((key.lastIndexOf(selNodes[i].data.key, 0) === 0) || (selNodes[i].data.key.lastIndexOf(key, 0) === 0)) && node.data.key !== selNodes[i].data.key) {
-								if ($('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).isSelected()) {
-									console.log("Unchecking: " + selNodes[i].data.key);
-									$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).toggleSelect();
-								}
-							}
+						// Look to see if the newly selected node lives
+						// inside of an old node, or if an old node
+						// lives inside the selected node
+						if (((key.lastIndexOf(selNodes[i].data.key, 0) === 0) || (selNodes[i].data.key.lastIndexOf(key, 0) === 0)) && node.data.key !== selNodes[i].data.key) {
+						if ($('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).isSelected()) {
+						console.log("Unchecking: " + selNodes[i].data.key);
+						$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).toggleSelect();
 						}
+						}
+						}
+						 */
 
 						selNodes = node.tree.getSelectedNodes();
 						// convert to title/key array
@@ -281,21 +284,19 @@ jQuery(document).ready(function () {
 			$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").reload();
 		}
 	}
-	
+
 	/**
 	 * Performs a refresh on target project
 	 */
-	$("#performRefreshButton").on('click', function () 
-	{
+	$("#performRefreshButton").on('click', function () {
 		var targetServer = $('.selectTargetServer').children(":selected").text();
 		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
-		
-		if(targetProjectId == null)
-		{
+
+		if (targetProjectId == null) {
 			alert("Please select a target project!");
 			return false;
 		}
-			
+
 		var refreshPath = 'bomRefresh' + '/' + targetServer + '/' + targetProjectId;
 		console.log("Submitting AJAX request to: " + refreshPath);
 		// Submit the refresh request
@@ -319,15 +320,15 @@ jQuery(document).ready(function () {
 			}
 		});
 	});
-	
+
 	/**
 	 * Submit copy button Note the # lookup for non-div
-	 * Grab the options on the main page as they are part 
+	 * Grab the options on the main page as they are part
 	 * of the copy functionality.
 	 */
 	$("#submitCopyButton").on('click', function () {
 		console.log("Submitting copy IDs...");
-		
+
 		// Copy required values
 		var sourceServer = $('.selectSourceServer').children(":selected").text();
 		var targetServer = $('.selectTargetServer').children(":selected").text();
@@ -335,10 +336,10 @@ jQuery(document).ready(function () {
 		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
 		var selectedSourcePath = $('.sourceSelectedPath').text();
 		// Copy options
-		var deferBOMOption = $('#deferBomRefreshCheckBox').is(':checked'); 
-		var recursiveCopyOption = $('#recursiveCopyCheckBox').is(':checked'); 
-		var overwriteIDsOption = $('#overwriteIDsCheckBox').is(':checked'); 
-		
+		var deferBOMOption = $('#deferBomRefreshCheckBox').is(':checked');
+		var recursiveCopyOption = $('#recursiveCopyCheckBox').is(':checked');
+		var overwriteIDsOption = $('#overwriteIDsCheckBox').is(':checked');
+
 		var params = {
 			'copy-source-server' : sourceServer,
 			'copy-target-server' : targetServer,
@@ -350,16 +351,14 @@ jQuery(document).ready(function () {
 			// Check boxes
 			'defer-bom-option' : deferBOMOption,
 			'recursive-option' : recursiveCopyOption,
-			'overwrite-option' : overwriteIDsOption		
+			'overwrite-option' : overwriteIDsOption
 		};
-		
+
 		var verified = verifyCopyParameters(params);
-		if(!verified)
-		{
+		if (!verified) {
 			return false;
 		}
-		
-		
+
 		$.ajax({
 			type : 'POST',
 			url : 'copyIDs',
@@ -457,21 +456,16 @@ jQuery(document).ready(function () {
  * Little function to test the parameters for some client-side validation
  * @param params
  */
-function verifyCopyParameters(params)
-{
+function verifyCopyParameters(params) {
 	console.log("Verifying params");
-	for(var key in params)
-	{
+	for (var key in params) {
 		var parameter = params[key];
-		if(parameter == null)
-		{
+		if (parameter == null) {
 			alert("ERROR: Null value for parameter: " + key);
 			return false;
 		}
 	}
-	
+
 	return true;
-	
+
 }
-
-
