@@ -1,49 +1,45 @@
-$(document).on('click', '.panel-heading span.clickable', function (e) {
-	/*
-	var servers = "servers";
+jQuery(document).ready(
+		function() {
+			var serversJsonURI = "servers";
+			var servers;
 
-	$.getJSON(servers, function(data) {
-	$(serverSelectorDiv).empty();
-	$(serverSelectorDiv).append(
-	"<option>" + messageServer + "</option>");
-	$.each(data, function(index, value) {
-	$(serverSelectorDiv).append(
-	"<option>" + value.serverName + "</option>");
-	});
-	});
-	 */
+			$.getJSON(serversJsonURI, function(data) {
+				servers = data;
 
-	var $this = $(this);
-	if (!$this.hasClass('panel-collapsed')) {
-		$this.parents('.panel').find('.panel-body').slideUp();
-		$this.addClass('panel-collapsed');
-		$this.find('i').removeClass('glyphicon-minus').addClass(
-			'glyphicon-plus');
-	} else {
-		$this.parents('.panel').find('.panel-body').slideDown();
-		$this.removeClass('panel-collapsed');
-		$this.find('i').removeClass('glyphicon-plus').addClass(
-			'glyphicon-minus');
-	}
-});
-$(document).on(
-	'click',
-	'.panel div.clickable',
-	function (e) {
-	var $this = $(this);
-	if (!$this.hasClass('panel-collapsed')) {
-		$this.parents('.panel').find('.panel-body').slideUp();
-		$this.addClass('panel-collapsed');
-		$this.find('i').removeClass('glyphicon-minus').addClass(
-			'glyphicon-plus');
-	} else {
-		$this.parents('.panel').find('.panel-body').slideDown();
-		$this.removeClass('panel-collapsed');
-		$this.find('i').removeClass('glyphicon-plus').addClass(
-			'glyphicon-minus');
-	}
-});
-$(document).ready(function () {
-	$('.panel-heading span.clickable').click();
-	$('.panel div.clickable').click();
-});
+				var dataSet = [];
+
+				$.each(data, function(index, value) {
+					dataSet.push([ value.serverName, value.userName,
+							getPasswordChars(value.password) ]);
+
+				});
+
+				console.log(dataSet);
+				buildDataTable(dataSet);
+			});
+
+			function buildDataTable(dataSet) {
+				$('#serverConfigurationTable').dataTable({
+					"data" : dataSet,
+					"paging" : false,
+					"bInfo" : false,
+					"columns" : [ {
+						"title" : "Server"
+					}, {
+						"title" : "Username",
+						"class" : "center"
+					}, {
+						"title" : "Password",
+						"class" : "center"
+					} ]
+				});
+			}
+
+			function getPasswordChars(pw) {
+				var out = '';
+				for ( var a = 0; a < pw.length; a++) {
+					out = out + '*';
+				}
+				return out;
+			}
+		});
