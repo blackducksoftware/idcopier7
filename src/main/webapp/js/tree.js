@@ -169,12 +169,17 @@ function loadDynaTree(sender, serverName, projectId)
  */
 function expandNode(dtnode, path, sender)
 {
-	if (dtnode.data.isFolder && !dtnode.hasChildren()) {
+	if(dtnode.data == null)
+	{
+		console.log("Node data is empty...");
+		return;
+	}
+
+	if (dtnode.data.isFolder && !dtnode.hasChildren()) 
+	{
 		dtnode.expand();
-		// This is the full
-		// Controller path with
-		// the node
-		// attached to the end
+		
+		// This is the full Controller path with
 		var finalPath = path + dtnode.data.key;
 		console.log("Passing in final RESTful path for node expansion: "
 				+ finalPath);
