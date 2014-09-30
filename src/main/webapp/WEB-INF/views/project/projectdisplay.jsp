@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="css/Dynatree/skin-vista/ui.dynatree.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 <link rel="stylesheet" href="css/menu.css">
+<link rel="stylesheet" href="css/Animate/animate.min.css">
 
 </head>
 <body>
@@ -187,19 +188,15 @@
 	</div>
 </body>
 
-<script src="js/libs/jquery/jquery.js" type="text/javascript"></script>
-<script src="js/libs/twitter-bootstrap/js/bootstrap.js"
-	type="text/javascript"></script>
-<script src="js/libs/jquery-ui/jquery-ui.custom.js"
-	type="text/javascript"></script>
-<script src="js/libs/progress/p-loader.js" type="text/javascript"></script>
-<script src="js/libs/jquery-cookie/jquery.cookie.js"
-	type="text/javascript"></script>
-<script src="js/libs/Dynatree/jquery.dynatree.js" type="text/javascript"></script>
-<script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"
-	type="text/javascript"></script>
-<!-- <script src="js/libs/EasyTree/jquery.easytree.js"></script>  -->
-<script src="js/menu.js" type="text/javascript"></script>
-<script src="js/main.js" type="text/javascript"></script>
+<script src="js/libs/jquery/jquery.js"></script>
+<script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
+<script src="js/libs/jquery-ui/jquery-ui.custom.js"></script>
+<script src="js/libs/progress/p-loader.js"></script>
+<script src="js/libs/jquery-cookie/jquery.cookie.js"></script>
+<script src="js/libs/Dynatree/jquery.dynatree.js"></script>
+<script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+<script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/main.js"></script>
 
 </ html>
