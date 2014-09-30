@@ -21,23 +21,85 @@
 			<img src="images/tempIcon.gif">
 		</div>
 		<hr>
-		<div class="container">
-			<div class="well">
-				<div class="row input-spacing">
-					<div class="input-group">
-						<input type="text" class="form-control" id="newServerInput"
-							name="newServerInput" placeholder="Add Protex Server"> <span
-							class="input-group-btn">
-							<button class="btn btn-primary" type="button">Add Server</button>
-						</span>
+		<div class="col-sm-6 col-lg-6 col-mx-6">
+			<div class="container">
+				<div class="well">
+					<div class="row input-spacing">
+						<div class="input-group">
+							<input type="text" class="form-control" id="newServerInput"
+								name="newServerInput" placeholder="Add Protex Server"> <span
+								class="input-group-btn">
+								<button class="btn btn-primary" type="button">Add
+									Server</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="well">
+					<div class="row input-spacing">
+						<table id="serverConfigurationTable" class="display"
+							cellspacing="0" width="100%">
+						</table>
 					</div>
 				</div>
 			</div>
+			<h1></h1>
+		</div>
+		<div class="col-sm-6 col-lg-6 col-mx-6">
 			<div class="well">
 				<div class="row input-spacing">
-					<table id="serverConfigurationTable"
-						class="display hover row-border" cellspacing="0" width="100%">
-					</table>
+					
+					<!-- Server input-->
+					<div class="form-group">
+						<label control-label" for="serverURI">URL:</label>
+						<div>
+							<input id="serverURI" name="serverURI" placeholder="Server"
+								class="form-control input-md" required="" type="text">
+						</div>
+					</div>
+
+					<!-- Username input-->
+					<div class="form-group">
+						<label class="control-label" for="userName">Username:</label>
+						<div>
+							<input id="userName" name="userName" placeholder="Username"
+								class="form-control input-md" required="" type="text">
+
+						</div>
+					</div>
+
+					<!-- Passwords inputs-->
+					<div class="form-group">
+						<label class="control-label" for="password">Password:</label>
+						<div>
+							<input id="password" name="password" placeholder="Password"
+								class="form-control input-md" required="" type="password">
+
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="cPassword">Confirm
+							Password:</label>
+						<div>
+							<input id="cPassword" name="cPassword"
+								placeholder="ConfirmPassword" class="form-control input-md"
+								required="" type="password">
+
+						</div>
+					</div>
+
+					<!-- Submit Button -->
+					<div class="form-group">
+						<label class="control-label" for="submitButton"></label>
+						<div>
+							<button id="submitButton" name="submitButton"
+								class="btn btn-primary pull-right ladda-button"
+								data-style="zoom-in">
+								<span class="ladda-label">Submit</span>
+							</button>
+							<!-- <label id="spinner"></label>  -->
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
