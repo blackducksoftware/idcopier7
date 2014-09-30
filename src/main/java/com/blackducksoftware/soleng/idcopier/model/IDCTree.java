@@ -26,6 +26,7 @@ public class IDCTree {
 		this.title = cleanName(title, count);
 		this.isFolder = isFolder;
 		this.isLazy = isFolder;
+		this.count = count;
 	}
 
 	private String cleanName(String original) {
