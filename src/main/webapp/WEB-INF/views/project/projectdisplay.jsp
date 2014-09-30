@@ -204,6 +204,7 @@
 <script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/main.js"></script>
+<script src="js/tree.js"></script>
 <script src="js/progress.js"></script>
 
 </ html>

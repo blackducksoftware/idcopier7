@@ -68,6 +68,7 @@ jQuery(document).ready(function ()
 	     }
 
 	     var percentComplete = jsonObj.percentComplete;
+	     var refreshStage = jsonObj.refreshStage;
 
 	     if (percentComplete === 100 && previousPercent === -1) {
 	       progressLoader.setValue('0%');
@@ -78,7 +79,7 @@ jQuery(document).ready(function ()
 
 	     previousPercent = percentComplete;
 
-	     progressLoader.setValue(percentComplete + '%');
+	     progressLoader.setValue(percentComplete + '%' + " [" + refreshStage + "]");
 	     progressLoader.setProgress(percentComplete / 100);
 
 	     if (percentComplete < 100) {
