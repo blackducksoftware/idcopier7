@@ -149,14 +149,14 @@ public class IDCProjectController
 	    @PathVariable String serverName,
 	    @PathVariable String projectId)
     {
-	log.info("Preparing BOM Refresh for project: '" + projectId + "'");
+	log.debug("Preparing BOM Refresh for project: '" + projectId + "'");
 
 	try
 	{
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    BomApi bomApi = proxy.getBomApi();
 	    bomApi.refreshBom(projectId, true, true);
-	    log.info("BOM Refresh completed for project ID: " + projectId);
+	    log.debug("BOM Refresh completed for project ID: " + projectId);
 	} catch (Exception e)
 	{
 	    log.error("Error during BOM refresh", e);
@@ -169,7 +169,7 @@ public class IDCProjectController
 	    @PathVariable String projectId,
 	    Model model)
     {
-	log.info("Getting BOM Refresh status for: '" + projectId + "'");
+	log.debug("Getting BOM Refresh status for: '" + projectId + "'");
 	Gson gson =  new Gson();
 	String jsonRefreshStatus = "";
 	try
@@ -178,7 +178,7 @@ public class IDCProjectController
 	    BomApi bomApi = proxy.getBomApi();
 	    BomProgressStatus status = bomApi.getRefreshBomProgress(projectId);
 	    jsonRefreshStatus =  gson.toJson(status);
-	    log.info("BOM Refresh status: " + jsonRefreshStatus);
+	    log.debug("BOM Refresh status: " + jsonRefreshStatus);
 	} catch (Exception e)
 	{
 	    log.error("Error getting refresh status", e);
