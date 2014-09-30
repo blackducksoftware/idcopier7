@@ -40,15 +40,15 @@ function loadDynaTree(sender, serverName, projectId)
      },
      onActivate: function (dtnode) 
      {
-    	 expandNode(dtnode, path);
+    	 expandNode(dtnode, path, sender);
      },
      onExpand: function (dtnode) 
      {
-    	 expandNode(dtnode, path);
+    	 expandNode(dtnode, path, sender);
      },
      onClick: function (dtnode) 
      {
-    	 expandNode(dtnode, path);
+    	 expandNode(dtnode, path, sender);
      },
 
      onSelect: function (select, node) {
@@ -165,8 +165,9 @@ function loadDynaTree(sender, serverName, projectId)
  * Called from onExpand and onActivate
  * @param dtnode - The node of the tree
  * @param path - The RESTful path to the Controller
+ * @param sender - Location (either source or target)
  */
-function expandNode(dtnode, path)
+function expandNode(dtnode, path, sender)
 {
 	if (dtnode.data.isFolder && !dtnode.hasChildren()) {
 		dtnode.expand();
