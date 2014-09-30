@@ -20,6 +20,11 @@
 	margin: 0 auto;
 }
 
+.hidden {
+	visibility: hidden;
+	display: none;
+}
+
 .errorLoginMsg {
 	visibility: hidden;
 	display: none;

@@ -590,6 +590,9 @@ jQuery(document)
 		var percentComplete = jsonObj.percentComplete;
 
 		if (percentComplete === 100 && previousPercent === -1) {
+			progressLoader.setValue('0%');
+			progressLoader.setProgress(0);
+
 			getRefreshStatusForProject(server, projectId);
 		}
 
