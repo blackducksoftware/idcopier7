@@ -133,39 +133,17 @@
 								class="btn btn-primary perform-refresh-button" /></td>
 						</tr>
 						<tr>
-						<!--  Progress Bar For Refresh -->
-						<td>
-						<center>
-						<div id="progressBar" class="easyui-progressbar"></div> </td>
+							<td colspan="2">
+								<!--  Progress Bar For Refresh -->
+								<center>
+									<div id="progressBar" class="easyui-progressbar"></div>
+								</center>
+							</td>
 						</tr>
 						<tr>
 							<td><h4></h4></td>
 							<td></td>
 						</tr>
-						<!--
-						<tr>
-							<td colspan="2">
-								<div id="droppableSample" class="ui-widget-content">
-									<p>Drop something here</p>
-								</div>
-							</td>
-						</tr>						
-						<tr>
-							<td>
-								<div>
-									<select id=" targetSelect" class=" targetSelect"></select>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div>
-									<ul id="list-group targetPathList"
-										class="list-group targetPathList"></ul>
-								</div>
-							</td>
-						</tr>
-						 -->
 					</tbody>
 				</table>
 			</div>
@@ -212,8 +190,9 @@
 <script src="js/libs/jquery/jquery.js" type="text/javascript"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"
 	type="text/javascript"></script>
-<script src="js/libs/jquery-ui/jquery-ui.custom.js"	type="text/javascript"></script>
-<script src="js/libs/progress/p-loader.js"	type="text/javascript"></script>
+<script src="js/libs/jquery-ui/jquery-ui.custom.js"
+	type="text/javascript"></script>
+<script src="js/libs/progress/p-loader.js" type="text/javascript"></script>
 <script src="js/libs/jquery-cookie/jquery.cookie.js"
 	type="text/javascript"></script>
 <script src="js/libs/Dynatree/jquery.dynatree.js" type="text/javascript"></script>
