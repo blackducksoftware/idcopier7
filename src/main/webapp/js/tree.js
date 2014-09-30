@@ -169,12 +169,6 @@ function loadDynaTree(sender, serverName, projectId)
  */
 function expandNode(dtnode, path, sender)
 {
-	if(dtnode.data == null)
-	{
-		console.log("Node data is empty...");
-		return;
-	}
-
 	if (dtnode.data.isFolder && !dtnode.hasChildren()) 
 	{
 		dtnode.expand();
