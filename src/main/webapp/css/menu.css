@@ -98,6 +98,10 @@ nav>ul>li>a {
 	color: rgb(190, 190, 190);
 }
 
+nav>ul>li>a:visited  {
+	color: rgb(190, 190, 190);
+}
+
 nav>ul>li>a:hover {
 	color: white;
 	text-decoration: none;
