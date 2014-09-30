@@ -163,38 +163,42 @@ function loadDynaTree(sender, serverName, projectId)
 /**
  * Expands the node using lady loading.
  * Called from onExpand and onActivate
- * @param dtnode
+ * @param dtnode - The node of the tree
+ * @param path - The RESTful path to the Controller
  */
 function expandNode(dtnode, path)
 {
-if (dtnode.data.isFolder && !dtnode.hasChildren()) {
-    dtnode.expand();
-    // This is the full
-    // Controller path with
-    // the node
-    // attached to the end
-    var finalPath = path + dtnode.data.key;
-    console.log("Passing in final RESTful path for node expansion: " + finalPath);
-    dtnode.appendAjax({
-      url: finalPath,
-      data: {
-        "mode": "all"
-      },
-      success: function (
-      node) {
-        node.expand();
-      },
-      debugLazyDelay: 750
-    });
-  }
-  if (sender === source) {
-    $('.' + sender.toLowerCase() + 'SelectedPath').text("/" + dtnode.data.key);
-      }
-  }
+	if (dtnode.data.isFolder && !dtnode.hasChildren()) {
+		dtnode.expand();
+		// This is the full
+		// Controller path with
+		// the node
+		// attached to the end
+		var finalPath = path + dtnode.data.key;
+		console.log("Passing in final RESTful path for node expansion: "
+				+ finalPath);
+		dtnode.appendAjax({
+			url : finalPath,
+			data : {
+				"mode" : "all"
+			},
+			success : function(node) {
+				node.expand();
+			},
+			debugLazyDelay : 750
+		});
+	}
+	if (sender === source) {
+		$('.' + sender.toLowerCase() + 'SelectedPath').text(
+				"/" + dtnode.data.key);
+	}
+}
+
 
 
 /**
- *  TODO:  What does this do?
+ * TODO: What does this do?
+ * 
  * @param event
  * @param nodes
  * @param node
