@@ -166,8 +166,10 @@ public class IDCLoginController {
 			ProtexServerProxy proxy = loginService.getProxy(server.getServerName());
 			projects = projectService.getProjectsByServer(proxy, server);
 
-		} catch (Exception e) {
-			log.error("Unable to authenticate new server: " + serverName);
+		} catch (Exception e) 
+		{
+			log.error("Unable to authenticate new server: " + serverName + " cause: " + e.getMessage());
+			return e.getCause().getMessage();
 		}
 
 		String projectJson = new Gson().toJson(projects);
