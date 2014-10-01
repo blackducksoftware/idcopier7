@@ -166,8 +166,7 @@ public class IDCProjectController
     @RequestMapping(IDCPathConstants.REFRESH_BOM_STATUS + "/{serverName}/{projectId}")
     public String refreshBOMStatus(
 	    @PathVariable String serverName,
-	    @PathVariable String projectId,
-	    Model model)
+	    @PathVariable String projectId)
     {
 	log.debug("Getting BOM Refresh status for: '" + projectId + "'");
 	Gson gson =  new Gson();
@@ -175,13 +174,12 @@ public class IDCProjectController
 	try
 	{
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    BomApi bomApi = proxy.getBomApi();
-	    BomProgressStatus status = bomApi.getRefreshBomProgress(projectId);
+	    BomProgressStatus status = projectService.getBOMRefreshStatus(proxy, projectId);
 	    jsonRefreshStatus =  gson.toJson(status);
-	    log.debug("BOM Refresh status: " + jsonRefreshStatus);
+	    log.debug("BOM Refresh status (JSON): " + jsonRefreshStatus);
 	} catch (Exception e)
 	{
-	    log.error("Error getting refresh status", e);
+	    log.error("Error getting refresh status: " + e.getMessage());
 	}
 	
 	return jsonRefreshStatus;

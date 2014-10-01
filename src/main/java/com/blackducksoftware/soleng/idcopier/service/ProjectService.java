@@ -21,6 +21,8 @@ import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.sdk.protex.project.Project;
 import com.blackducksoftware.sdk.protex.project.ProjectApi;
 import com.blackducksoftware.sdk.protex.project.ProjectInfo;
+import com.blackducksoftware.sdk.protex.project.bom.BomApi;
+import com.blackducksoftware.sdk.protex.project.bom.BomProgressStatus;
 import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNode;
 import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNodeRequest;
 import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNodeType;
@@ -48,7 +50,10 @@ public class ProjectService
 
     // Map of projects for caching lookup
     private Map<String, List<ProjectInfo>> projectMap = new HashMap<String, List<ProjectInfo>>();
-
+    // Map of BOM Apis per proxy
+    private Map<ProtexServerProxy, BomApi> bomApis = new HashMap<ProtexServerProxy, BomApi>();
+  
+    
     public ProjectService()
     {
     }
@@ -158,6 +163,39 @@ public class ProjectService
 	return json;
     }
 
+    /**
+     * Returns the status of  BOM refresh
+     * @param proxy 
+     * @param projectId
+     * @return
+     */
+    public BomProgressStatus getBOMRefreshStatus(ProtexServerProxy proxy, String projectId)
+    {
+	this.proxy = proxy;
+	BomProgressStatus status = null;
+	BomApi bomApi = getBomApiForProxy(proxy);
+	try
+	{
+	    status = bomApi.getRefreshBomProgress(projectId);
+	    if(status != null)
+		log.debug("Got status object:" + status.getPercentComplete());
+	} catch (SdkFault e)
+	{
+	    log.error("Error getting status for project ID: " + projectId);
+	    log.error("Reason: " + e.getMessage());
+	}
+
+	return status;
+    }
+    
+
+
+    /**
+     * Gets the tree with all its paths and pending counts.
+     * @param projectID
+     * @param path
+     * @return
+     */
     public String getProjectCodeTreeNodesWithCount(String projectID, String path)
     {
 	String json = "";
@@ -420,5 +458,23 @@ public class ProjectService
 	}
 
 	return count;
+    }
+    
+    
+    /**
+     * Uses the internal map to quickly fetch a BOM Api
+     * @param currentProxy - User supplied proxy
+     * @return
+     */
+    private BomApi getBomApiForProxy(ProtexServerProxy currentProxy)
+    {
+	BomApi bomApi = bomApis.get(currentProxy);
+	if(bomApi == null)
+	{
+	    bomApi = currentProxy.getBomApi();
+	    bomApis.put(currentProxy, bomApi);
+	}
+	
+	return bomApi;
     }
 }
