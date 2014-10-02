@@ -35,6 +35,7 @@ public class IDCPathConstants {
 	 * Tree
 	 */
 	public static final String TREE_EXPAND_NODE = "/treeExpandNode";
+	public static final String TREE_UPDATE_NODES = "/treeUpdateNodes";
 
 	/**
 	 * Logging

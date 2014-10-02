@@ -21,7 +21,9 @@
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <!-- <link rel="stylesheet" href="css/EasyTree/skin-win8/ui.easytree.css">  -->
-<link rel="stylesheet" href="css/Dynatree/skin-vista/ui.dynatree.css">
+<!-- <link rel="stylesheet" href="css/Dynatree/skin-vista/ui.dynatree.css"> -->
+<link rel="stylesheet"
+	href="css/Fancytree/skin-bootstrap/ui.fancytree.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 <link rel="stylesheet" href="css/menu.css">
 <link rel="stylesheet" href="css/Animate/animate.min.css">
@@ -101,7 +103,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div id="sourceCodeTree" class="sourceCodeTree"></div>
+					<div id="sourceCodeTree" data-source="ajax" class="sourceCodeTree"></div>
 				</div>
 			</div>
 			<div class="col-sm-2 col-lg-2">
@@ -199,12 +201,15 @@
 <script src="js/libs/jquery-ui/jquery-ui.custom.js"></script>
 <script src="js/libs/progress/p-loader.js"></script>
 <script src="js/libs/jquery-cookie/jquery.cookie.js"></script>
-<script src="js/libs/Dynatree/jquery.dynatree.js"></script>
+<!-- <script src="js/libs/Dynatree/jquery.dynatree.js"></script> -->
+<script src="js/libs/Fancytree/jquery.fancytree.js"></script>
+<script src="js/libs/Fancytree/jquery.fancytree.glyph.js"></script>
 <script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
 <script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script>
+<!-- <script src="js/tree.js"></script> -->
+<script src="js/treeFancy.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/main.js"></script>
-<script src="js/tree.js"></script>
 <script src="js/progress.js"></script>
 
 </ html>

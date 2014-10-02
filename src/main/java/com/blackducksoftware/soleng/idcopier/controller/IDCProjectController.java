@@ -185,4 +185,33 @@ public class IDCProjectController
 	return jsonRefreshStatus;
 	
     }
+    
+    @RequestMapping(IDCPathConstants.TREE_UPDATE_NODES)
+	public String copyIDs(@RequestParam(value = IDCViewModelConstants.PROJECT_ID) String projectId,
+			@RequestParam(value = IDCViewModelConstants.TREE_LOADED_PATH) String path,
+			@RequestParam(value = IDCViewModelConstants.TREE_LAST_LOADED_PATH) String lastLoadedPath, Model model) {
+		String returnMsg = null;
+		
+		String validPath = "";
+		
+		String[] pathList = path.split("/");
+		
+		for (int a = 0; a < pathList.length; a++) {
+			
+			
+		//	if (!currentPath) {
+		//		currentPath = pathParts[i];
+			//} else {
+			//	currentPath += "/" + pathParts[i];
+			//}
+		//	runningPaths.push(currentPath);
+		}
+
+		// Start with the last loaded path and get the nodes for that folder, and dive down deeper into that folder to see if we can find the desired path
+
+		System.out.println(projectService.isValidPath(projectId, lastLoadedPath) + "\t: " + lastLoadedPath);
+		System.out.println(projectService.isValidPath(projectId, path) + "\t: " + path);
+
+		return returnMsg;
+	}
 }

@@ -73,7 +73,7 @@ public class IDCViewModelConstants
     public static final String COPY_TARGET_PROJECT_ID = "copy-target-project-id";
     public static final String COPY_SOURCE_PATH = "copy-source-path";
     public static final String COPY_TARGET_PATHS = "copy-target-paths";
-    
+     
     //// These are optional
     // Should the copying recursively traverse the children
     public static final String COPY_RECURSIVE_OPTION = "recursive-option";
@@ -86,5 +86,6 @@ public class IDCViewModelConstants
      * Tree related variables
      */
     public static final String TREE_NODE_PATH = "tree-node-path";
-    
+    public static final String TREE_LOADED_PATH = "tree-loaded-path";
+    public static final String TREE_LAST_LOADED_PATH = "tree-last-loaded-path";
 }

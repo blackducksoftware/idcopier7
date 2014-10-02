@@ -7,25 +7,25 @@ public class IDCTree {
 	private String key;
 	private String title;
 	private int count;
-	private boolean isFolder;
-	private boolean expand;
-	private boolean isLazy;
+	private boolean folder;
+	private boolean expanded;
+	private boolean lazy;
 	private List<IDCTree> children;
 
 	public IDCTree(String key, String title, boolean isFolder) {
 		super();
 		this.key = key;
 		this.title = cleanName(title);
-		this.isFolder = isFolder;
-		this.isLazy = isFolder;
+		this.folder = isFolder;
+		this.lazy = isFolder;
 	}
 
 	public IDCTree(String key, String title, boolean isFolder, int count) {
 		super();
 		this.key = key;
 		this.title = cleanName(title, count);
-		this.isFolder = isFolder;
-		this.isLazy = isFolder;
+		this.folder = isFolder;
+		this.lazy = isFolder;
 		this.count = count;
 	}
 
@@ -77,19 +77,19 @@ public class IDCTree {
 	}
 
 	public boolean isFolder() {
-		return isFolder;
+		return folder;
 	}
 
 	public void setFolder(boolean isFolder) {
-		this.isFolder = isFolder;
+		this.folder = isFolder;
 	}
 
 	public boolean isExpand() {
-		return expand;
+		return expanded;
 	}
 
 	public void setExpand(boolean expand) {
-		this.expand = expand;
+		this.expanded = expand;
 	}
 
 	public List<IDCTree> getChildren() {
