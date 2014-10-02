@@ -115,7 +115,7 @@ public class IDCProjectController {
 		} catch (Exception e) {
 			log.error("Connection not established", e);
 		}
-
+		log.info("Returning JSON: " + jsonTree);
 		return jsonTree;
 	}
 

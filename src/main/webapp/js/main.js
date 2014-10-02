@@ -204,7 +204,7 @@ $(".userSourcePathInput").keyup(function(event) {
 		console.log("Loading tree for user entered path: " + path);
 		// TODO:  Need to build a key delimmited list here
 		console.log("Sending path: " + path);
-
+		
 		var strings = path.split("/");
 		var stringArry = new Array();
 		for(var i = 0; i < strings.length+1; i++)
@@ -262,7 +262,7 @@ function fetchPaths(sender, key)
 			// as we go				
 			
 			node.setActive();
-			node.setExpanded();
+			//node.setExpanded();
 					
 				
 		} else if (status == "ok") {
@@ -270,7 +270,7 @@ function fetchPaths(sender, key)
 			// If we call activate() or makeVisible() here, then the
 			// whole branch will be expanded now
 			node.setActive();
-			node.setExpanded();
+			//node.setExpanded();
 	
 		} else if (status == "notfound") {
 			var seg = arguments[2], isEndNode = arguments[3];

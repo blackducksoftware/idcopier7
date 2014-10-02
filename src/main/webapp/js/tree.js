@@ -45,7 +45,7 @@ function loadFancyTree(sender, serverName, projectId) {
 			autoScroll : true, // Automatically scroll nodes into visible area.
 			clickFolderMode : 3, // 1:activate, 2:expand, 3:activate and expand, 4:activate (dblclick expands)
 			checkbox : setAsCheckBox, // Show checkboxes.
-			debugLevel : 0, // 0:quiet, 1:normal, 2:debug
+			debugLevel : 2, // 0:quiet, 1:normal, 2:debug
 			generateIds : false, // Generate id attributes like <span id='fancytree-id-KEY'>
 			idPrefix : "ft_", // Used to generate node id´s like <span id='fancytree-id-<key>'>.
 			icons : true, // Display node icons.

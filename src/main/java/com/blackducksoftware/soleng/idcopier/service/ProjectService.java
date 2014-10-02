@@ -87,9 +87,10 @@ public class ProjectService {
 		return jsonTree;
 	}
 
-	public String getFolderJSON(ProtexServerProxy proxy, String projectID, String path) {
+	public String getFolderJSON(ProtexServerProxy proxy, String projectID, String path) 
+	{
 		this.proxy = proxy;
-		log.error("PATH=" + path);
+		log.info("PATH=" + path);
 
 		String jsonTree = getProjectCodeTreeNodesWithCount(projectID, path);
 
