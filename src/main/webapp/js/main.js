@@ -202,6 +202,7 @@ $(".userSourcePathInput").keyup(function(event) {
 	{
 		var path = $('.userSourcePathInput').val();
 		console.log("Loading tree for user entered path: " + path);
+		// TODO:  Need to build a key delimmited list here
 		fetchPaths("Source", path);
 	}
 });
@@ -213,9 +214,9 @@ $(".userSourcePathInput").keyup(function(event) {
  * @param sender
  * @param path
  */
-function fetchPaths(sender, path) {
+function fetchPaths(sender, key) {
 	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");
-	tree.loadKeyPath(path, function(node, status) 
+	tree.loadKeyPath(key, function(node, status) 
 	{
 		if (status == "loaded") {
 			// 'node' is a parent that was just traversed.
@@ -223,21 +224,24 @@ function fetchPaths(sender, path) {
 			// as we go				
 			if(!node.isExpanded())
 			{
-				node.toggleExpanded();
+				node.setExpanded();
+				node.setActive();
 			}		
 				
 		} else if (status == "ok") {
 			// 'node' is the end node of our path.
 			// If we call activate() or makeVisible() here, then the
-			// whole branch will be exoanded now
-			node.activate();
+			// whole branch will be expanded now
+			node.setExpanded();
+			node.setActive();
+	
 		} else if (status == "notfound") {
 			var seg = arguments[2], isEndNode = arguments[3];
 		}
 		else
 		{
-			console.log("Failed for node key: " + node.key);
-			}
+			console.log("Failed for node key: " + key);
+		}
 	});
 }
 function getPath(path) {

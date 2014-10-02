@@ -50,7 +50,7 @@ function loadFancyTree(sender, serverName, projectId) {
 			idPrefix : "ft_", // Used to generate node id´s like <span id='fancytree-id-<key>'>.
 			icons : true, // Display node icons.
 			keyboard : true, // Support keyboard navigation.
-			keyPathSeparator : "/", // Used by node.getKeyPath() and tree.loadKeyPath().
+			keyPathSeparator : "_", // Used by node.getKeyPath() and tree.loadKeyPath().
 			minExpandLevel : 1, // 1: root node is not collapsible
 			selectMode : 2, // 1:single, 2:multi, 3:multi-hier
 			titlesTabbable : true, // Node titles can receive keyboard focus
@@ -73,6 +73,8 @@ function loadFancyTree(sender, serverName, projectId) {
 			},
 			activate : function(event, data) 
 			{
+				console.log("Node key: " + data.node.key);
+				console.log("Node key path: " + data.node.getKeyPath());
 				if (sender === source) {
 					showSelectedPath(data.node);
 				}
