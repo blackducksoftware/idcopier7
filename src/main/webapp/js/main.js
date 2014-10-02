@@ -202,44 +202,76 @@ $(".userSourcePathInput").keyup(function(event) {
 	{
 		var path = $('.userSourcePathInput').val();
 		console.log("Loading tree for user entered path: " + path);
-
-		fetchPaths("Source", path);	
+		// TODO:  Need to build a key delimmited list here
+		console.log("Sending path: " + path);
+		fetchPaths("Source", path);
+		var strings = path.split("/");
+		var stringArry = new Array();
+		for(var i = 0; i < strings.length+1; i++)
+		{
+			var currentString = strings[i];
+			var tempString=  "_";
+			
+			if(stringArry.length > 0)
+			{
+			
+				for(var j=0; j<stringArry.length; j++)
+				{
+					if(j == 0)
+						tempString = tempString + strings[j];
+					else
+						tempString = tempString + "/" + strings[j];
+				}
+			}
+		
+			stringArry[i] = tempString;
+		}
+		for(var k = 0; k < stringArry.length; k++)
+		{
+			var key = stringArry[k];
+			if(key != "_")
+			{
+				// Build monster string here
+				var monsterKey = "";
+				for(var z = 0; z <= k; z++)
+				{
+					monsterKey = monsterKey + stringArry[z];
+				}
+				
+			}
+		}
+		fetchPaths("Source", monsterKey);
 	}
 });
 
 /**
- * Takes the path the user submits, then fetches a key node path for that path
- * and finally loads the key path using built-in AJAX.
+ * Attempts to retrieve all paths specified by the user.
+ * This is still a work in progress
  * 
  * @param sender
  * @param path
  */
-function fetchPaths(sender, path) 
+function fetchPaths(sender, key) 
 {
-	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");
-	var rootNode = tree.rootNode;
-	var ourNode = tree.getNodeByKey(path, rootNode);
-	if(ourNode == null)
-	{
-		displayNotificationMessage(warning, "Error expanding tree", "Could not find key for path: " + path);
-		return;
-	}
-	var nodeKey = ourNode.getKeyPath();
-	
-	tree.loadKeyPath(nodeKey, function(node, status) 
+	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");	
+	tree.loadKeyPath(key, function(node, status) 
 	{
 		if (status == "loaded") {
 			// 'node' is a parent that was just traversed.
 			// If we call expand() here, then all nodes will be expanded
 			// as we go				
+			
 			node.setActive();
 			node.setExpanded();
+					
+				
 		} else if (status == "ok") {
 			// 'node' is the end node of our path.
 			// If we call activate() or makeVisible() here, then the
 			// whole branch will be expanded now
 			node.setActive();
 			node.setExpanded();
+	
 		} else if (status == "notfound") {
 			var seg = arguments[2], isEndNode = arguments[3];
 		}
