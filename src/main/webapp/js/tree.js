@@ -5,7 +5,7 @@
  * @param serverName
  * @param projectId
  */
-function loadDynaTree(sender, serverName, projectId) {
+function loadFancyTree(sender, serverName, projectId) {
 	if (projectId !== null) {
 		// Clear our the selected paths
 		var selectedPathDiv = "." + sender + "SelectedPath";
@@ -18,138 +18,94 @@ function loadDynaTree(sender, serverName, projectId) {
 		if (sender === target) {
 			setAsCheckBox = true;
 		}
-		$('.' + sender.toLowerCase() + 'CodeTree').dynatree({
-			title : "Source Code Tree",
-			fx : {
-				height : "toggle",
-				duration : 200
+		$('#' + sender.toLowerCase() + 'CodeTree').fancytree({
+			title : sender + 'Code Tree',
+			extensions : [ "glyph" ],
+			glyph : {
+				map : {
+					doc : "glyphicon glyphicon-file",
+					docOpen : "glyphicon glyphicon-file",
+					checkbox : "glyphicon glyphicon-unchecked",
+					checkboxSelected : "glyphicon glyphicon-check",
+					checkboxUnknown : "glyphicon glyphicon-share",
+					error : "glyphicon glyphicon-warning-sign",
+					expanderClosed : "glyphicon glyphicon-plus-sign",
+					expanderLazy : "glyphicon glyphicon-plus-sign",
+					// expanderLazy: "glyphicon glyphicon-expand",
+					expanderOpen : "glyphicon glyphicon-minus-sign",
+					// expanderOpen: "glyphicon glyphicon-collapse-down",
+					folder : "glyphicon glyphicon-folder-close",
+					folderOpen : "glyphicon glyphicon-folder-open",
+					loading : "glyphicon glyphicon-refresh"
+				}
 			},
-			checkbox : setAsCheckBox,
-			// TODO: This does not appear to
-			// be doing anything
-			perist : true,
-			// TODO: What is select mode?
-			// What is '2'?
-			selectMode : 2,
-			autoFocus : false,
-			initAjax : {
-				// Gets the root node for
-				// the project
+			persist : true,
+			activeVisible : true, // Make sure, active nodes are visible (expanded).
+			autoActivate : true, // Automatically activate a node when it is focused (using keys).
+			autoCollapse : false, // Automatically collapse all siblings, when a node is expanded.
+			autoScroll : true, // Automatically scroll nodes into visible area.
+			clickFolderMode : 3, // 1:activate, 2:expand, 3:activate and expand, 4:activate (dblclick expands)
+			checkbox : setAsCheckBox, // Show checkboxes.
+			debugLevel : 0, // 0:quiet, 1:normal, 2:debug
+			generateIds : false, // Generate id attributes like <span id='fancytree-id-KEY'>
+			idPrefix : "ft_", // Used to generate node id´s like <span id='fancytree-id-<key>'>.
+			icons : true, // Display node icons.
+			keyboard : true, // Support keyboard navigation.
+			keyPathSeparator : "/", // Used by node.getKeyPath() and tree.loadKeyPath().
+			minExpandLevel : 1, // 1: root node is not collapsible
+			selectMode : 2, // 1:single, 2:multi, 3:multi-hier
+			titlesTabbable : true, // Node titles can receive keyboard focus
+			source : {
 				url : path + '/'
 			},
-			onActivate : function(dtnode) {
-				return expandNode(dtnode, path, sender);
+			lazyLoad : function(event, data) {
+				var node = data.node;
+				var finalPath = path + node.key;
+				console.log(data);
+				data.result = $.ajax({
+					url : finalPath,
+					dataType : "json"
+				});
 			},
-			onExpand : function(dtnode) {
-				return expandNode(dtnode, path, sender);
+			ajaxDefaults : { // Used by initAjax option
+				cache : true, // false: Append random '_' argument to the request url to prevent caching.
+				timeout : 0, // >0: Make sure we get an ajax error for invalid URLs
+				dataType : "json" // Expect json format and pass json object to callbacks.
 			},
-			onClick : function(dtnode) {
-				return expandNode(dtnode, path, sender);
+			activate : function(event, data) {
+				if (sender === source) {
+					showSelectedPath(data.node);
+				}
 			},
-			onSelect : function(select, node) {
+			click : function(event, data) {
+				if (sender === source) {
+					showSelectedPath(data.node);
+				}
+			},
+			expand : function(event, data) {
+				if (sender === source) {
+					showSelectedPath(data.node);
+				}
+			},
+			select : function(event, data) {
 				if (sender === target) {
+					var node = data.node;
 					var selNodes = node.tree.getSelectedNodes();
 					var uniqueNodes = [];
 					var key = node.data.key;
-					/*
-					 * This doesn't do what we wanted, and I realized the flaw in my thinking. I was doing a simple check to see if one path contained the
-					 * other, but that won't be correct.
-					 * 
-					 * In reality what we want is to:
-					 * 
-					 * 1. Check to make sure that the selected path we are looking at, isn't he path being checked against in the selected paths.
-					 * 
-					 * 2. If there is a file name, strip that out. We only want to deal with folder names. If we try for file names, we will run into situations
-					 * where we uncheck items with very similar names
-					 * 
-					 * Path 1: /com/niles/test/path/README Path 2: /com/niles/test/path/README2
-					 * 
-					 * Path 2 will contain Path 1, but not be an accurate check.
-					 * 
-					 * So we need to check to see if the node type is a file or a folder. If it is a folder, we can just do the check as is. If it's a file,
-					 * then we will have to take off the file name and then compare the folder that we are checking against. This should make it more accurate.
-					 */
-					/*
-					 * for (var i = 0; i < selNodes.length; ++i) { // Look to see if the newly selected node lives // inside of an old node, or if an old node //
-					 * lives inside the selected node if (((key.lastIndexOf(selNodes[i].data.key, 0) === 0) || (selNodes[i].data.key.lastIndexOf(key, 0) === 0)) &&
-					 * node.data.key !== selNodes[i].data.key) { if ($('.' + sender.toLowerCase() +
-					 * 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).isSelected()) { console.log("Unchecking: " + selNodes[i].data.key); $('.' +
-					 * sender.toLowerCase() + 'CodeTree').dynatree("getTree").selectKey(selNodes[i].data.key).toggleSelect(); } } }
-					 */
 					selNodes = node.tree.getSelectedNodes();
 					// convert to title/key
 					// array
 					var selKeys = $.map(selNodes, function(node) {
-						return "/" + node.data.key;
+						return "/" + node.key;
 					});
 					targetPaths = selectedPaths = selKeys.join(", ");
 					$('.' + sender.toLowerCase() + 'SelectedPath').text(selectedPaths);
 				}
-			},
-			debugLevel : 0
-		// 0:quiet, 1:normal, 2:debug
-		});
-		$('.' + sender.toLowerCase() + 'CodeTree').dynatree("getTree").reload();
-	}
-}
-/**
- * Expands the node using lady loading. Called from onExpand and onActivate
- * 
- * @param dtnode -
- *            The node of the tree
- * @param path -
- *            The RESTful path to the Controller
- * @param sender -
- *            Location (either source or target)
- */
-function expandNode(dtnode, path, sender) {
-	if (dtnode.data.isFolder && !dtnode.hasChildren()) {
-		dtnode.expand();
-		// This is the full Controller path with
-		var finalPath = path + dtnode.data.key;
-		console.log("Passing in final RESTful path for node expansion: " + finalPath);
-		dtnode.appendAjax({
-			url : finalPath,
-			data : {
-				"mode" : "all"
-			},
-			success : function(node) {
-				node.expand();
-				return true;
-			},
-			debugLazyDelay : 750
+			}
 		});
 	}
-	if (sender === source) {
-		$('.' + sender.toLowerCase() + 'SelectedPath').text("/" + dtnode.data.key);
-	}
 }
-/**
- * TODO: What does this do?
- * 
- * @param event
- * @param nodes
- * @param node
- * @param hasChildren
- * @returns {Boolean}
- */
-function openLazyNode(event, nodes, node, hasChildren) {
-	if (hasChildren) {
-		return false;
-	}
-	// node.lazyUrlJson = node.id;
-}
-function updateCodeTreeNodes(sender, serverName, projectId) {
-	// var dict = $('.' + sender.toLowerCase() + 'CodeTree').dynatree('getTree').toDict(true);
-	// console.log(dict);
-	var nodes = $('.' + sender.toLowerCase() + 'CodeTree').dynatree('getRoot').getChildren();
-	console.log(nodes);
-	/*
-	 * var params = { 'tree-nodes-paths' : sourceServer, 'copy-target-server' : targetServer, 'copy-source-project-id' : sourceProjectId,
-	 * 'copy-target-project-id' : targetProjectId, 'copy-source-path' : selectedSourcePath, 'copy-target-paths' : targetPaths, 'defer-bom-option' :
-	 * deferBOMOption, 'recursive-option' : recursiveCopyOption, 'overwrite-option' : overwriteIDsOption }; $.ajax({ type : 'POST', url : 'treeUpdateNodes',
-	 * data : params, success : function(msg) { console.log(msg); displayNotificationMessage(success, 'Successfully copied identifications', msg); //
-	 * alert('Copy Result: ' // + msg); }, error : function(msg) { console.log(msg); displayNotificationMessage(danger, 'Failed to copy identifications', msg); //
-	 * alert("General error: // " + msg) } });
-	 */
+function showSelectedPath(node) {
+	$('.sourceSelectedPath').text("/" + node.key);
 }
