@@ -85,9 +85,7 @@ jQuery(document).ready(function() {
 			});
 		});
 	})();
-	/**
-	 * populateWidgets
-	 */
+
 	function loadSelectBox(sender) {
 		var currentlySelected = $('.' + sender.toLowerCase() + 'CodeTree :selected').val();
 		console.log(sourceTree.getNode(currentlySelected));
@@ -173,27 +171,7 @@ jQuery(document).ready(function() {
 		'placement' : 'bottom',
 		'title' : "Type source path here"
 	});
-	$(".userSourcePathInput").keyup(function(event) {
-		$('.sourceSelectedPath').empty();
-		$('.sourceSelectedPath').text(this.value);
-		console.log("this.value = " + this.value);
-		if (event.which == 13 || event.keyCode == 13) {
-			var path = $('.userSourcePathInput').val();
-			console.log("Loading tree for user entered path: " + path);
-			var pathParts = path.split("/");
-			var runningPaths = [];
-			var currentPath = "";
-			for (i = 0; i < pathParts.length; i++) {
-				if (!currentPath) {
-					currentPath = pathParts[i];
-				} else {
-					currentPath += "/" + pathParts[i];
-				}
-				runningPaths.push(currentPath);
-			}
-			fetchPaths(runningPaths);
-		}
-	});
+	
 	$(".userTargetPathInput").tooltip({
 		'show' : true,
 		'placement' : 'bottom',
@@ -211,19 +189,43 @@ jQuery(document).ready(function() {
 		}
 	});
 });
+
+
 /**
+ * Drill down 
+ */
+$(".userSourcePathInput").keyup(function(event) {
+	$('.sourceSelectedPath').empty();
+	$('.sourceSelectedPath').text(this.value);
+	console.log("this.value = " + this.value);
+	if (event.which == 13 || event.keyCode == 13) 
+	{
+		var path = $('.userSourcePathInput').val();
+		console.log("Loading tree for user entered path: " + path);
+		fetchPaths("Source", path);
+	}
+});
+
+/**
+ * Attempts to retrieve all paths specified by the user.
  * This is still a work in progress
  * 
  * @param sender
  * @param path
  */
 function fetchPaths(sender, path) {
-	$('.' + sender.toLowerCase(), path + 'CodeTree').fancytree("getTree").loadKeyPath(path, function(node, status) {
+	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");
+	tree.loadKeyPath(path, function(node, status) 
+	{
 		if (status == "loaded") {
 			// 'node' is a parent that was just traversed.
 			// If we call expand() here, then all nodes will be expanded
-			// as we go
-			node.expand();
+			// as we go				
+			if(!node.isExpanded())
+			{
+				node.toggleExpanded();
+			}		
+				
 		} else if (status == "ok") {
 			// 'node' is the end node of our path.
 			// If we call activate() or makeVisible() here, then the
@@ -232,6 +234,10 @@ function fetchPaths(sender, path) {
 		} else if (status == "notfound") {
 			var seg = arguments[2], isEndNode = arguments[3];
 		}
+		else
+		{
+			console.log("Failed for node key: " + node.key);
+			}
 	});
 }
 function getPath(path) {

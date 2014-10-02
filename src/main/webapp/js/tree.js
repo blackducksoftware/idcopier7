@@ -71,7 +71,8 @@ function loadFancyTree(sender, serverName, projectId) {
 				timeout : 0, // >0: Make sure we get an ajax error for invalid URLs
 				dataType : "json" // Expect json format and pass json object to callbacks.
 			},
-			activate : function(event, data) {
+			activate : function(event, data) 
+			{
 				if (sender === source) {
 					showSelectedPath(data.node);
 				}
