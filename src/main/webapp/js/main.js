@@ -270,7 +270,7 @@ function fetchPaths(sender, key)
 			// If we call activate() or makeVisible() here, then the
 			// whole branch will be expanded now
 			node.setActive();
-			//node.setExpanded();
+			node.toggleExpanded();
 	
 		} else if (status == "notfound") {
 			var seg = arguments[2], isEndNode = arguments[3];
