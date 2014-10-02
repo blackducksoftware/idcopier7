@@ -42,176 +42,121 @@ import com.google.gson.Gson;
 
 @RestController
 @SessionAttributes(IDCViewModelConstants.IDC_SESSION)
-public class IDCProjectController
-{
-    static Logger log = Logger.getLogger(IDCProjectController.class);
+public class IDCProjectController {
+	static Logger log = Logger.getLogger(IDCProjectController.class);
 
-    @Autowired
-    private LoginService loginService;
+	@Autowired
+	private LoginService loginService;
 
-    @Autowired
-    private ProjectService projectService;
+	@Autowired
+	private ProjectService projectService;
 
-    @RequestMapping(IDCPathConstants.GET_PROJECTS)
-    public String getProjectJSONList(
-	    @RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName)
-    {
-	log.info("Getting project list for server: " + serverName);
-	List<ProjectInfo> projects = null;
-	try
-	{
-	    IDCServer server = loginService.getServerByName(serverName);
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    projectService.getProjectsByServer(proxy, server);
+	@RequestMapping(IDCPathConstants.GET_PROJECTS)
+	public String getProjectJSONList(@RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName) {
+		log.info("Getting project list for server: " + serverName);
+		List<ProjectInfo> projects = null;
+		try {
+			IDCServer server = loginService.getServerByName(serverName);
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			projectService.getProjectsByServer(proxy, server);
 
-	} catch (Exception e)
-	{
-	    log.error("Error getting projects", e);
-	}
-
-	log.info("Returning JSON projects: " + new Gson().toJson(projects));
-
-	return new Gson().toJson(projects);
-    }
-
-    @RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
-    public ModelAndView displayProjectTree(
-	    @RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
-	    @RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
-	    @ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session,
-	    Model model)
-    {
-	ModelAndView modelAndView = new ModelAndView();
-
-	log.info("Processing project: " + projectId);
-
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    String jsonTree = projectService.getProjectJSON(proxy, projectId);
-
-	    modelAndView.addObject(IDCViewModelConstants.PROJECT_JSON_TREE,
-		    jsonTree);
-
-	    modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
-	} catch (Exception e)
-	{
-	    log.error("Unable to display project tree", e);
-	}
-
-	return modelAndView;
-    }
-
-    /**
-     * Gets the children for a specific path
-     * 
-     * @param serverName
-     * @param projectId
-     * @param path
-     *            - The node in the tree that needs expansion
-     * @param session
-     * @param model
-     * @return
-     */
-    @RequestMapping(IDCPathConstants.TREE_EXPAND_NODE + "/{serverName}/{projectId}")
-    public String expandPathNode(
-	    @PathVariable String serverName,
-	    @PathVariable String projectId,
-	    @RequestParam(value = IDCViewModelConstants.TREE_NODE_PATH, required = true) String path,
-	    Model model)
-    {
-	log.info("Generating for path: '" + path + "'");
-
-	String jsonTree = "";
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    jsonTree = projectService.getFolderJSON(proxy, projectId, path);
-	} catch (Exception e)
-	{
-	    log.error("Connection not established", e);
-	}
-
-	return jsonTree;
-    }
-    
-    /**
-     * Refreshes the BOM of a particular project
-     * 
-     * @param serverName
-     * @param projectId
-     * @param path
-     * @param model
-     * @return
-     */
-    @RequestMapping(IDCPathConstants.REFRESH_BOM + "/{serverName}/{projectId}")
-    public void refreshBOM(
-	    @PathVariable String serverName,
-	    @PathVariable String projectId)
-    {
-	log.debug("Preparing BOM Refresh for project: '" + projectId + "'");
-
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    BomApi bomApi = proxy.getBomApi();
-	    bomApi.refreshBom(projectId, true, true);
-	    log.debug("BOM Refresh completed for project ID: " + projectId);
-	} catch (Exception e)
-	{
-	    log.error("Error during BOM refresh", e);
-	}
-    }
-    
-    @RequestMapping(IDCPathConstants.REFRESH_BOM_STATUS + "/{serverName}/{projectId}")
-    public String refreshBOMStatus(
-	    @PathVariable String serverName,
-	    @PathVariable String projectId)
-    {
-	log.debug("Getting BOM Refresh status for: '" + projectId + "'");
-	Gson gson =  new Gson();
-	String jsonRefreshStatus = "";
-	try
-	{
-	    ProtexServerProxy proxy = loginService.getProxy(serverName);
-	    BomProgressStatus status = projectService.getBOMRefreshStatus(proxy, projectId);
-	    jsonRefreshStatus =  gson.toJson(status);
-	    log.debug("BOM Refresh status (JSON): " + jsonRefreshStatus);
-	} catch (Exception e)
-	{
-	    log.error("Error getting refresh status: " + e.getMessage());
-	}
-	
-	return jsonRefreshStatus;
-	
-    }
-    
-    @RequestMapping(IDCPathConstants.TREE_UPDATE_NODES)
-	public String copyIDs(@RequestParam(value = IDCViewModelConstants.PROJECT_ID) String projectId,
-			@RequestParam(value = IDCViewModelConstants.TREE_LOADED_PATH) String path,
-			@RequestParam(value = IDCViewModelConstants.TREE_LAST_LOADED_PATH) String lastLoadedPath, Model model) {
-		String returnMsg = null;
-		
-		String validPath = "";
-		
-		String[] pathList = path.split("/");
-		
-		for (int a = 0; a < pathList.length; a++) {
-			
-			
-		//	if (!currentPath) {
-		//		currentPath = pathParts[i];
-			//} else {
-			//	currentPath += "/" + pathParts[i];
-			//}
-		//	runningPaths.push(currentPath);
+		} catch (Exception e) {
+			log.error("Error getting projects", e);
 		}
 
-		// Start with the last loaded path and get the nodes for that folder, and dive down deeper into that folder to see if we can find the desired path
+		log.info("Returning JSON projects: " + new Gson().toJson(projects));
 
-		System.out.println(projectService.isValidPath(projectId, lastLoadedPath) + "\t: " + lastLoadedPath);
-		System.out.println(projectService.isValidPath(projectId, path) + "\t: " + path);
+		return new Gson().toJson(projects);
+	}
 
-		return returnMsg;
+	@RequestMapping(value = IDCPathConstants.PROJECT_DISPLAY_TREE)
+	public ModelAndView displayProjectTree(
+			@RequestParam(value = IDCViewModelConstants.PROJECT_SOURCE_ID) String projectId,
+			@RequestParam(value = IDCViewModelConstants.IDC_SERVER_NAME) String serverName,
+			@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, Model model) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		log.info("Processing project: " + projectId);
+
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			String jsonTree = projectService.getProjectJSON(proxy, projectId);
+
+			modelAndView.addObject(IDCViewModelConstants.PROJECT_JSON_TREE, jsonTree);
+
+			modelAndView.setViewName(IDCViewConstants.PROJECT_PAGE);
+		} catch (Exception e) {
+			log.error("Unable to display project tree", e);
+		}
+
+		return modelAndView;
+	}
+
+	/**
+	 * Gets the children for a specific path
+	 * 
+	 * @param serverName
+	 * @param projectId
+	 * @param path
+	 *            - The node in the tree that needs expansion
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(IDCPathConstants.TREE_EXPAND_NODE + "/{serverName}/{projectId}")
+	public String expandPathNode(@PathVariable String serverName, @PathVariable String projectId,
+			@RequestParam(value = IDCViewModelConstants.TREE_NODE_PATH, required = true) String path, Model model) {
+		log.info("Generating for path: '" + path + "'");
+
+		String jsonTree = "";
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			jsonTree = projectService.getFolderJSON(proxy, projectId, path);
+		} catch (Exception e) {
+			log.error("Connection not established", e);
+		}
+
+		return jsonTree;
+	}
+
+	/**
+	 * Refreshes the BOM of a particular project
+	 * 
+	 * @param serverName
+	 * @param projectId
+	 * @param path
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(IDCPathConstants.REFRESH_BOM + "/{serverName}/{projectId}")
+	public void refreshBOM(@PathVariable String serverName, @PathVariable String projectId) {
+		log.debug("Preparing BOM Refresh for project: '" + projectId + "'");
+
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			BomApi bomApi = proxy.getBomApi();
+			bomApi.refreshBom(projectId, true, true);
+			log.debug("BOM Refresh completed for project ID: " + projectId);
+		} catch (Exception e) {
+			log.error("Error during BOM refresh", e);
+		}
+	}
+
+	@RequestMapping(IDCPathConstants.REFRESH_BOM_STATUS + "/{serverName}/{projectId}")
+	public String refreshBOMStatus(@PathVariable String serverName, @PathVariable String projectId) {
+		log.debug("Getting BOM Refresh status for: '" + projectId + "'");
+		Gson gson = new Gson();
+		String jsonRefreshStatus = "";
+		try {
+			ProtexServerProxy proxy = loginService.getProxy(serverName);
+			BomProgressStatus status = projectService.getBOMRefreshStatus(proxy, projectId);
+			jsonRefreshStatus = gson.toJson(status);
+			log.debug("BOM Refresh status (JSON): " + jsonRefreshStatus);
+		} catch (Exception e) {
+			log.error("Error getting refresh status: " + e.getMessage());
+		}
+
+		return jsonRefreshStatus;
+
 	}
 }

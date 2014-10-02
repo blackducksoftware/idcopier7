@@ -10,8 +10,7 @@ function loadFancyTree(sender, serverName, projectId) {
 		// Clear our the selected paths
 		var selectedPathDiv = "." + sender + "SelectedPath";
 		$(selectedPathDiv).empty();
-		// Activate the
-		// IDCProjectController.expandPathNode()
+		// Activate the IDCProjectController.expandPathNode()
 		// Pass in an argument representing the node
 		var path = "treeExpandNode/" + serverName + '/' + projectId + "/?tree-node-path=";
 		var setAsCheckBox = false;

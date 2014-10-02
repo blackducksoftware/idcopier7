@@ -6,9 +6,7 @@ var targetPaths;
 var servers = "servers";
 var source = "Source";
 var target = "Target";
-// The locations array will be used to auto trigger internal
-// jQuery
-// functions
+// The locations array will be used to auto trigger internal jQuery functions
 var locations = [ source, target ];
 // Growl Types
 var success = 'success';
@@ -35,14 +33,11 @@ jQuery(document).ready(function() {
 		$.each(locations, function(index, locationValue) {
 			console.log("Processing location: " + locationValue);
 			// Variables used for all processes
-			// This is the div id of the
-			// pulldown
+			// This is the div id of the pulldown
 			var serverSelectorDiv = ".select" + locationValue + "Server";
-			// This is the dev id of the project
-			// pulldown
+			// This is the dev id of the project pulldown
 			var projectSelectorDiv = ".select" + locationValue + "Project";
-			// This is the default non-value
-			// message of the selector
+			// This is the default non-value message of the selector
 			var messageServer = "Select " + locationValue + " Server";
 			/**
 			 * Populate server pulldown
@@ -89,10 +84,11 @@ jQuery(document).ready(function() {
 				loadFancyTree(locationValue, serverName, projectId);
 			});
 		});
-	})(); // populateWidgets
+	})();
+	/**
+	 * populateWidgets
+	 */
 	function loadSelectBox(sender) {
-		// alert($('.' + sender.toLowerCase() + 'CodeTree
-		// :selected').val());
 		var currentlySelected = $('.' + sender.toLowerCase() + 'CodeTree :selected').val();
 		console.log(sourceTree.getNode(currentlySelected));
 	}
@@ -107,15 +103,13 @@ jQuery(document).ready(function() {
 			$('.user' + sender + 'PathInput').val('/');
 			$('.' + sender.toLowerCase() + 'SelectedPath').empty();
 			$('.' + sender.toLowerCase() + 'SelectedPath').text('/');
-			// Set the EasyTree
+			// Set the FancyTree
 			var tree;
 			if (sender == source) {
 				tree = sourceTree;
 			} else {
 				tree = targetTree
 			}
-			// var currentlySelected = $('#lstNodes
-			// :selected').val();
 			tree = $('.' + sender.toLowerCase() + 'CodeTree').easytree({
 				allowActivate : true,
 				dataUrl : path,
@@ -149,12 +143,7 @@ jQuery(document).ready(function() {
 			'copy-target-project-id' : targetProjectId,
 			'copy-source-path' : selectedSourcePath,
 			'copy-target-paths' : targetPaths,
-			// Also
-			// inside
-			// the
-			// dynatree
-			// behavior
-			// Check boxes
+			// Also inside the FancyTree behavior Check boxes
 			'defer-bom-option' : deferBOMOption,
 			'recursive-option' : recursiveCopyOption,
 			'overwrite-option' : overwriteIDsOption
@@ -170,14 +159,12 @@ jQuery(document).ready(function() {
 			success : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(success, 'Successfully copied identifications', msg);
-				// alert('Copy Result: '
-				// + msg);
+				// alert('Copy Result: ' + msg);
 			},
 			error : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(danger, 'Failed to copy identifications', msg);
-				// alert("General error:
-				// " + msg)
+				// alert("General error: " + msg)
 			}
 		});
 	});
@@ -205,11 +192,6 @@ jQuery(document).ready(function() {
 				runningPaths.push(currentPath);
 			}
 			fetchPaths(runningPaths);
-			/*
-			 * for (i = runningPaths.length - 1; i >= 0; i--) { // console.log("Running path: " // + runningPaths[i]); var testName =
-			 * $('.sourceCodeTree').dynatree("getTree").getNodeByKey(runningPaths[i]); if (testName != null) { testName.activate(); testName.expand(true);
-			 * console.log("Name: " + testName.data.title + " (" + path + ")"); } }
-			 */
 		}
 	});
 	$(".userTargetPathInput").tooltip({
@@ -229,6 +211,12 @@ jQuery(document).ready(function() {
 		}
 	});
 });
+/**
+ * This is still a work in progress
+ * 
+ * @param sender
+ * @param path
+ */
 function fetchPaths(sender, path) {
 	$('.' + sender.toLowerCase(), path + 'CodeTree').fancytree("getTree").loadKeyPath(path, function(node, status) {
 		if (status == "loaded") {
@@ -245,17 +233,6 @@ function fetchPaths(sender, path) {
 			var seg = arguments[2], isEndNode = arguments[3];
 		}
 	});
-}
-function fetchPaths2(paths) {
-	var promises = [];
-	for ( var i in paths) {
-		promises.push(getPath(paths[i])); // push the Promises to our array
-	}
-	Promise.all(promises).then(function(dataArr) {
-		dataArr.forEach(function(data) {
-			console.log('Expande path: ' + data.data.key);
-		});
-	})
 }
 function getPath(path) {
 	var currentNode = $('.sourceCodeTree').dynatree("getTree").getNodeByKey(path);
