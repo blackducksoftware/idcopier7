@@ -202,39 +202,44 @@ $(".userSourcePathInput").keyup(function(event) {
 	{
 		var path = $('.userSourcePathInput').val();
 		console.log("Loading tree for user entered path: " + path);
-		// TODO:  Need to build a key delimmited list here
-		fetchPaths("Source", path);
+
+		fetchPaths("Source", path);	
 	}
 });
 
 /**
- * Attempts to retrieve all paths specified by the user.
- * This is still a work in progress
+ * Takes the path the user submits, then fetches a key node path for that path
+ * and finally loads the key path using built-in AJAX.
  * 
  * @param sender
  * @param path
  */
-function fetchPaths(sender, key) {
+function fetchPaths(sender, path) 
+{
 	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");
-	tree.loadKeyPath(key, function(node, status) 
+	var rootNode = tree.rootNode;
+	var ourNode = tree.getNodeByKey(path, rootNode);
+	if(ourNode == null)
+	{
+		displayNotificationMessage(warning, "Error expanding tree", "Could not find key for path: " + path);
+		return;
+	}
+	var nodeKey = ourNode.getKeyPath();
+	
+	tree.loadKeyPath(nodeKey, function(node, status) 
 	{
 		if (status == "loaded") {
 			// 'node' is a parent that was just traversed.
 			// If we call expand() here, then all nodes will be expanded
 			// as we go				
-			if(!node.isExpanded())
-			{
-				node.setExpanded();
-				node.setActive();
-			}		
-				
+			node.setActive();
+			node.setExpanded();
 		} else if (status == "ok") {
 			// 'node' is the end node of our path.
 			// If we call activate() or makeVisible() here, then the
 			// whole branch will be expanded now
-			node.setExpanded();
 			node.setActive();
-	
+			node.setExpanded();
 		} else if (status == "notfound") {
 			var seg = arguments[2], isEndNode = arguments[3];
 		}
