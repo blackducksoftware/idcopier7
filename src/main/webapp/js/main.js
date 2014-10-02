@@ -204,7 +204,7 @@ $(".userSourcePathInput").keyup(function(event) {
 		console.log("Loading tree for user entered path: " + path);
 		// TODO:  Need to build a key delimmited list here
 		console.log("Sending path: " + path);
-		fetchPaths("Source", path);
+
 		var strings = path.split("/");
 		var stringArry = new Array();
 		for(var i = 0; i < strings.length+1; i++)
