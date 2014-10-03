@@ -2,7 +2,7 @@
  * Globals
  */
 // The list of selected target paths
-var targetPaths;
+var targetPaths = "";
 var servers = "servers";
 var source = "Source";
 var target = "Target";
@@ -76,6 +76,7 @@ jQuery(document).ready(function() {
 			/**
 			 * Assign project pulldown behavior
 			 */
+	
 			$(projectSelectorDiv).change(function() {
 				progressDiv.hide();
 				var projectId = $(this).children(":selected").attr("id");
@@ -83,6 +84,83 @@ jQuery(document).ready(function() {
 				// loadDynaTree(locationValue, serverName, projectId);
 				loadFancyTree(locationValue, serverName, projectId);
 			});
+			
+			/**
+			 * Establish tooltips
+			 */
+			var pathSelectInput = ".user" + locationValue + "PathInput";
+			$(pathSelectInput).tooltip({
+				'show' : true,
+				'placement' : 'bottom',
+				'title' : "Type " + locationValue +" path here"
+			});
+						
+			/**
+			 * Assign enter key behavior for path field
+			 */				
+			var selectedPath = "." + locationValue + "SelectedPath";
+			$(pathSelectInput).keyup(function(event) {
+				$(selectedPath).empty();
+				$(selectedPath).text(this.value);
+				if (event.which == 13 || event.keyCode == 13) 
+				{
+					var projectId = getProjectIDforLocation(locationValue);
+					if(projectId == null)
+					{
+						displayNotificationMessage(warning, "Can not select path", "No project selected");
+						return false;
+					}	
+					
+					var path = $(pathSelectInput).val();
+					console.log("Loading tree for user entered path: " + path);
+
+					// IF path starts with '/', then discard it
+					var startingChar = path.substring(0, 1);
+					if(startingChar === "/" || startingChar === "\\")
+					{
+						console.log("Removing leading slash");
+						path = path.substring(1,path.length);
+					}	
+
+					var strings = path.split("/");
+					var stringArry = new Array();
+					for(var i = 0; i < strings.length+1; i++)
+					{
+						var tempString=  "_";
+						
+						if(stringArry.length > 0)
+						{
+						
+							for(var j=0; j<stringArry.length; j++)
+							{
+								if(j == 0)
+									tempString = tempString + strings[j];
+								else
+									tempString = tempString + "/" + strings[j];
+							}
+						}
+					
+						stringArry[i] = tempString;
+					}
+					for(var k = 0; k < stringArry.length; k++)
+					{
+						var key = stringArry[k];
+						if(key != "_")
+						{
+							// Build monster string here
+							var monsterKey = "";
+							for(var z = 0; z <= k; z++)
+							{
+								monsterKey = monsterKey + stringArry[z];
+							}
+							
+						}
+					}
+					// tree.js
+					fetchPaths(locationValue, monsterKey);
+				}
+			});
+			
 		});
 	})();
 
@@ -166,121 +244,41 @@ jQuery(document).ready(function() {
 			}
 		});
 	});
-	$(".userSourcePathInput").tooltip({
-		'show' : true,
-		'placement' : 'bottom',
-		'title' : "Type source path here"
-	});
-	
-	$(".userTargetPathInput").tooltip({
-		'show' : true,
-		'placement' : 'bottom',
-		'title' : "Type target path here"
-	});
+
 	$(".userTargetPathInput").keyup(function() {
 		$('.targetSelectedPath').empty();
 		// $('.targetSelectedPath').text(this.value);
-		if (targetPaths.length === 0) {
-			$('.targetSelectedPath').text(this.value);
-		} else if (this.value.length === 0) {
-			$('.targetSelectedPath').text(targetPaths);
-		} else {
-			$('.targetSelectedPath').text(targetPaths + ", " + this.value);
+		if(targetPaths != null)
+		{
+			if (targetPaths.length === 0) {
+				$('.targetSelectedPath').text(this.value);
+			} else if (this.value.length === 0) {
+				$('.targetSelectedPath').text(targetPaths);
+			} else {
+				$('.targetSelectedPath').text(targetPaths + ", " + this.value);
+			}
 		}
 	});
 });
 
-
 /**
- * Drill down 
+ * Helper method to return project ID of pulldown
+ * @param location
  */
-$(".userSourcePathInput").keyup(function(event) {
-	$('.sourceSelectedPath').empty();
-	$('.sourceSelectedPath').text(this.value);
-	console.log("this.value = " + this.value);
-	if (event.which == 13 || event.keyCode == 13) 
-	{
-		var path = $('.userSourcePathInput').val();
-		console.log("Loading tree for user entered path: " + path);
-		// TODO:  Need to build a key delimmited list here
-		console.log("Sending path: " + path);
-		
-		var strings = path.split("/");
-		var stringArry = new Array();
-		for(var i = 0; i < strings.length+1; i++)
-		{
-			var currentString = strings[i];
-			var tempString=  "_";
-			
-			if(stringArry.length > 0)
-			{
-			
-				for(var j=0; j<stringArry.length; j++)
-				{
-					if(j == 0)
-						tempString = tempString + strings[j];
-					else
-						tempString = tempString + "/" + strings[j];
-				}
-			}
-		
-			stringArry[i] = tempString;
-		}
-		for(var k = 0; k < stringArry.length; k++)
-		{
-			var key = stringArry[k];
-			if(key != "_")
-			{
-				// Build monster string here
-				var monsterKey = "";
-				for(var z = 0; z <= k; z++)
-				{
-					monsterKey = monsterKey + stringArry[z];
-				}
-				
-			}
-		}
-		fetchPaths("Source", monsterKey);
-	}
-});
-
-/**
- * Attempts to retrieve all paths specified by the user.
- * This is still a work in progress
- * 
- * @param sender
- * @param path
- */
-function fetchPaths(sender, key) 
+function getProjectIDforLocation(locationValue)
 {
-	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");	
-	tree.loadKeyPath(key, function(node, status) 
+	var projectSelectorDiv = ".select" + locationValue + "Project";
+	var projectId = $(projectSelectorDiv).children(":selected").attr("id");
+	if(projectId == null)
 	{
-		if (status == "loaded") {
-			// 'node' is a parent that was just traversed.
-			// If we call expand() here, then all nodes will be expanded
-			// as we go				
-			
-			node.setActive();
-			//node.setExpanded();
-					
-				
-		} else if (status == "ok") {
-			// 'node' is the end node of our path.
-			// If we call activate() or makeVisible() here, then the
-			// whole branch will be expanded now
-			node.setActive();
-			node.toggleExpanded();
+		displayNotificationMessage(error, "Error getting project ID", "Project ID cannot be determined");
+	}
 	
-		} else if (status == "notfound") {
-			var seg = arguments[2], isEndNode = arguments[3];
-		}
-		else
-		{
-			console.log("Failed for node key: " + key);
-		}
-	});
+	return projectId;
 }
+
+
+
 function getPath(path) {
 	var currentNode = $('.sourceCodeTree').dynatree("getTree").getNodeByKey(path);
 	if (currentNode !== null) {

@@ -111,3 +111,52 @@ function loadFancyTree(sender, serverName, projectId) {
 function showSelectedPath(node) {
 	$('.sourceSelectedPath').text("/" + node.key);
 }
+
+/**
+ * Attempts to retrieve all paths specified by the user.
+ * This is still a work in progress
+ * 
+ * @param sender
+ * @param path
+ */
+function fetchPaths(sender, key) 
+{
+	var performScroll = true;
+	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");	
+	tree.loadKeyPath(key, function(node, status) 
+	{
+		if (status == "loaded") {
+			node.setActive();
+	
+		} else if (status == "ok") {
+			node.setActive();
+			node.toggleExpanded();	
+		} else if (status == "notfound") {
+			var seg = arguments[2], isEndNode = arguments[3];
+		}
+		else if(status == "error")
+		{
+			displayNotificationMessage(warning, "Could not expand tree", "Does path exist?");
+			performScroll = false;
+		}
+		else
+		{
+			console.log("Unknown error with tree expansion: " + status);
+		}
+		
+	});
+	
+	// Once selected, focus in.
+	// Grab the HTML node
+	if(performScroll)
+	{
+	    var activeNodeLI = tree.getActiveNode().li;
+	    // Grab the HTMl container of our tree
+		var treeContainer = tree.$container;
+		treeContainer.animate(
+		{ 
+			scrollTop: $(activeNodeLI).offset().top - treeContainer.offset().top + treeContainer.scrollTop()
+		}, 'slow');
+	}
+	
+}
