@@ -14,23 +14,14 @@ var info = 'info';
 var warning = 'warning';
 var danger = 'danger';
 jQuery(document).ready(function() {
-	/**
-	 * Populate the project pulldown
-	 */
-	function setProjects(sender, message, data) {
-		$('.select' + sender + 'Project').empty();
-		$('.select' + sender + 'Project').append("<option>" + message + "</option>");
-		$.each(data, function(index, value) {
-			console.log("Outputting project: " + value);
-			$('.select' + sender + 'Project').append("<option id=\"" + value.projectId + "\">" + value.name + "</option>");
-		});
-	}
+
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
 	var populateWidgets = (function() {
 		console.log("Populating project pulldows");
-		$.each(locations, function(index, locationValue) {
+		$.each(locations, function(index, locationValue) 
+		{
 			console.log("Processing location: " + locationValue);
 			// Variables used for all processes
 			// This is the div id of the pulldown
@@ -42,37 +33,40 @@ jQuery(document).ready(function() {
 			/**
 			 * Populate server pulldown
 			 */
-			processJSON(servers, locationValue, "Servers").done(function(data) {
+			processJSON(servers, locationValue, "Servers").done(function(data) 
+			{
+				// Grab the cookie, if there is one
+				var cachedServerName = $.cookie(serverSelectorDiv);
 				$(serverSelectorDiv).empty();
 				$(serverSelectorDiv).append("<option>" + messageServer + "</option>");
 				$.each(data, function(index, value) {
-					$(serverSelectorDiv).append("<option>" + value.serverName + "</option>");
+					if(value.serverName === cachedServerName)
+					{
+						displayNotificationMessage(info, "Loading Cached Server", "Cookie found for: " + cachedServerName);
+						$(serverSelectorDiv).append("<option selected=true>" + value.serverName + "</option>");
+						populateProjectPerServer(serverSelectorDiv, locationValue);
+					}
+					else
+						$(serverSelectorDiv).append("<option>" + value.serverName + "</option>");
 				});
 			});
 			/**
 			 * Assign server pulldown behavior
 			 */
-			$(serverSelectorDiv).change(function() {
+			$(serverSelectorDiv).change(function() 
+			{
+
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				var path = "reloginServer/" + source + "/?server-name=" + serverName;
 				console.log("Sending  relogin path: " + path);
 				processJSON(path, locationValue, "Server Projects").done(function(data) {
 					setProjects(locationValue, messageServer, data)
 				});
+				
+				// Remember cookies
+				$.cookie(serverSelectorDiv, serverName);
 			});
-			/**
-			 * Populate the projects
-			 */
-			// Build the path, lower case it to // match Controller
-			var serverName = $(serverSelectorDiv).children(":selected").text();
-			var projectPath = locationValue.toLowerCase() + "Projects" + "/?server-name=" + serverName;
-			var messageProject = "Select " + locationValue + " Project";
-			if (serverName != null && serverName.length > 0) {
-				processJSON(projectPath, locationValue, "Getting Projects").done(function(data) {
-					console.log("Getting projects: " + projectPath);
-					setProjects(locationValue, messageProject, data)
-				});
-			}
+
 			/**
 			 * Assign project pulldown behavior
 			 */
@@ -81,7 +75,9 @@ jQuery(document).ready(function() {
 				progressDiv.hide();
 				var projectId = $(this).children(":selected").attr("id");
 				var serverName = $(serverSelectorDiv).children(":selected").text();
-				// loadDynaTree(locationValue, serverName, projectId);
+				// Remember selection in cookie
+				$.cookie(projectSelectorDiv, projectId);				
+				// Load Tree
 				loadFancyTree(locationValue, serverName, projectId);
 			});
 			
@@ -260,6 +256,59 @@ jQuery(document).ready(function() {
 		}
 	});
 });
+
+/**
+ * Populates projects for a particular server selector
+ * @param serverSelectorDiv
+ */
+function populateProjectPerServer(serverSelectorDiv, locationValue)
+{	
+	var serverName = $(serverSelectorDiv).children(":selected").text();
+	var projectPath = "getProjects" + "/?server-name=" + serverName;
+	var messageProject = "Select " + locationValue + " Project";
+	if (serverName != null && serverName.length > 0) {
+		processJSON(projectPath, locationValue, "Getting Projects").done(function(data) {
+			console.log("Getting projects: " + projectPath);
+			setProjects(locationValue, messageProject, data)
+		});
+	}
+}
+
+/**
+ * Populate the project pulldown
+ */
+function setProjects(sender, message, data) {
+	var projectSelectorDiv = $('.select' + sender + 'Project');
+	var serverSelectorDiv = $('.select' + sender + 'Server');
+	
+	// Use the selector for lookup, not the actual div
+	var cachedProjectId = $.cookie(projectSelectorDiv.selector);
+	var cachedServerName = $.cookie(serverSelectorDiv.selector);
+	projectSelectorDiv.empty();
+	projectSelectorDiv.append("<option>" + message + "</option>");
+	
+	if(data == null)
+	{
+		displayNotificationMessage(error, "Project Display Error", "No projects returned from server!");
+		return false;
+	}
+	$.each(data, function(index, value) 
+	{
+		// TODO: Should this actually be here?
+		if(cachedProjectId === value.projectId)
+		{
+			displayNotificationMessage(info, "Loading Cached Project", "Found cached project ID");
+			projectSelectorDiv.append("<option id=\"" + value.projectId + "\" selected=true>" + value.name + "</option>");
+			loadFancyTree(sender, cachedServerName, cachedProjectId);
+		}
+		else
+		{
+			projectSelectorDiv.append("<option id=\"" + value.projectId + "\">" + value.name + "</option>");
+		}	
+		console.log("Outputting project: " + value);
+
+	});
+}
 
 /**
  * Helper method to return project ID of pulldown

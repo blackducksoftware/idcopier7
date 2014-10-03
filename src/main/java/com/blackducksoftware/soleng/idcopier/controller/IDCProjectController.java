@@ -58,7 +58,7 @@ public class IDCProjectController {
 		try {
 			IDCServer server = loginService.getServerByName(serverName);
 			ProtexServerProxy proxy = loginService.getProxy(serverName);
-			projectService.getProjectsByServer(proxy, server);
+			projects = projectService.getProjectsByServer(proxy, server);
 
 		} catch (Exception e) {
 			log.error("Error getting projects", e);
