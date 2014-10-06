@@ -22,8 +22,8 @@ function loadFancyTree(sender, serverName, projectId) {
 			extensions : [ "glyph" ],
 			glyph : {
 				map : {
-					doc : "glyphicon glyphicon-file",
-					docOpen : "glyphicon glyphicon-file",
+					doc : "glyphicon glyphicon-file document-node",
+					docOpen : "glyphicon glyphicon-file document-node",
 					checkbox : "glyphicon glyphicon-unchecked",
 					checkboxSelected : "glyphicon glyphicon-check",
 					checkboxUnknown : "glyphicon glyphicon-share",
@@ -33,9 +33,9 @@ function loadFancyTree(sender, serverName, projectId) {
 					// expanderLazy: "glyphicon glyphicon-expand",
 					expanderOpen : "glyphicon glyphicon-minus-sign",
 					// expanderOpen: "glyphicon glyphicon-collapse-down",
-					folder : "glyphicon glyphicon-folder-close",
-					folderOpen : "glyphicon glyphicon-folder-open",
-					loading : "glyphicon glyphicon-refresh"
+					folder : "glyphicon glyphicon-folder-close folder-node",
+					folderOpen : "glyphicon glyphicon-folder-open folder-node",
+					loading : "glyphicon glyphicon-refresh loading-node"
 				}
 			},
 			persist : true,
@@ -56,6 +56,20 @@ function loadFancyTree(sender, serverName, projectId) {
 			titlesTabbable : true, // Node titles can receive keyboard focus
 			source : {
 				url : path + '/'
+			},
+			renderNode: function(event, data) 
+			{
+				var nodeData = data.node.data;
+				if(nodeData != null)
+				{		
+					// If we determine a node has pending items
+					// We apply a pending-node css (main.css) to make it stand out
+					if(nodeData.hasPending)
+					{
+						var $nodeSpan = $(data.node.span);
+						$nodeSpan.find('> span.fancytree-title').text(data.node.title).addClass('pending-node');	
+					}
+				}			
 			},
 			lazyLoad : function(event, data) {
 				var node = data.node;

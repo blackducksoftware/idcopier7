@@ -10,6 +10,7 @@ public class IDCTree {
 	private boolean folder;
 	private boolean expanded;
 	private boolean lazy;
+	private boolean hasPending = false;
 	private List<IDCTree> children;
 
 	public IDCTree(String key, String title, boolean isFolder) {
@@ -40,8 +41,10 @@ public class IDCTree {
 	}
 
 	private String cleanName(String original, int count) {
-		if (count > 0) {
+		if (count > 0) 
+		{
 			original = original + " (" + count + ")";
+			hasPending = true;
 		}
 
 		if (original.contains("/")) {
@@ -110,5 +113,15 @@ public class IDCTree {
 		}
 
 		this.children.add(child);
+	}
+
+	public boolean isHasPending()
+	{
+	    return hasPending;
+	}
+
+	public void setHasPending(boolean hasPending)
+	{
+	    this.hasPending = hasPending;
 	}
 }

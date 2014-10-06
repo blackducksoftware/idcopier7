@@ -2,6 +2,28 @@
     Created on : Jun 29, 2014, 9:44:23 PM
     Author     : Niles Madison <niles.madison@gmail.com>
 */
+
+/*-- Tree Stuff */
+.pending-node 
+{
+	font-weight: bold;
+	font-style: italic;
+}
+.folder-node
+{
+	color: #FFD53C;
+}
+.document-node
+{
+	color: #C5BFBF;
+}
+.loading-node
+{
+	color: #4224FF;
+}
+
+/* -- Tree Stuff Done -- */
+
 .header-buffer {
 	padding-top: 10px;
 }
