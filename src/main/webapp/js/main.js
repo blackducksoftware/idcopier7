@@ -50,6 +50,12 @@ jQuery(document).ready(function() {
 						$(serverSelectorDiv).append("<option>" + value.serverName + "</option>");
 				});
 			});
+			
+			/**
+			 * Init the trees
+			 */
+			initFancyTree(locationValue);
+			
 			/**
 			 * Assign server pulldown behavior
 			 */
@@ -164,35 +170,7 @@ jQuery(document).ready(function() {
 		var currentlySelected = $('.' + sender.toLowerCase() + 'CodeTree :selected').val();
 		console.log(sourceTree.getNode(currentlySelected));
 	}
-	/**
-	 * Loads the project for a: - Specific server - Specific project ID
-	 */
-	function loadProject(sender, serverName, projectId) {
-		if (projectId !== null) {
-			var path = serverName + '/' + projectId + '/' + ROOT;
-			// Modify the HTML
-			$('.user' + sender + 'PathInput').empty();
-			$('.user' + sender + 'PathInput').val('/');
-			$('.' + sender.toLowerCase() + 'SelectedPath').empty();
-			$('.' + sender.toLowerCase() + 'SelectedPath').text('/');
-			// Set the FancyTree
-			var tree;
-			if (sender == source) {
-				tree = sourceTree;
-			} else {
-				tree = targetTree
-			}
-			tree = $('.' + sender.toLowerCase() + 'CodeTree').easytree({
-				allowActivate : true,
-				dataUrl : path,
-				openLazyNode : openLazyNode,
-				lazyUrl : path
-			});
-			$('.' + sender.toLowerCase() + 'CodeTree').click(function() {
-				loadSelectBox(sender);
-			});
-		}
-	}
+
 	/**
 	 * Submit copy button Note the # lookup for non-div Grab the options on the main page as they are part of the copy functionality.
 	 */

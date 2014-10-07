@@ -136,6 +136,7 @@ public class IDCProjectController {
 			ProtexServerProxy proxy = loginService.getProxy(serverName);
 			BomApi bomApi = proxy.getBomApi();
 			bomApi.refreshBom(projectId, true, true);
+			
 			log.debug("BOM Refresh completed for project ID: " + projectId);
 		} catch (Exception e) {
 			log.error("Error during BOM refresh", e);
