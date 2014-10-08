@@ -107,6 +107,9 @@
 			<div class="col-sm-2 col-lg-2">
 				<table class="table">
 					<tbody>
+					<!--  These options are invoked when use clicks perform copy button 
+						  Behavior is captured in main.js onclick	
+						 -->
 						<tr>
 							<td><h4>Defer BOM refresh</h4></td>
 							<td><input id="deferBomRefreshCheckBox"
@@ -124,6 +127,14 @@
 							<td><input id="overwriteIDsCheckBox"
 								name="overwriteIDsCheckBox" class="checkbox" type="checkbox" /></td>
 						</tr>
+									<tr>
+							<td><h4>Partial BOM Refresh</h4></td>
+							<td><input id="partialBOMCheckBox"
+								name="partialBOMCheckBox" class="checkbox" type="checkbox" /></td>
+						</tr>
+						
+						<!--  BUTTONS -->
+						
 						<tr>
 							<td colspan="2"><input type="button" id="submitCopyButton"
 								value="Perform Copy" class="btn btn-primary perform-copy-button" /></td>
@@ -133,6 +144,7 @@
 								id="performRefreshButton" value="Refresh BOM"
 								class="btn btn-primary perform-refresh-button" /></td>
 						</tr>
+			
 						<tr>
 							<td colspan="2">
 								<!--  Progress Bar For Refresh -->
@@ -194,6 +206,7 @@
 	</div>
 </body>
 
+<!--  JS Libraries -->
 <script src="js/libs/jquery/jquery.js"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
 <script src="js/libs/jquery-ui/jquery-ui.custom.js"></script>
@@ -203,9 +216,12 @@
 <script src="js/libs/Fancytree/jquery.fancytree.glyph.js"></script>
 <script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
 <script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script>
+<!--  ID Copier JS files -->
 <script src="js/tree.js"></script>
 <script src="js/menu.js"></script>
-<script src="js/main.js"></script>
 <script src="js/progress.js"></script>
+<!--  Keep this last, as main.js invokes other files -->
+<script src="js/main.js"></script>
+
 
 </ html>

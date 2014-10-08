@@ -81,7 +81,8 @@ public class IDCViewModelConstants
     public static final String COPY_DEFER_BOM_REFRESH_OPTION = "defer-bom-option";
     // Do existing identifications get overwritten?
     public static final String COPY_OVERWRITE_OPTION = "overwrite-option";
-
+    // Should the BOM Refresh do the whole project or only those files that changed recently?
+    public static final String PARTIAL_BOM_OPTION = "partial-bom-option";
     /**
      * Tree related variables
      */

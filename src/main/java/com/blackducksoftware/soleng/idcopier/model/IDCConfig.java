@@ -44,6 +44,7 @@ public class IDCConfig
     private Boolean bomRefresh = false;
     private Boolean overwriteIDs = false;
     private Boolean recursive = false;
+    private Boolean partialBom = false;
     
     public IDCConfig()
     {
@@ -98,5 +99,15 @@ public class IDCConfig
     public void setRecursive(Boolean recursive)
     {
 	this.recursive = recursive;
+    }
+
+    public Boolean istPartialBom()
+    {
+	return partialBom;
+    }
+
+    public void setPartialBom(Boolean partialBom)
+    {
+	this.partialBom = partialBom;
     }
 }

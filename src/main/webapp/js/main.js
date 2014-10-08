@@ -85,6 +85,8 @@ jQuery(document).ready(function() {
 				$.cookie(projectSelectorDiv, projectId);				
 				// Load Tree
 				loadFancyTree(locationValue, serverName, projectId);
+				// Check refresh status via progress.js
+				getRefreshStatusForProject(serverName, projectId);
 			});
 			
 			/**
@@ -186,6 +188,8 @@ jQuery(document).ready(function() {
 		var deferBOMOption = $('#deferBomRefreshCheckBox').is(':checked');
 		var recursiveCopyOption = $('#recursiveCopyCheckBox').is(':checked');
 		var overwriteIDsOption = $('#overwriteIDsCheckBox').is(':checked');
+		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
+		
 		var params = {
 			'copy-source-server' : sourceServer,
 			'copy-target-server' : targetServer,
@@ -193,15 +197,19 @@ jQuery(document).ready(function() {
 			'copy-target-project-id' : targetProjectId,
 			'copy-source-path' : selectedSourcePath,
 			'copy-target-paths' : targetPaths,
-			// Also inside the FancyTree behavior Check boxes
+			// Also inside the tree behavior Check boxes
 			'defer-bom-option' : deferBOMOption,
 			'recursive-option' : recursiveCopyOption,
-			'overwrite-option' : overwriteIDsOption
+			'overwrite-option' : overwriteIDsOption,
+			'partial-bom-option' : partialBOMOption
+			
 		};
 		var verified = verifyCopyParameters(params);
 		if (!verified) {
 			return false;
 		}
+		
+		// Perform the Copy
 		$.ajax({
 			type : 'POST',
 			url : 'copyIDs',
@@ -209,14 +217,18 @@ jQuery(document).ready(function() {
 			success : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(success, 'Successfully copied identifications', msg);
-				// alert('Copy Result: ' + msg);
 			},
 			error : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(danger, 'Failed to copy identifications', msg);
-				// alert("General error: " + msg)
 			}
 		});
+		// Call the BOM refresh if necessary
+		if(!deferBOMOption)
+		{
+			displayNotificationMessage(info, "Refresh","Defer BOM refresh unchecked, triggering refresh.");
+			getRefreshStatusForProject(targetServer, targetProjectId, partialBOMOption);
+		}
 	});
 
 	$(".userTargetPathInput").keyup(function() {
