@@ -50,13 +50,17 @@ function performBOMRefresh(targetServer, targetProjectId, partialBOMOption)
 		data: params,
 		error : function(msg) {
 			console.log("Error submitting refresh: " + msg.statusText);
+		},
+		success: function(msg) 
+		{
+			console.log("Refresh finished with success");		
+			// Grab the status
+			getRefreshStatusForProject(targetServer, targetProjectId);
+			// Reload the tree
+			refreshNodes("target");
 		}
 	});
-	
-	// Grab the status
-	getRefreshStatusForProject(targetServer, targetProjectId);
-	// Reload the tere
-	refreshNodes("target");
+
 }
 
 /**

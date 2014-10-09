@@ -178,20 +178,23 @@ jQuery(document).ready(function() {
 			type : 'POST',
 			url : 'copyIDs',
 			data : params,
-			success : function(msg) {
+			success : function(msg) 
+			{
 				console.log(msg);
 				displayNotificationMessage(success, 'Successfully copied identifications', msg);
+				// Call the BOM refresh if necessary
+				if(!deferBOMOption)
+				{
+					displayNotificationMessage(info, "Refresh","Defer BOM refresh unchecked, triggering refresh.");
+					performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
+				}
 			},
 			error : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(danger, 'Failed to copy identifications', msg);
 			}
 		});
-		// Call the BOM refresh if necessary
-		if (!deferBOMOption) {
-			displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.");
-			performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
-		}
+
 	});
 	$(".userTargetPathInput").keyup(function() {
 		$('.targetSelectedPath').empty();
@@ -299,7 +302,7 @@ function verifyCopyParameters(params) {
 	console.log("Verifying params");
 	for ( var key in params) {
 		var parameter = params[key];
-		if (parameter == null) {
+		if (parameter === null) {
 			var msg = 'Null value for parameter: ' + key;
 			displayNotificationMessage(danger, 'ERROR!', msg);
 			// alert("ERROR: Null value for parameter: " + key);
