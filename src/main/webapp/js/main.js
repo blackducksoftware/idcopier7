@@ -338,10 +338,14 @@ function displayNotificationMessage(type, heading, message) {
 	if (heading !== undefined) {
 		output = '<b>' + heading + '</b>';
 	}
+	// Check to see that the message has been defined
 	if (message !== undefined) {
 		output = output + '<br />' + message;
 	}
-	// Check to see that the message has been defined
+	Messenger.options = {
+		extraClasses : 'messenger-fixed messenger-on-bottom messenger-on-right',
+		theme : 'air'
+	}
 	Messenger().post({
 		message : output,
 		type : type,
