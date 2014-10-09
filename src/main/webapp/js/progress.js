@@ -52,8 +52,11 @@ function performBOMRefresh(targetServer, targetProjectId, partialBOMOption)
 			console.log("Error submitting refresh: " + msg.statusText);
 		}
 	});
+	
 	// Grab the status
 	getRefreshStatusForProject(targetServer, targetProjectId);
+	// Reload the tere
+	refreshNodes("target");
 }
 
 /**

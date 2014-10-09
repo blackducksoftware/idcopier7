@@ -214,6 +214,7 @@
 <script src="js/libs/jquery-cookie/jquery.cookie.js"></script>
 <script src="js/libs/Fancytree/jquery.fancytree.js"></script>
 <script src="js/libs/Fancytree/jquery.fancytree.glyph.js"></script>
+<script src="js/libs/Fancytree/jquery.fancytree.persist.js"></script>
 <script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
 <script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script>
 <!--  ID Copier JS files -->

@@ -227,7 +227,7 @@ jQuery(document).ready(function() {
 		if(!deferBOMOption)
 		{
 			displayNotificationMessage(info, "Refresh","Defer BOM refresh unchecked, triggering refresh.");
-			getRefreshStatusForProject(targetServer, targetProjectId, partialBOMOption);
+			performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
 		}
 	});
 

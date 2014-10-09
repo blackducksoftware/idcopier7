@@ -24,7 +24,7 @@ function initFancyTree(sender)
 
 	$('#' + sender.toLowerCase() + 'CodeTree').fancytree({
 		title : sender + 'Code Tree',
-		extensions : [ "glyph" ],
+		extensions : [ "glyph","persist" ],
 		glyph : {
 			map : {
 				doc : "glyphicon glyphicon-file document-node",
@@ -43,7 +43,6 @@ function initFancyTree(sender)
 				loading : "glyphicon glyphicon-refresh loading-node"
 			}
 		},
-		persist : false,
 		activeVisible : true, // Make sure, active nodes are visible (expanded).
 		autoActivate : true, // Automatically activate a node when it is focused (using keys).
 		autoCollapse : false, // Automatically collapse all siblings, when a node is expanded.
@@ -62,6 +61,12 @@ function initFancyTree(sender)
 		source : {
 			url : "/"
 		},
+		persist: 
+		{
+			expandLazy: true,
+	        overrideSource: true, // true: cookie takes precedence over `source` data attributes.
+	        store: "auto"
+		},	
 		renderNode: function(event, data) 
 		{
 			var nodeData = data.node.data;
@@ -152,6 +157,16 @@ function loadFancyTree(sender, serverName, projectId)
 	return;
 }
 
+/**
+ * Utilizes the internal persistence mechanism to reload the entire tree
+ * Called by refresh mechanism
+ * @param sender
+ */
+function refreshNodes(sender)
+{
+	var tree = 	$('.' + sender.toLowerCase() + 'CodeTree').fancytree("getTree");	
+	tree.reload();
+}
 
 /**
  * Toggles children and parents of the checked node
