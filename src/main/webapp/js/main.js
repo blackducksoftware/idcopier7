@@ -14,14 +14,12 @@ var info = 'info';
 var warning = 'warning';
 var danger = 'danger';
 jQuery(document).ready(function() {
-
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
 	var populateWidgets = (function() {
 		console.log("Populating project pulldows");
-		$.each(locations, function(index, locationValue) 
-		{
+		$.each(locations, function(index, locationValue) {
 			console.log("Processing location: " + locationValue);
 			// Variables used for all processes
 			// This is the div id of the pulldown
@@ -33,62 +31,51 @@ jQuery(document).ready(function() {
 			/**
 			 * Populate server pulldown
 			 */
-			processJSON(servers, locationValue, "Servers").done(function(data) 
-			{
+			processJSON(servers, locationValue, "Servers").done(function(data) {
 				// Grab the cookie, if there is one
 				var cachedServerName = $.cookie(serverSelectorDiv);
 				$(serverSelectorDiv).empty();
 				$(serverSelectorDiv).append("<option>" + messageServer + "</option>");
 				$.each(data, function(index, value) {
-					if(value.serverName === cachedServerName)
-					{
+					if (value.serverName === cachedServerName) {
 						displayNotificationMessage(info, "Loading Cached Server", "Cookie found for: " + cachedServerName);
 						$(serverSelectorDiv).append("<option selected=true>" + value.serverName + "</option>");
 						populateProjectPerServer(serverSelectorDiv, locationValue);
-					}
-					else
+					} else
 						$(serverSelectorDiv).append("<option>" + value.serverName + "</option>");
 				});
 			});
-			
 			/**
 			 * Init the trees
 			 */
 			initFancyTree(locationValue);
-			
 			/**
 			 * Assign server pulldown behavior
 			 */
-			$(serverSelectorDiv).change(function() 
-			{
-
+			$(serverSelectorDiv).change(function() {
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				var path = "reloginServer/" + source + "/?server-name=" + serverName;
 				console.log("Sending  relogin path: " + path);
 				processJSON(path, locationValue, "Server Projects").done(function(data) {
 					setProjects(locationValue, messageServer, data)
 				});
-				
 				// Remember cookies
 				$.cookie(serverSelectorDiv, serverName);
 			});
-
 			/**
 			 * Assign project pulldown behavior
 			 */
-	
 			$(projectSelectorDiv).change(function() {
 				progressDiv.hide();
 				var projectId = $(this).children(":selected").attr("id");
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				// Remember selection in cookie
-				$.cookie(projectSelectorDiv, projectId);				
+				$.cookie(projectSelectorDiv, projectId);
 				// Load Tree
 				loadFancyTree(locationValue, serverName, projectId);
 				// Check refresh status via progress.js
 				getRefreshStatusForProject(serverName, projectId);
 			});
-			
 			/**
 			 * Establish tooltips
 			 */
@@ -96,83 +83,63 @@ jQuery(document).ready(function() {
 			$(pathSelectInput).tooltip({
 				'show' : true,
 				'placement' : 'bottom',
-				'title' : "Type " + locationValue +" path here"
+				'title' : "Type " + locationValue + " path here"
 			});
-						
 			/**
 			 * Assign enter key behavior for path field
-			 */				
+			 */
 			var selectedPath = "." + locationValue + "SelectedPath";
 			$(pathSelectInput).keyup(function(event) {
 				$(selectedPath).empty();
 				$(selectedPath).text(this.value);
-				if (event.which == 13 || event.keyCode == 13) 
-				{
+				if (event.which == 13 || event.keyCode == 13) {
 					var projectId = getProjectIDforLocation(locationValue);
-					if(projectId == null)
-					{
+					if (projectId == null) {
 						displayNotificationMessage(warning, "Can not select path", "No project selected");
 						return false;
-					}	
-					
+					}
 					var path = $(pathSelectInput).val();
 					console.log("Loading tree for user entered path: " + path);
-
 					// IF path starts with '/', then discard it
 					var startingChar = path.substring(0, 1);
-					if(startingChar === "/" || startingChar === "\\")
-					{
+					if (startingChar === "/" || startingChar === "\\") {
 						console.log("Removing leading slash");
-						path = path.substring(1,path.length);
-					}	
-
+						path = path.substring(1, path.length);
+					}
 					var strings = path.split("/");
 					var stringArry = new Array();
-					for(var i = 0; i < strings.length+1; i++)
-					{
-						var tempString=  "_";
-						
-						if(stringArry.length > 0)
-						{
-						
-							for(var j=0; j<stringArry.length; j++)
-							{
-								if(j == 0)
+					for (var i = 0; i < strings.length + 1; i++) {
+						var tempString = "_";
+						if (stringArry.length > 0) {
+							for (var j = 0; j < stringArry.length; j++) {
+								if (j == 0)
 									tempString = tempString + strings[j];
 								else
 									tempString = tempString + "/" + strings[j];
 							}
 						}
-					
 						stringArry[i] = tempString;
 					}
-					for(var k = 0; k < stringArry.length; k++)
-					{
+					for (var k = 0; k < stringArry.length; k++) {
 						var key = stringArry[k];
-						if(key != "_")
-						{
+						if (key != "_") {
 							// Build monster string here
 							var monsterKey = "";
-							for(var z = 0; z <= k; z++)
-							{
+							for (var z = 0; z <= k; z++) {
 								monsterKey = monsterKey + stringArry[z];
 							}
-							
 						}
 					}
 					// tree.js
 					fetchPaths(locationValue, monsterKey);
 				}
 			});
-			
 		});
 	})();
-
 	function loadSelectBox(sender) {
 		var currentlySelected = $('.' + sender.toLowerCase() + 'CodeTree :selected').val();
 		console.log(sourceTree.getNode(currentlySelected));
 	}
-
 	/**
 	 * Submit copy button Note the # lookup for non-div Grab the options on the main page as they are part of the copy functionality.
 	 */
@@ -189,7 +156,6 @@ jQuery(document).ready(function() {
 		var recursiveCopyOption = $('#recursiveCopyCheckBox').is(':checked');
 		var overwriteIDsOption = $('#overwriteIDsCheckBox').is(':checked');
 		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
-		
 		var params = {
 			'copy-source-server' : sourceServer,
 			'copy-target-server' : targetServer,
@@ -202,13 +168,11 @@ jQuery(document).ready(function() {
 			'recursive-option' : recursiveCopyOption,
 			'overwrite-option' : overwriteIDsOption,
 			'partial-bom-option' : partialBOMOption
-			
 		};
 		var verified = verifyCopyParameters(params);
 		if (!verified) {
 			return false;
 		}
-		
 		// Perform the Copy
 		$.ajax({
 			type : 'POST',
@@ -224,18 +188,15 @@ jQuery(document).ready(function() {
 			}
 		});
 		// Call the BOM refresh if necessary
-		if(!deferBOMOption)
-		{
-			displayNotificationMessage(info, "Refresh","Defer BOM refresh unchecked, triggering refresh.");
+		if (!deferBOMOption) {
+			displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.");
 			performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
 		}
 	});
-
 	$(".userTargetPathInput").keyup(function() {
 		$('.targetSelectedPath').empty();
 		// $('.targetSelectedPath').text(this.value);
-		if(targetPaths != null)
-		{
+		if (targetPaths != null) {
 			if (targetPaths.length === 0) {
 				$('.targetSelectedPath').text(this.value);
 			} else if (this.value.length === 0) {
@@ -246,13 +207,12 @@ jQuery(document).ready(function() {
 		}
 	});
 });
-
 /**
  * Populates projects for a particular server selector
+ * 
  * @param serverSelectorDiv
  */
-function populateProjectPerServer(serverSelectorDiv, locationValue)
-{	
+function populateProjectPerServer(serverSelectorDiv, locationValue) {
 	var serverName = $(serverSelectorDiv).children(":selected").text();
 	var projectPath = "getProjects" + "/?server-name=" + serverName;
 	var messageProject = "Select " + locationValue + " Project";
@@ -263,61 +223,46 @@ function populateProjectPerServer(serverSelectorDiv, locationValue)
 		});
 	}
 }
-
 /**
  * Populate the project pulldown
  */
 function setProjects(sender, message, data) {
 	var projectSelectorDiv = $('.select' + sender + 'Project');
 	var serverSelectorDiv = $('.select' + sender + 'Server');
-	
 	// Use the selector for lookup, not the actual div
 	var cachedProjectId = $.cookie(projectSelectorDiv.selector);
 	var cachedServerName = $.cookie(serverSelectorDiv.selector);
 	projectSelectorDiv.empty();
 	projectSelectorDiv.append("<option>" + message + "</option>");
-	
-	if(data == null)
-	{
+	if (data == null) {
 		displayNotificationMessage(error, "Project Display Error", "No projects returned from server!");
 		return false;
 	}
-	$.each(data, function(index, value) 
-	{
+	$.each(data, function(index, value) {
 		// TODO: Should this actually be here?
-		if(cachedProjectId === value.projectId)
-		{
+		if (cachedProjectId === value.projectId) {
 			displayNotificationMessage(info, "Loading Cached Project", "Found cached project ID");
 			projectSelectorDiv.append("<option id=\"" + value.projectId + "\" selected=true>" + value.name + "</option>");
 			loadFancyTree(sender, cachedServerName, cachedProjectId);
-		}
-		else
-		{
+		} else {
 			projectSelectorDiv.append("<option id=\"" + value.projectId + "\">" + value.name + "</option>");
-		}	
+		}
 		console.log("Outputting project: " + value);
-
 	});
 }
-
 /**
  * Helper method to return project ID of pulldown
+ * 
  * @param location
  */
-function getProjectIDforLocation(locationValue)
-{
+function getProjectIDforLocation(locationValue) {
 	var projectSelectorDiv = ".select" + locationValue + "Project";
 	var projectId = $(projectSelectorDiv).children(":selected").attr("id");
-	if(projectId == null)
-	{
+	if (projectId == null) {
 		displayNotificationMessage(error, "Error getting project ID", "Project ID cannot be determined");
 	}
-	
 	return projectId;
 }
-
-
-
 function getPath(path) {
 	var currentNode = $('.sourceCodeTree').dynatree("getTree").getNodeByKey(path);
 	if (currentNode !== null) {
@@ -366,7 +311,7 @@ function verifyCopyParameters(params) {
 /**
  * This will display any messages we want to show up on the screen
  */
-function displayNotificationMessage(type, heading, message) {
+function displayGrowlNotificationMessage(type, heading, message) {
 	$.growl({
 		title : '<br /><h4>' + heading + '</h4>',
 		message : message
@@ -381,5 +326,24 @@ function displayNotificationMessage(type, heading, message) {
 			y : 20
 		},
 		icon_type : 'class'
+	});
+}
+/**
+ * This will display any HubSpot Messaging message we want to show up on the screen
+ */
+function displayNotificationMessage(type, heading, message) {
+	var output;
+	// Check to see that the heading has been defined
+	if (heading !== undefined) {
+		output = '<b>' + heading + '</b>';
+	}
+	if (message !== undefined) {
+		output = output + '<br />' + message;
+	}
+	// Check to see that the message has been defined
+	Messenger().post({
+		message : output,
+		type : type,
+		showCloseButton : true
 	});
 }

@@ -25,6 +25,9 @@
 <link rel="stylesheet" href="css/justified-nav.css">
 <link rel="stylesheet" href="css/menu.css">
 <link rel="stylesheet" href="css/Animate/animate.min.css">
+<link rel="stylesheet" href="css/HubSpot-messenger/messenger.css">
+<link rel="stylesheet" href="css/HubSpot-messenger/messenger-theme-future.css">
+<link rel="stylesheet" href="css/HubSpot-messengere/messenger-spinner.css">
 
 </head>
 <body>
@@ -107,7 +110,7 @@
 			<div class="col-sm-2 col-lg-2">
 				<table class="table">
 					<tbody>
-					<!--  These options are invoked when use clicks perform copy button 
+						<!--  These options are invoked when use clicks perform copy button 
 						  Behavior is captured in main.js onclick	
 						 -->
 						<tr>
@@ -127,24 +130,24 @@
 							<td><input id="overwriteIDsCheckBox"
 								name="overwriteIDsCheckBox" class="checkbox" type="checkbox" /></td>
 						</tr>
-									<tr>
+						<tr>
 							<td><h4>Partial BOM Refresh</h4></td>
-							<td><input id="partialBOMCheckBox"
-								name="partialBOMCheckBox" class="checkbox" type="checkbox" /></td>
+							<td><input id="partialBOMCheckBox" name="partialBOMCheckBox"
+								class="checkbox" type="checkbox" /></td>
 						</tr>
-						
+
 						<!--  BUTTONS -->
-						
+
 						<tr>
 							<td colspan="2"><input type="button" id="submitCopyButton"
-								value="Perform Copy" class="btn btn-primary perform-copy-button" /></td>
+								value="Perform Copy" class="btn btn-success perform-copy-button" /></td>
 						</tr>
 						<tr>
 							<td colspan="2"><input type="button"
 								id="performRefreshButton" value="Refresh BOM"
 								class="btn btn-primary perform-refresh-button" /></td>
 						</tr>
-			
+
 						<tr>
 							<td colspan="2">
 								<!--  Progress Bar For Refresh -->
@@ -216,7 +219,9 @@
 <script src="js/libs/Fancytree/jquery.fancytree.glyph.js"></script>
 <script src="js/libs/Fancytree/jquery.fancytree.persist.js"></script>
 <script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-<script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script>
+<!-- <script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script> -->
+<script src="js/libs/HubSpot-messenger/messenger.js"></script>
+<script src="js/libs/HubSpot-messenger/messenger-theme-future.js"></script>
 <!--  ID Copier JS files -->
 <script src="js/tree.js"></script>
 <script src="js/menu.js"></script>
