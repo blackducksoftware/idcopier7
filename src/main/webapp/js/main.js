@@ -12,7 +12,7 @@ var locations = [ source, target ];
 var success = 'success';
 var info = 'info';
 var warning = 'warning';
-var danger = 'danger';
+var error = 'error';
 jQuery(document).ready(function() {
 	/**
 	 * Populates the pulldowns Assign onChange behavior
@@ -178,23 +178,20 @@ jQuery(document).ready(function() {
 			type : 'POST',
 			url : 'copyIDs',
 			data : params,
-			success : function(msg) 
-			{
+			success : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(success, 'Successfully copied identifications', msg);
 				// Call the BOM refresh if necessary
-				if(!deferBOMOption)
-				{
-					displayNotificationMessage(info, "Refresh","Defer BOM refresh unchecked, triggering refresh.");
+				if (!deferBOMOption) {
+					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.");
 					performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
 				}
 			},
 			error : function(msg) {
 				console.log(msg);
-				displayNotificationMessage(danger, 'Failed to copy identifications', msg);
+				displayNotificationMessage(error, 'Failed to copy identifications', msg);
 			}
 		});
-
 	});
 	$(".userTargetPathInput").keyup(function() {
 		$('.targetSelectedPath').empty();
@@ -287,7 +284,7 @@ function processJSON(path, source, widgetName) {
 	$.getJSON(path, function(data) {
 		deferred.resolve(data)
 	}).fail(function(jqxhr, textStatus, error) {
-		displayNotificationMessage(danger, "Error: " + msg, jqxhr.responseText);
+		displayNotificationMessage(error, "Error: " + msg, jqxhr.responseText);
 	}).done(function() {
 		displayNotificationMessage(success, msg);
 	});
@@ -300,16 +297,17 @@ function processJSON(path, source, widgetName) {
  */
 function verifyCopyParameters(params) {
 	console.log("Verifying params");
+	var valid = true;
 	for ( var key in params) {
 		var parameter = params[key];
-		if (parameter === null) {
+		if (parameter === null || parameter.length === 0) {
 			var msg = 'Null value for parameter: ' + key;
-			displayNotificationMessage(danger, 'ERROR!', msg);
+			displayNotificationMessage(error, 'ERROR!', msg);
 			// alert("ERROR: Null value for parameter: " + key);
-			return false;
+			valid = false;
 		}
 	}
-	return true;
+	return valid;
 }
 /**
  * This will display any messages we want to show up on the screen
