@@ -11,15 +11,18 @@ var targetProgressBar;
  */
 jQuery(document).ready(function()
 {
-	targetProgressBar= $('.progress .progress-bar').progressbar({display_text: 'center'});
-	targetProgressBar.attr('data-transitiongoal', percentComplete).progressbar({
-		display_text : 'center',
-		use_percentage : true
+	targetProgressBar = $('#targetProgressBar').progressbar({
+		display_text: 'none',
+		use_percentage: true
 	});
+	targetProgressBar.attr('data-transitiongoal', 100).progressbar();	
+		
+	
 	/**
 	 * Performs a refresh on target project
 	 */
 	$("#performRefreshButton").on('click', function() {
+		targetProgressBar.attr('data-transitiongoal', 0).progressbar();	
 		var targetServer = $('.selectTargetServer').children(":selected").text();
 		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
 		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
@@ -103,17 +106,13 @@ function updateRefreshProgress(jsonStatusString, server)
 	if (percentComplete === 100 && previousPercent === -1) 
 	{
 		var selectedProject = $('.selectTargetProject').children(":selected").text();
-		targetProgressBar.attr('data-transitiongoal', 100).progressbar({
-			display_text : 'center',
-			use_percentage : true
-		});
 	}
 	else
 	{	
 		previousPercent = percentComplete;
+		console.log('Percent Complete: '+percentComplete);
 		targetProgressBar.attr('data-transitiongoal', percentComplete).progressbar({
-			display_text : 'center',
-			use_percentage : true
+			display_text: 'fill'
 		});
 		// progressLoader.setValue(percentComplete + '%' + " [" + refreshStage + "]");
 	}
@@ -123,6 +122,9 @@ function updateRefreshProgress(jsonStatusString, server)
 		getRefreshStatusForProject(server, projectId);
 	} else {
 		previousPercent = -1;
+		targetProgressBar.attr('data-transitiongoal', 100).progressbar({
+		display_text: 'none'
+	});
 		//updateCodeTreeNodes('target', server, projectId);
 	}
 }

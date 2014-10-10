@@ -73,7 +73,7 @@
 		<hr>
 		<div class="project-container">
 			<div class="col-sm-5 col-lg-5 col-mx-5">
-				<div class="container well">
+				<div class="well">
 					<table class="table">
 						<tbody>
 							<tr>
@@ -173,7 +173,7 @@
 				</table>
 			</div>
 			<div class="col-sm-5 col-lg-5 col-mx-5">
-				<div class="container well">
+				<div class="well">
 					<table class="table">
 						<tbody>
 							<tr>
@@ -199,7 +199,8 @@
 							<tr>
 								<td>
 									<div class="progress">
-										<div class="progress-bar" role="progressbar" data-transitiongoal="100"></div>
+										<div id="targetProgressBar" class="progress-bar" role="progressbar"
+											data-transitiongoal="100"></div>
 									</div>
 								</td>
 							</tr>
