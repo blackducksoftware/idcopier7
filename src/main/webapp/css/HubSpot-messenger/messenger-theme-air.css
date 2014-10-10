@@ -269,6 +269,7 @@ ul.messenger-theme-air .messenger-message {
 /* line 33, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message:hover {
   background-color: white;
+  mouse: pointer;
 }
 /* line 36, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-close {
@@ -298,7 +299,7 @@ ul.messenger-theme-air .messenger-message .messenger-close:active {
 /* line 58, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-actions {
   float: none;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 /* line 62, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-actions a {

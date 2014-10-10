@@ -1,24 +1,25 @@
 /**
  * GLOBALS
  */
-var progressDiv = $("#progressBar");
 var previousPercent = -1;
-// Map of progress loaders
-var progressMap = {};
 // Project currently selected
 var projectId;
+// Target Progress Bar
+var targetProgressBar;
 /**
  * Loader 
  */
 jQuery(document).ready(function()
 {
-	progressDiv.hide();
-
+	targetProgressBar= $('.progress .progress-bar').progressbar({display_text: 'center'});
+	targetProgressBar.attr('data-transitiongoal', percentComplete).progressbar({
+		display_text : 'center',
+		use_percentage : true
+	});
 	/**
 	 * Performs a refresh on target project
 	 */
 	$("#performRefreshButton").on('click', function() {
-		
 		var targetServer = $('.selectTargetServer').children(":selected").text();
 		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
 		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
@@ -69,7 +70,6 @@ function performBOMRefresh(targetServer, targetProjectId, partialBOMOption)
 function getRefreshStatusForProject(targetServer, targetProjectId) 
 {
 	projectId = targetProjectId;
-	progressDiv.show();
 	var statusPath = 'bomRefreshStatus' + '/' + targetServer + '/' + projectId;
 	$.ajax({
 		type : 'GET',
@@ -90,17 +90,6 @@ function getRefreshStatusForProject(targetServer, targetProjectId)
 function updateRefreshProgress(jsonStatusString, server) 
 {
 	/**
-	 * Get the progress loader per project Id
-	 * If empty, create a new one
-	 */
-	progressLoader = progressMap[projectId];
-	if(progressLoader == null)
-	{
-		progressLoader = createProgresLoader();
-		progressMap[projectId] = progressLoader;
-	}
-	progressLoader.show();
-	/**
 	 * Parse the return JSON
 	 */
 	var jsonObj = JSON.parse(jsonStatusString);
@@ -114,14 +103,19 @@ function updateRefreshProgress(jsonStatusString, server)
 	if (percentComplete === 100 && previousPercent === -1) 
 	{
 		var selectedProject = $('.selectTargetProject').children(":selected").text();
-		progressLoader.setValue('Done: ' + selectedProject);
-		progressLoader.setProgress(1);
+		targetProgressBar.attr('data-transitiongoal', 100).progressbar({
+			display_text : 'center',
+			use_percentage : true
+		});
 	}
 	else
 	{	
 		previousPercent = percentComplete;
-		progressLoader.setValue(percentComplete + '%' + " [" + refreshStage + "]");
-		progressLoader.setProgress(percentComplete / 100);
+		targetProgressBar.attr('data-transitiongoal', percentComplete).progressbar({
+			display_text : 'center',
+			use_percentage : true
+		});
+		// progressLoader.setValue(percentComplete + '%' + " [" + refreshStage + "]");
 	}
 	
 	if (percentComplete < 100) 
@@ -131,18 +125,4 @@ function updateRefreshProgress(jsonStatusString, server)
 		previousPercent = -1;
 		//updateCodeTreeNodes('target', server, projectId);
 	}
-}
-
-function createProgresLoader()
-{
-	// Clear out the div, as we will store the progress bars internally.
-	progressDiv.empty();
-	var progressLoader = progressDiv.percentageLoader({
-		width : 140,
-		height : 140,
-		progress : 0,
-		value : '0%'
-	})
-	progressLoader.hide();
-	return progressLoader;
 }

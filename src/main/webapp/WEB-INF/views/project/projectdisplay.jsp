@@ -26,7 +26,8 @@
 <link rel="stylesheet" href="css/menu.css">
 <link rel="stylesheet" href="css/Animate/animate.min.css">
 <link rel="stylesheet" href="css/HubSpot-messenger/messenger.css">
-<link rel="stylesheet" href="css/HubSpot-messenger/messenger-theme-air.css">
+<link rel="stylesheet"
+	href="css/HubSpot-messenger/messenger-theme-air.css">
 <!-- <link rel="stylesheet" href="css/HubSpot-messenger/messenger-spinner.css"> -->
 
 </head>
@@ -147,19 +148,21 @@
 								id="performRefreshButton" value="Refresh BOM"
 								class="btn btn-primary perform-refresh-button" /></td>
 						</tr>
-
+						<!-- 
 						<tr>
 							<td colspan="2">
 								<!--  Progress Bar For Refresh -->
-								<center>
-									<div id="progressBar" class="easyui-progressbar"></div>
-								</center>
-							</td>
+						<!-- 
+						<center>
+							<div id="progressBar" class="easyui-progressbar"></div>
+						</center>
+						</td>
 						</tr>
 						<tr>
 							<td></td>
 							<td></td>
 						</tr>
+						-->
 						<!-- 
 						<tr>
 							<td><h4></h4></td>
@@ -194,12 +197,21 @@
 									placeholder="Target Path"></input></td>
 							</tr>
 							<tr>
+								<td>
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" data-transitiongoal="100"></div>
+									</div>
+								</td>
+							</tr>
+							<tr>
 								<td><i>Selected:</i>
 									<h5 class="targetSelectedPath"></h5></td>
 							</tr>
+							<!-- 
 							<tr>
 								<td></td>
 							</tr>
+							 -->
 						</tbody>
 					</table>
 					<div id="targetCodeTree" class="targetCodeTree"></div>
@@ -222,6 +234,7 @@
 <!-- <script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script> -->
 <script src="js/libs/HubSpot-messenger/messenger.js"></script>
 <script src="js/libs/HubSpot-messenger/messenger-theme-future.js"></script>
+<script src="js/libs/bootstrap-progressbar/bootstrap-progressbar.js"></script>
 <!--  ID Copier JS files -->
 <script src="js/tree.js"></script>
 <script src="js/menu.js"></script>
