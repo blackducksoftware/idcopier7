@@ -4,27 +4,30 @@
 */
 
 /*-- Tree Stuff */
-.pending-node 
-{
+.pending-node {
 	font-weight: bold;
 }
-.folder-node
-{
+
+.folder-node {
 	color: #FFD53C;
 }
-.document-node
-{
+
+.document-node {
 	color: #C5BFBF;
 }
-.loading-node
-{
+
+.loading-node {
 	color: #4224FF;
 }
 
 /* -- Tree Stuff Done -- */
-
 .header-buffer {
 	padding-top: 10px;
+}
+
+.projects-header-buffer {
+	padding-left: 23px;
+	padding-right: 23px;
 }
 
 .perform-copy-button, .perform-refresh-button {

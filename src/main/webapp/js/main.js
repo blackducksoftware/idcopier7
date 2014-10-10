@@ -66,7 +66,7 @@ jQuery(document).ready(function() {
 			 * Assign project pulldown behavior
 			 */
 			$(projectSelectorDiv).change(function() {
-				progressDiv.hide();
+				// progressDiv.hide();
 				var projectId = $(this).children(":selected").attr("id");
 				var serverName = $(serverSelectorDiv).children(":selected").text();
 				// Remember selection in cookie

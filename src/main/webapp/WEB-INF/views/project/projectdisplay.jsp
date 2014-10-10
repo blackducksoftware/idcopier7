@@ -143,12 +143,12 @@
 							<td colspan="2"><input type="button" id="submitCopyButton"
 								value="Perform Copy" class="btn btn-success perform-copy-button" /></td>
 						</tr>
+						<!-- 
 						<tr>
 							<td colspan="2"><input type="button"
 								id="performRefreshButton" value="Refresh BOM"
 								class="btn btn-primary perform-refresh-button" /></td>
-						</tr>
-						<!-- 
+						</tr>						
 						<tr>
 							<td colspan="2">
 								<!--  Progress Bar For Refresh -->
@@ -174,11 +174,23 @@
 			</div>
 			<div class="col-sm-5 col-lg-5 col-mx-5">
 				<div class="well">
+					<div class="projects-header-buffer">
+						<div class="row">
+							<p class="navbar-brand">Target Project</p>
+							<button id="refreshTargetProjectBom" type="button"
+								class="btn btn-primary btn-lg pull-right">
+								<span class="glyphicon glyphicon-refresh"></span>
+							</button>
+						</div>
+						<div class="row">
+							<div class="progress">
+								<div id="targetProgressBar" class="progress-bar"
+									role="progressbar" data-transitiongoal="100"></div>
+							</div>
+						</div>
+					</div>
 					<table class="table">
 						<tbody>
-							<tr>
-								<h4>Target Project</h4>
-							</tr>
 							<tr>
 								<td><select id="selectTargetServer"
 									name="selectTargetServer"
@@ -191,28 +203,19 @@
 									class="form-control selectTargetProject">
 										<option value="1">No Projects</option>
 								</select></td>
+							</tr>
 							<tr>
 								<td><input class="form-control userTargetPathInput"
 									id="userTargetPathInput" name="userTargetPathInput"
 									placeholder="Target Path"></input></td>
 							</tr>
 							<tr>
-								<td>
-									<div class="progress">
-										<div id="targetProgressBar" class="progress-bar" role="progressbar"
-											data-transitiongoal="100"></div>
-									</div>
-								</td>
-							</tr>
-							<tr>
 								<td><i>Selected:</i>
 									<h5 class="targetSelectedPath"></h5></td>
 							</tr>
-							<!-- 
 							<tr>
 								<td></td>
 							</tr>
-							 -->
 						</tbody>
 					</table>
 					<div id="targetCodeTree" class="targetCodeTree"></div>

@@ -12,7 +12,7 @@ var targetProgressBar;
 jQuery(document).ready(function()
 {
 	targetProgressBar = $('#targetProgressBar').progressbar({
-		display_text: 'none',
+		display_text: 'fill',
 		use_percentage: true
 	});
 	targetProgressBar.attr('data-transitiongoal', 100).progressbar();	
@@ -21,13 +21,13 @@ jQuery(document).ready(function()
 	/**
 	 * Performs a refresh on target project
 	 */
-	$("#performRefreshButton").on('click', function() {
+	$("#refreshTargetProjectBom").on('click', function() {
 		targetProgressBar.attr('data-transitiongoal', 0).progressbar();	
 		var targetServer = $('.selectTargetServer').children(":selected").text();
 		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
 		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
 		if (targetProjectId == null) {
-			displayNotificationMessage(warning, 'Unable to refresh BOM', 'Please select a target project!');
+			displayNotificationMessage(error, 'Unable to refresh BOM', 'Please select a target project!');
 			return false;
 		}
 		performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
@@ -111,9 +111,7 @@ function updateRefreshProgress(jsonStatusString, server)
 	{	
 		previousPercent = percentComplete;
 		console.log('Percent Complete: '+percentComplete);
-		targetProgressBar.attr('data-transitiongoal', percentComplete).progressbar({
-			display_text: 'fill'
-		});
+		targetProgressBar.attr('data-transitiongoal', percentComplete).progressbar();
 		// progressLoader.setValue(percentComplete + '%' + " [" + refreshStage + "]");
 	}
 	
@@ -122,9 +120,7 @@ function updateRefreshProgress(jsonStatusString, server)
 		getRefreshStatusForProject(server, projectId);
 	} else {
 		previousPercent = -1;
-		targetProgressBar.attr('data-transitiongoal', 100).progressbar({
-		display_text: 'none'
-	});
+		targetProgressBar.attr('data-transitiongoal', 100).progressbar();
 		//updateCodeTreeNodes('target', server, projectId);
 	}
 }
