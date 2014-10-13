@@ -74,11 +74,23 @@
 		<div class="project-container">
 			<div class="col-sm-5 col-lg-5 col-mx-5">
 				<div class="well">
+					<div class="projects-header-buffer">
+						<div class="row">
+							<p class="navbar-brand">Source Project</p>
+							<button id="refreshSourceProjectBom" type="button"
+								class="btn btn-primary btn-lg pull-right">
+								<span class="glyphicon glyphicon-refresh"></span>
+							</button>
+						</div>
+						<div class="row">
+							<div class="progress">
+								<div id="sourceProgressBar" class="progress-bar"
+									role="progressbar" data-transitiongoal="100"></div>
+							</div>
+						</div>
+					</div>
 					<table class="table">
 						<tbody>
-							<tr>
-								<h4>Source Project</h4>
-							</tr>
 							<tr>
 								<td><select class="form-control selectSourceServer"
 									title="Select Source Server">
@@ -143,32 +155,6 @@
 							<td colspan="2"><input type="button" id="submitCopyButton"
 								value="Perform Copy" class="btn btn-success perform-copy-button" /></td>
 						</tr>
-						<!-- 
-						<tr>
-							<td colspan="2"><input type="button"
-								id="performRefreshButton" value="Refresh BOM"
-								class="btn btn-primary perform-refresh-button" /></td>
-						</tr>						
-						<tr>
-							<td colspan="2">
-								<!--  Progress Bar For Refresh -->
-						<!-- 
-						<center>
-							<div id="progressBar" class="easyui-progressbar"></div>
-						</center>
-						</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-						</tr>
-						-->
-						<!-- 
-						<tr>
-							<td><h4></h4></td>
-							<td></td>
-						</tr>
-						-->
 					</tbody>
 				</table>
 			</div>
@@ -192,9 +178,8 @@
 					<table class="table">
 						<tbody>
 							<tr>
-								<td><select id="selectTargetServer"
-									name="selectTargetServer"
-									class="form-control selectTargetServer">
+								<td><select class="form-control selectTargetServer"
+									id="selectTargetServer" name="selectTargetServer">
 								</select></td>
 							</tr>
 							<tr>

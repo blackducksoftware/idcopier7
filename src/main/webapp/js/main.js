@@ -74,7 +74,11 @@ jQuery(document).ready(function() {
 				// Load Tree
 				loadFancyTree(locationValue, serverName, projectId);
 				// Check refresh status via progress.js
-				getRefreshStatusForProject(serverName, projectId);
+				if (sender === source) {
+					getRefreshStatusForSourceProject(serverName, projectId);
+				} else {
+					getRefreshStatusForTargetProject(serverName, projectId);
+				}
 			});
 			/**
 			 * Establish tooltips
