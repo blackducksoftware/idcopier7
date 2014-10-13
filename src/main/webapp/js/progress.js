@@ -86,7 +86,7 @@ function performBOMRefreshSource(server, projectId, partialBOMOption) {
 			// Grab the status
 			getRefreshStatusForSourceProject(server, projectId);
 			// Reload the tree
-			refreshNodes("target");
+			refreshNodes("source");
 		}
 	});
 }
