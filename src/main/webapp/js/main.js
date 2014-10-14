@@ -177,6 +177,7 @@ jQuery(document).ready(function() {
 		if (!verified) {
 			return false;
 		}
+		startLoading();
 		// Perform the Copy
 		$.ajax({
 			type : 'POST',
@@ -190,10 +191,12 @@ jQuery(document).ready(function() {
 					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.");
 					performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
 				}
+				stopLoading();
 			},
 			error : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(error, 'Failed to copy identifications', msg);
+				stopLoading();
 			}
 		});
 	});
@@ -287,7 +290,7 @@ function processJSON(path, source, widgetName) {
 	var deferred = $.Deferred();
 	$.getJSON(path, function(data) {
 		deferred.resolve(data)
-	}).fail(function(jqxhr, textStatus, error) {
+	}).fail(function(jqxhr, textStatus, tempError) {
 		displayNotificationMessage(error, "Error: " + msg, jqxhr.responseText);
 	}).done(function() {
 		displayNotificationMessage(success, msg);
@@ -312,26 +315,6 @@ function verifyCopyParameters(params) {
 		}
 	}
 	return valid;
-}
-/**
- * This will display any messages we want to show up on the screen
- */
-function displayGrowlNotificationMessage(type, heading, message) {
-	$.growl({
-		title : '<br /><h4>' + heading + '</h4>',
-		message : message
-	}, {
-		type : type,
-		placement : {
-			from : "bottom",
-			align : "right"
-		},
-		offset : {
-			x : 20,
-			y : 20
-		},
-		icon_type : 'class'
-	});
 }
 /**
  * This will display any HubSpot Messaging message we want to show up on the screen

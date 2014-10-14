@@ -67,7 +67,6 @@
 						</tr>
 					</tbody>
 				</table>
-
 			</div>
 		</div>
 		<hr>
@@ -139,7 +138,7 @@
 								value="recursiveCopy" checked /></td>
 						</tr>
 						<tr>
-							<td><h4>Overwrite Identifications</h4></td>
+							<td><h4>Replace Identifications</h4></td>
 							<td><input id="overwriteIDsCheckBox"
 								name="overwriteIDsCheckBox" class="checkbox" type="checkbox" /></td>
 						</tr>
@@ -208,6 +207,7 @@
 			</div>
 		</div>
 	</div>
+	<div id="pageLoader"></div>
 </body>
 
 <!--  JS Libraries -->
