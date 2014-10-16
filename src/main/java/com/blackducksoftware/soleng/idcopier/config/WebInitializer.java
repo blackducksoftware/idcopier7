@@ -27,7 +27,7 @@ public class WebInitializer implements WebApplicationInitializer
 	AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 	ctx.register(IDCWebConfig.class);
 	ctx.register(IDCConfig.class);
-	ctx.register(LoginService.class);
+	//ctx.register(LoginService.class);
 	ctx.register(ProjectService.class);
 	ctx.setServletContext(servletContext);
 
@@ -41,7 +41,7 @@ public class WebInitializer implements WebApplicationInitializer
 	IDCSessionFilter sessionFilter = new IDCSessionFilter();
 	servletContext.addFilter("sessionFilter", sessionFilter).addMappingForUrlPatterns(null, false, "/*");
 	
-	
+
 
     }
 

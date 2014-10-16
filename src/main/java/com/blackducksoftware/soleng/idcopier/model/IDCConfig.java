@@ -46,6 +46,8 @@ public class IDCConfig
     private Boolean recursive = false;
     private Boolean partialBom = false;
     
+    private String serverList = null;
+    
     public IDCConfig()
     {
 	log.info("Configuration file has been loaded");
@@ -56,11 +58,20 @@ public class IDCConfig
 	return getProperty(IDCConfigurationConstants.SESSION_TIMEOUT);
     }
 
+    /**
+     * Retrieves the list of server host addresses.
+     * @return
+     */
     public String getServerListLocation()
     {
 	return getProperty(IDCConfigurationConstants.SERVER_LIST_LOCATION);
     }
 
+    public String getServerList()
+    {
+	return getProperty(IDCConfigurationConstants.SERVER_LIST);
+    }
+    
     private String getProperty(String key)
     {
 	String someprop = env.getProperty(key);
@@ -110,4 +121,7 @@ public class IDCConfig
     {
 	this.partialBom = partialBom;
     }
+
+
+
 }

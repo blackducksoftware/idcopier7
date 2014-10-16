@@ -30,6 +30,7 @@ import com.blackducksoftware.soleng.idcopier.constants.IDCViewConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
+import com.blackducksoftware.soleng.idcopier.model.UserServiceModel;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
 import com.blackducksoftware.soleng.idcopier.service.ProjectService;
 import com.google.gson.Gson;
@@ -47,10 +48,8 @@ public class IDCProjectController
     static Logger log = Logger.getLogger(IDCProjectController.class);
 
     @Autowired
-    private LoginService loginService;
+    private UserServiceModel userServiceModel;
 
-    @Autowired
-    private ProjectService projectService;
 
     @RequestMapping(IDCPathConstants.GET_PROJECTS)
     public String getProjectJSONList(
@@ -60,6 +59,8 @@ public class IDCProjectController
 	List<ProjectInfo> projects = null;
 	try
 	{
+	    LoginService loginService = userServiceModel.getLoginService();
+	    ProjectService projectService = userServiceModel.getProjectService();
 	    IDCServer server = loginService.getServerByName(serverName);
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    projects = projectService.getProjectsByServer(proxy, server);
@@ -87,6 +88,8 @@ public class IDCProjectController
 
 	try
 	{
+	    LoginService loginService = userServiceModel.getLoginService();
+	    ProjectService projectService = userServiceModel.getProjectService();
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    String jsonTree = projectService.getProjectJSON(proxy, projectId);
 
@@ -126,6 +129,8 @@ public class IDCProjectController
 	String jsonTree = "";
 	try
 	{
+	    LoginService loginService = userServiceModel.getLoginService();
+	    ProjectService projectService = userServiceModel.getProjectService();
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    jsonTree = projectService.getFolderJSON(proxy, projectId, path);
 	} catch (Exception e)
@@ -155,6 +160,7 @@ public class IDCProjectController
 	try
 	{
 	    log.debug("Partial BOM Refresh Option: " + partialBomRefresh);
+	    LoginService loginService = userServiceModel.getLoginService();
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    BomApi bomApi = proxy.getBomApi();
 	    bomApi.refreshBom(projectId, partialBomRefresh, true);
@@ -176,6 +182,8 @@ public class IDCProjectController
 	String jsonRefreshStatus = "";
 	try
 	{
+	    LoginService loginService = userServiceModel.getLoginService();
+	    ProjectService projectService = userServiceModel.getProjectService();
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    BomProgressStatus status = projectService.getBOMRefreshStatus(
 		    proxy, projectId);

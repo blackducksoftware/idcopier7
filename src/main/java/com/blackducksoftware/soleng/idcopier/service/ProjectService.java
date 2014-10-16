@@ -8,6 +8,7 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ import com.google.gson.Gson;
  * @date Sep 16, 2014
  * 
  */
-public class ProjectService {
+public class ProjectService implements Serializable {
 	static Logger log = Logger.getLogger(ProjectService.class);
 
 	private IDCSession session;
@@ -50,11 +51,13 @@ public class ProjectService {
 	private String ROOT = "/";
 
 	// Map of projects for caching lookup
-	private Map<String, List<ProjectInfo>> projectMap = new HashMap<String, List<ProjectInfo>>();
+	private Map<String, List<ProjectInfo>> projectMap;
 	// Map of BOM Apis per proxy
-	private Map<ProtexServerProxy, BomApi> bomApis = new HashMap<ProtexServerProxy, BomApi>();
+	private Map<ProtexServerProxy, BomApi> bomApis;
 
 	public ProjectService() {
+		projectMap = new HashMap<String, List<ProjectInfo>>();
+		bomApis = new HashMap<ProtexServerProxy, BomApi>();
 	}
 
 	/**

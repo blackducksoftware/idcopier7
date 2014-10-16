@@ -18,7 +18,7 @@
 
 	<div class="main">
 		<div class="header-logo">
-			<img src="images/tempIcon.gif">
+			<img src="images/tempIcon.png">
 		</div>
 
 		<hr>
@@ -29,15 +29,6 @@
 				commandName="protex-server" action="login.do">
 				<legend> Please Login </legend>
 				<fieldset>
-					<!-- Server input-->
-					<div class="form-group">
-						<label control-label" for="serverURI">Server:</label>
-						<div>
-							<input id="serverURI" name="serverURI" placeholder="Server"
-								class="form-control input-md" required="" type="text"
-								path="serverURI" value=${server.serverURI}>
-						</div>
-					</div>
 
 					<!-- Username input-->
 					<div class="form-group">

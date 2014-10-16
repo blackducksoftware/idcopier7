@@ -21,6 +21,7 @@ import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
 import com.blackducksoftware.soleng.idcopier.model.IDCConfig;
+import com.blackducksoftware.soleng.idcopier.model.UserServiceModel;
 import com.blackducksoftware.soleng.idcopier.service.CopyService;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
 import com.blackducksoftware.soleng.idcopier.service.ProjectService;
@@ -43,10 +44,7 @@ public class IDCCopyController
     private IDCConfig config;
 
     @Autowired
-    private LoginService loginService;
-
-    @Autowired
-    private ProjectService projectService;
+    private UserServiceModel userServiceModel;
 
     @RequestMapping(IDCPathConstants.COPY_IDS)
     public String copyIDs(
@@ -96,6 +94,8 @@ public class IDCCopyController
 		config.setRecursive(recursiveOption);
 		config.setPartialBom(partialBomOption);
 
+		LoginService loginService = userServiceModel.getLoginService();
+		
 		ProtexServerProxy sourceProxy = loginService
 			.getProxy(sourceServer);
 

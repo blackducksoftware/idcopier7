@@ -8,12 +8,17 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.service;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
+import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 
@@ -22,7 +27,8 @@ import com.blackducksoftware.soleng.idcopier.model.IDCSession;
  * @date Sep 15, 2014
  * 
  */
-public class LoginService
+
+public class LoginService implements Serializable  
 {
     static Logger log = Logger.getLogger(LoginService.class);
 
@@ -31,12 +37,12 @@ public class LoginService
     // Map of servers by their names, where names are hostnames
     private HashMap<String, IDCServer> serverMap = new HashMap<String, IDCServer>();
     // Map of established proxies, a proxy is established upon a successful
-
     private HashMap<String, ProtexServerProxy> proxyMap = new HashMap<String, ProtexServerProxy>();
 
     public LoginService()
     {
-
+	    serverMap = new HashMap<String, IDCServer>();
+	    proxyMap = new HashMap<String, ProtexServerProxy>();
     }
 
     /**
@@ -44,25 +50,6 @@ public class LoginService
      * 
      * @param session
      */
-    public void loginSession(IDCSession session) throws Exception
-    {
-	try
-	{
-	    ProtexServerProxy proxy = new ProtexServerProxy(
-		    session.getServerURI(), session.getUserName(),
-		    session.getPassword());
-
-	    proxy.validateCredentials();
-
-	    log.info("Login successful");
-	    proxy.close();
-	} catch (Exception e)
-	{
-	    log.error("Error logging in: " + e.getMessage());
-	    throw new Exception(e.getCause().getMessage());
-	}
-    }
-
     public IDCServer getServerByName(String serverName) throws Exception
     {
 	IDCServer server = serverMap.get(serverName);

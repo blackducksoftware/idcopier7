@@ -19,6 +19,7 @@ public class IDCConfigurationConstants
 {
     // Property file keys
     public static final String SERVER_LIST_LOCATION = "idcopier.servers.location";
+    public static final String SERVER_LIST = "idcopier.server.list";
     public static final String SESSION_TIMEOUT = "idcopier.web.timeout";
     
     // Server Configuration file

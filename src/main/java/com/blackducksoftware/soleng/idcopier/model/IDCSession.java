@@ -27,12 +27,10 @@ public class IDCSession implements Serializable
      * 
      */
     private static final long serialVersionUID = -797003971186382394L;
-    private String serverURI;
+
     private String userName;
     private String password;
     private String error;
-    private IDCServer sourceServer;
-    private IDCServer targetServer;
 
     public IDCSession()
     {
@@ -59,15 +57,6 @@ public class IDCSession implements Serializable
 	this.userName = userName;
     }
 
-    public String getServerURI()
-    {
-	return serverURI;
-    }
-
-    public void setServerURI(String serverURI)
-    {
-	this.serverURI = serverURI;
-    }
 
     public String getError()
     {
@@ -79,23 +68,5 @@ public class IDCSession implements Serializable
 	this.error = error;
     }
 
-    public IDCServer getSourceServer()
-    {
-	return sourceServer;
-    }
-
-    public void setSourceServer(IDCServer sourceServer)
-    {
-	this.sourceServer = sourceServer;
-    }
-
-    public IDCServer getTargetServer()
-    {
-	return targetServer;
-    }
-
-    public void setTargetServer(IDCServer targetServer)
-    {
-	this.targetServer = targetServer;
-    }
+   
 }

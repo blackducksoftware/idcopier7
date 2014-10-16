@@ -77,17 +77,20 @@ public class IDCServer implements Serializable
      * Helper method to retrieve host name
      * @param serverURI
      * @return
+     * @throws Exception 
      */
-    public static String getHostFromURI(String serverURI)
+    public static String getHostFromURI(String serverURI) throws Exception
     {
 	String hostName = null;
 	try
 	{
 	    URIBuilder builder = new URIBuilder(serverURI);
 	    hostName = builder.getHost();
+	    if(hostName == null)
+		throw new Exception("Unable to determine host name from URI: " + serverURI);
 	} catch (Exception e)
 	{
-	    log.warn("Trouble parsing server URI: " + e.getMessage());
+	    throw new Exception("Trouble parsing server URI: " + e.getMessage());
 	}
 	
 	return hostName;
