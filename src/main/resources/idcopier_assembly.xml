@@ -1,0 +1,36 @@
+<assembly>  
+	<includeBaseDirectory>false</includeBaseDirectory> 
+	<formats>
+		<format>zip</format> 
+	</formats> 
+	  <id>archive</id>
+	<fileSets> 
+	
+		<!--  Drop Readme, notices, license into root -->
+		 <fileSet>
+	       <directory>${project.basedir}/src/main/resources</directory>
+	       	<outputDirectory>/</outputDirectory>
+	       	<includes>
+				<include>*example*</include>
+				<include>*README*</include>
+				<include>*RELEASE*</include>
+			</includes>
+	    </fileSet>
+		<fileSet> 
+			<directory>${project.basedir}/target</directory> 
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<!-- Local builds will only grab latest version -->
+				<include>*${project.version}*war</include>
+			</includes>
+		</fileSet> 	
+		<!--  Supply the sources jar -->
+		<fileSet>
+			<directory>${project.basedir}/target</directory> 
+				<outputDirectory>/</outputDirectory>
+				<includes>
+					<include>*sources*.jar</include>
+				</includes>
+		</fileSet>
+	</fileSets> 
+</assembly> 

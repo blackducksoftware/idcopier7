@@ -62,7 +62,8 @@ public class IDCViewModelConstants
     public static final String PROJECT_SOURCE_ID = "selected-project-source-id";
     // Tree representing a particular project
     public static final String PROJECT_JSON_TREE = "projectJsonTree";
-    
+    // Config settings
+    public static final String CONFIG_SETTINGS = "configSettings";
     /**
      * Copy related variables
      */

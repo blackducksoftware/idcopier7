@@ -1,8 +1,7 @@
 /**
  * GLOBALS
  */
-var source = "Source";
-var target = "Target";
+
 var previousSourcePercent = -1;
 var previousTargetPercent = -1;
 // Project currently selected
@@ -39,7 +38,7 @@ jQuery(document).ready(function() {
 			return false;
 		}
 		sourceProgressBar.attr('data-transitiongoal', 0).progressbar();
-		performBOMRefreshSource(sourceServer, sourceProjectId, partialBOMOption);
+		performBOMRefresh(source, sourceServer, sourceProjectId, partialBOMOption);
 	});
 	/**
 	 * Handle target project refresh
@@ -61,13 +60,13 @@ jQuery(document).ready(function() {
 			return false;
 		}
 		targetProgressBar.attr('data-transitiongoal', 0).progressbar();
-		performBOMRefreshTarget(targetServer, targetProjectId, partialBOMOption);
+		performBOMRefresh(target, targetServer, targetProjectId, partialBOMOption);
 	});
 });
 /**
  * Calls IDCProjectController and performs a BOM refresh against a specific server/project
  */
-function performBOMRefreshSource(server, projectId, partialBOMOption) {
+function performBOMRefresh(location, server, projectId, partialBOMOption) {
 	var refreshPath = 'bomRefresh' + '/' + server + '/' + projectId;
 	console.log("Submitting AJAX request to: " + refreshPath);
 	var params = {
@@ -84,38 +83,16 @@ function performBOMRefreshSource(server, projectId, partialBOMOption) {
 		success : function(msg) {
 			console.log("Refresh finished with success");
 			// Grab the status
-			getRefreshStatusForSourceProject(server, projectId);
+			if(location == source)
+				getRefreshStatusForSourceProject(server, projectId);
+			else
+				getRefreshStatusForTargetProject(server, projectId);
 			// Reload the tree
-			refreshNodes("source");
+			refreshNodes(location);
 		}
 	});
 }
-/**
- * Calls IDCProjectController and performs a BOM refresh against a specific server/project
- */
-function performBOMRefreshTarget(server, projectId, partialBOMOption) {
-	var refreshPath = 'bomRefresh' + '/' + server + '/' + projectId;
-	console.log("Submitting AJAX request to: " + refreshPath);
-	var params = {
-		'partial-bom-option' : partialBOMOption
-	};
-	// Submit the refresh request
-	$.ajax({
-		type : 'POST',
-		url : refreshPath,
-		data : params,
-		error : function(msg) {
-			console.log("Error submitting refresh: " + msg.statusText);
-		},
-		success : function(msg) {
-			console.log("Refresh finished with success");
-			// Grab the status
-			getRefreshStatusForTargetProject(server, projectId);
-			// Reload the tree
-			refreshNodes("target");
-		}
-	});
-}
+
 /**
  * Gets back the current status of the refresh
  */

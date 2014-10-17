@@ -67,6 +67,7 @@
 						</tr>
 					</tbody>
 				</table>
+
 			</div>
 		</div>
 		<hr>
@@ -124,30 +125,35 @@
 					<tbody>
 						<!--  These options are invoked when use clicks perform copy button 
 						  Behavior is captured in main.js onclick	
+						  
+						  The default behavior is read from the IDCConfig class and dynamically set via main.js
+						  The name of the checkbox must match the internal java value
 						 -->
+					
+						 
 						<tr>
 							<td><h4>Defer BOM refresh</h4></td>
 							<td><input id="deferBomRefreshCheckBox"
-								name="deferBomRefreshCheckBox" class="checkbox" type="checkbox"
-								value="deferBomRefreshCheckBox" checked /></td>
+								name="defer-bom-option" class="checkbox" type="checkbox"
+								value="deferBomRefreshCheckBox" ></td>
 						</tr>
 						<tr>
 							<td><h4>Recursive</h4></td>
 							<td><input id="recursiveCopyCheckBox"
-								name="recursiveCopyCheckBox" class="checkbox" type="checkbox"
-								value="recursiveCopy" checked /></td>
+								name="recursive-option" class="checkbox" type="checkbox"
+								value="recursiveCopyCheckBox" /></td>
 						</tr>
 						<tr>
-							<td><h4>Replace Identifications</h4></td>
+							<td><h4>Overwrite Identifications</h4></td>
 							<td><input id="overwriteIDsCheckBox"
-								name="overwriteIDsCheckBox" class="checkbox" type="checkbox" /></td>
+								name="overwrite-option" class="checkbox" type="checkbox" /></td>
 						</tr>
 						<tr>
 							<td><h4>Partial BOM Refresh</h4></td>
-							<td><input id="partialBOMCheckBox" name="partialBOMCheckBox"
+							<td><input id="partialBOMCheckBox" name="partial-bom-option"
 								class="checkbox" type="checkbox" /></td>
 						</tr>
-
+						
 						<!--  BUTTONS -->
 
 						<tr>
@@ -207,7 +213,6 @@
 			</div>
 		</div>
 	</div>
-	<div id="pageLoader"></div>
 </body>
 
 <!--  JS Libraries -->

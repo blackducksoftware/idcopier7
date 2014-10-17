@@ -13,7 +13,35 @@ var success = 'success';
 var info = 'info';
 var warning = 'warning';
 var error = 'error';
-jQuery(document).ready(function() {
+jQuery(document).ready(function() 
+{
+	/**
+	 * Sets the checkbox
+	 */
+	$.getJSON("configSettings", function(data) 
+	{
+		if(data != null)
+		{
+			var checkboxes = $("[id$='CheckBox']");
+			for(var i=0; i< checkboxes.length; i++)
+			{				
+				var checkBoxName = checkboxes[i].name;
+				var checkBoxId = checkboxes[i].id;
+				
+				if(checkBoxName != null)
+				{
+					var configValueForName = data[checkBoxName];
+					var checkBoxDiv = $('#'+ checkBoxId);
+					if(checkBoxDiv != null)
+					{
+						checkBoxDiv.prop('checked', configValueForName);
+					}				
+				}						
+			}
+			
+		}	
+	});
+	
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
@@ -177,7 +205,6 @@ jQuery(document).ready(function() {
 		if (!verified) {
 			return false;
 		}
-		startLoading();
 		// Perform the Copy
 		$.ajax({
 			type : 'POST',
@@ -189,14 +216,12 @@ jQuery(document).ready(function() {
 				// Call the BOM refresh if necessary
 				if (!deferBOMOption) {
 					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.");
-					performBOMRefresh(targetServer, targetProjectId, partialBOMOption);
+					performBOMRefresh("target", targetServer, targetProjectId, partialBOMOption);
 				}
-				stopLoading();
 			},
 			error : function(msg) {
 				console.log(msg);
 				displayNotificationMessage(error, 'Failed to copy identifications', msg);
-				stopLoading();
 			}
 		});
 	});
@@ -290,7 +315,7 @@ function processJSON(path, source, widgetName) {
 	var deferred = $.Deferred();
 	$.getJSON(path, function(data) {
 		deferred.resolve(data)
-	}).fail(function(jqxhr, textStatus, tempError) {
+	}).fail(function(jqxhr, textStatus, error) {
 		displayNotificationMessage(error, "Error: " + msg, jqxhr.responseText);
 	}).done(function() {
 		displayNotificationMessage(success, msg);
@@ -307,14 +332,38 @@ function verifyCopyParameters(params) {
 	var valid = true;
 	for ( var key in params) {
 		var parameter = params[key];
-		if (parameter === null || parameter.length === 0) {
-			var msg = 'Null value for parameter: ' + key;
-			displayNotificationMessage(error, 'ERROR!', msg);
-			// alert("ERROR: Null value for parameter: " + key);
-			valid = false;
+		if (parameter === null) 
+		{
+			if(parameter.length === 0)
+			{
+				var msg = 'Null value for parameter: ' + key;
+				displayNotificationMessage(error, 'ERROR!', msg);
+				// alert("ERROR: Null value for parameter: " + key);
+				valid = false;
+			}
 		}
 	}
 	return valid;
+}
+/**
+ * This will display any messages we want to show up on the screen
+ */
+function displayGrowlNotificationMessage(type, heading, message) {
+	$.growl({
+		title : '<br /><h4>' + heading + '</h4>',
+		message : message
+	}, {
+		type : type,
+		placement : {
+			from : "bottom",
+			align : "right"
+		},
+		offset : {
+			x : 20,
+			y : 20
+		},
+		icon_type : 'class'
+	});
 }
 /**
  * This will display any HubSpot Messaging message we want to show up on the screen

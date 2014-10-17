@@ -41,7 +41,7 @@ public class IDCConfig
     @Autowired
     ApplicationContext cxt;
 
-    private Boolean bomRefresh = false;
+    private Boolean deferBomRefresh = false;
     private Boolean overwriteIDs = false;
     private Boolean recursive = false;
     private Boolean partialBom = false;
@@ -51,8 +51,15 @@ public class IDCConfig
     public IDCConfig()
     {
 	log.info("Configuration file has been loaded");
+	init();
     }
 
+    // Initialize default values
+    private void init()
+    {
+
+    }
+    
     public String getSessionTimeOut()
     {
 	return getProperty(IDCConfigurationConstants.SESSION_TIMEOUT);
@@ -81,15 +88,30 @@ public class IDCConfig
 	return someprop;
     }
 
+    private Boolean getBooleanProperty(String key)
+    {
+	Boolean returnedValue = false;
+	String value = getProperty(key);
+	if(value != null)
+	{
+	    returnedValue = Boolean.valueOf(value);
+	    log.debug("Value for key: " + key + " is: "+ returnedValue);
+	}
+
+	return returnedValue;
+    }
+    
+    
 
     public Boolean isBomRefreshDefer()
     {
-	return bomRefresh;
+	deferBomRefresh = getBooleanProperty(IDCConfigurationConstants.OPTION_DEFER_BOM);
+	return deferBomRefresh;
     }
 
     public void setBomRefreshDefer(Boolean bomRefresh)
     {
-	this.bomRefresh = bomRefresh;
+	this.deferBomRefresh = bomRefresh;
     }
 
     public Boolean isOverwriteIDs()
@@ -99,11 +121,13 @@ public class IDCConfig
 
     public void setOverwriteIDs(Boolean overwriteIDs)
     {
+	overwriteIDs = getBooleanProperty(IDCConfigurationConstants.OPTION_OVERWRITE_IDS);
 	this.overwriteIDs = overwriteIDs;
     }
 
     public Boolean isRecursive()
     {
+	recursive = getBooleanProperty(IDCConfigurationConstants.OPTION_RECURSIVE);
 	return recursive;
     }
 
@@ -114,6 +138,7 @@ public class IDCConfig
 
     public Boolean istPartialBom()
     {
+	partialBom = getBooleanProperty(IDCConfigurationConstants.OPTION_PARTIAL_BOM_REFRESH);
 	return partialBom;
     }
 

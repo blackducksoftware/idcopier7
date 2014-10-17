@@ -14,7 +14,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -70,6 +72,8 @@ public class IDCLoginController
 
     // Internal
     private static List<IDCServer> servers = null;
+    // Config options
+    private static String configJson = null;
 
     @RequestMapping(value = IDCPathConstants.LOGIN_MAIN_PATH)
     public ModelAndView displayLoginPage(
@@ -162,6 +166,19 @@ public class IDCLoginController
 
 	    modelAndView.addObject(IDCViewModelConstants.IDC_SESSION, session);
 	    modelAndView.addObject(IDCViewModelConstants.SERVER_LIST, servers);
+	    
+	    // Checkboxes
+	    
+	    Map<String, Boolean> options = new HashMap<String, Boolean>();
+	    options.put(IDCViewModelConstants.COPY_DEFER_BOM_REFRESH_OPTION, config.isBomRefreshDefer());
+	    options.put(IDCViewModelConstants.COPY_RECURSIVE_OPTION, config.isRecursive());
+	    options.put(IDCViewModelConstants.COPY_OVERWRITE_OPTION, config.isOverwriteIDs());
+	    options.put(IDCViewModelConstants.PARTIAL_BOM_OPTION, config.istPartialBom());
+	    
+	    Gson gson = new Gson();
+	    configJson = gson.toJson(options);
+
+	    
 	} catch (Exception e)
 	{
 	    /**
@@ -287,6 +304,13 @@ public class IDCLoginController
 	return new Gson().toJson(servers);
     }
 
+    
+    @RequestMapping(IDCPathConstants.LOGIN_CONFIG)
+    public String getConfigOptions()
+    {
+	return configJson;
+    }
+    
     /**
      * @param rememberCookie
      * @param session
