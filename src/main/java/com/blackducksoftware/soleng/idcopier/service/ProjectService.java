@@ -93,7 +93,7 @@ public class ProjectService implements Serializable {
 	public String getFolderJSON(ProtexServerProxy proxy, String projectID, String path) 
 	{
 		this.proxy = proxy;
-		log.info("PATH=" + path);
+		log.debug("PATH=" + path);
 
 		String jsonTree = getProjectCodeTreeNodesWithCount(projectID, path);
 
@@ -204,7 +204,7 @@ public class ProjectService implements Serializable {
 
 			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, path, ctrRequest);
 
-			log.info("Got nodes for '" + path + "' (count: " + nodes.size() + ")");
+			log.debug("Got nodes for '" + path + "' (count: " + nodes.size() + ")");
 
 			List<String> folderNodes = new ArrayList<String>();
 			List<String> fileNodes = new ArrayList<String>();

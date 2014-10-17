@@ -13,6 +13,15 @@ var success = 'success';
 var info = 'info';
 var warning = 'warning';
 var error = 'error';
+
+// Growl level
+var noisy = 0;
+var quiet = 1;
+
+// This toggles the growl messages
+// TODO: Can make this configurable later.
+var noiseLevel = quiet;
+
 jQuery(document).ready(function() 
 {
 	/**
@@ -42,9 +51,11 @@ jQuery(document).ready(function()
 		}	
 	});
 	
+
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
+
 	var populateWidgets = (function() {
 		console.log("Populating project pulldows");
 		$.each(locations, function(index, locationValue) {
@@ -66,7 +77,7 @@ jQuery(document).ready(function()
 				$(serverSelectorDiv).append("<option>" + messageServer + "</option>");
 				$.each(data, function(index, value) {
 					if (value.serverName === cachedServerName) {
-						displayNotificationMessage(info, "Loading Cached Server", "Cookie found for: " + cachedServerName);
+						displayNotificationMessage(info, "Loading Cached Server", "Cookie found for: " + cachedServerName, noiseLevel);
 						$(serverSelectorDiv).append("<option selected=true>" + value.serverName + "</option>");
 						populateProjectPerServer(serverSelectorDiv, locationValue);
 					} else
@@ -127,7 +138,7 @@ jQuery(document).ready(function()
 				if (event.which == 13 || event.keyCode == 13) {
 					var projectId = getProjectIDforLocation(locationValue);
 					if (projectId == null) {
-						displayNotificationMessage(warning, "Can not select path", "No project selected");
+						displayNotificationMessage(warning, "Can not select path", "No project selected", noisy);
 						return false;
 					}
 					var path = $(pathSelectInput).val();
@@ -212,16 +223,16 @@ jQuery(document).ready(function()
 			data : params,
 			success : function(msg) {
 				console.log(msg);
-				displayNotificationMessage(success, 'Successfully copied identifications', msg);
+				displayNotificationMessage(success, 'Successfully copied identifications', msg, noiseLevel);
 				// Call the BOM refresh if necessary
 				if (!deferBOMOption) {
-					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.");
+					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.", noiseLevel);
 					performBOMRefresh("target", targetServer, targetProjectId, partialBOMOption);
 				}
 			},
 			error : function(msg) {
 				console.log(msg);
-				displayNotificationMessage(error, 'Failed to copy identifications', msg);
+				displayNotificationMessage(error, 'Failed to copy identifications', msg, noisy);
 			}
 		});
 	});
@@ -267,13 +278,13 @@ function setProjects(sender, message, data) {
 	projectSelectorDiv.empty();
 	projectSelectorDiv.append("<option>" + message + "</option>");
 	if (data == null) {
-		displayNotificationMessage(error, "Project Display Error", "No projects returned from server!");
+		displayNotificationMessage(error, "Project Display Error", "No projects returned from server!", noisy);
 		return false;
 	}
 	$.each(data, function(index, value) {
 		// TODO: Should this actually be here?
 		if (cachedProjectId === value.projectId) {
-			displayNotificationMessage(info, "Loading Cached Project", "Found cached project ID");
+			displayNotificationMessage(info, "Loading Cached Project", "Found cached project ID", noiseLevel);
 			projectSelectorDiv.append("<option id=\"" + value.projectId + "\" selected=true>" + value.name + "</option>");
 			loadFancyTree(sender, cachedServerName, cachedProjectId);
 		} else {
@@ -291,7 +302,7 @@ function getProjectIDforLocation(locationValue) {
 	var projectSelectorDiv = ".select" + locationValue + "Project";
 	var projectId = $(projectSelectorDiv).children(":selected").attr("id");
 	if (projectId == null) {
-		displayNotificationMessage(error, "Error getting project ID", "Project ID cannot be determined");
+		displayNotificationMessage(error, "Error getting project ID", "Project ID cannot be determined", noisy);
 	}
 	return projectId;
 }
@@ -316,9 +327,10 @@ function processJSON(path, source, widgetName) {
 	$.getJSON(path, function(data) {
 		deferred.resolve(data)
 	}).fail(function(jqxhr, textStatus, error) {
-		displayNotificationMessage(error, "Error: " + msg, jqxhr.responseText);
+		displayNotificationMessage(error, "Error: " + msg, jqxhr.responseText, noisy);
 	}).done(function() {
-		displayNotificationMessage(success, msg);
+		// Always show error
+		displayNotificationMessage(success, "Processing", msg, noiseLevel);
 	});
 	return deferred.promise();
 }
@@ -332,14 +344,14 @@ function verifyCopyParameters(params) {
 	var valid = true;
 	for ( var key in params) {
 		var parameter = params[key];
-		if (parameter === null) 
+		if (typeof parameter =="string") 
 		{
-			if(parameter.length === 0)
-			{
-				var msg = 'Null value for parameter: ' + key;
-				displayNotificationMessage(error, 'ERROR!', msg);
+			if(!parameter)
+			{	
+				var msg = 'Invalid value for parameter: ' + key;
+				displayNotificationMessage(error, 'ERROR!', msg, noisy);
 				// alert("ERROR: Null value for parameter: " + key);
-				valid = false;
+				valid = false;	
 			}
 		}
 	}
@@ -368,7 +380,11 @@ function displayGrowlNotificationMessage(type, heading, message) {
 /**
  * This will display any HubSpot Messaging message we want to show up on the screen
  */
-function displayNotificationMessage(type, heading, message) {
+function displayNotificationMessage(type, heading, message, noiselevel) 
+{
+	if(noiselevel == quiet)
+		return;
+	
 	var output;
 	// Check to see that the heading has been defined
 	if (heading !== undefined) {

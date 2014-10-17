@@ -84,7 +84,7 @@ public class IDCProjectController
     {
 	ModelAndView modelAndView = new ModelAndView();
 
-	log.info("Processing project: " + projectId);
+	log.debug("Processing project: " + projectId);
 
 	try
 	{
@@ -124,7 +124,7 @@ public class IDCProjectController
 	    @RequestParam(value = IDCViewModelConstants.TREE_NODE_PATH, required = true) String path,
 	    Model model)
     {
-	log.info("Generating for path: '" + path + "'");
+	log.debug("Generating for path: '" + path + "'");
 
 	String jsonTree = "";
 	try

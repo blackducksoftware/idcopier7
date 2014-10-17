@@ -50,8 +50,9 @@ public class IDCServer implements Serializable
      * @param server
      * @param user
      * @param password
+     * @throws Exception 
      */
-    public IDCServer(String server, String user, String password)
+    public IDCServer(String server, String user, String password) throws Exception
     {
 	setServerURI(server);
 	setUserName(user);
@@ -68,9 +69,11 @@ public class IDCServer implements Serializable
 	return serverURI;
     }
 
-    public void setServerURI(String serverURI)
+    public void setServerURI(String serverURI) throws Exception
     {
 	this.serverURI = serverURI;
+	// Validate host name
+	getHostFromURI(serverURI);
     }
 
     /**
@@ -87,10 +90,10 @@ public class IDCServer implements Serializable
 	    URIBuilder builder = new URIBuilder(serverURI);
 	    hostName = builder.getHost();
 	    if(hostName == null)
-		throw new Exception("Unable to determine host name from URI: " + serverURI);
+		throw new IllegalArgumentException("Unable to determine host name from URI: " + serverURI);
 	} catch (Exception e)
 	{
-	    throw new Exception("Trouble parsing server URI: " + e.getMessage());
+	    throw new IllegalArgumentException("Trouble parsing server URI: " + e.getMessage());
 	}
 	
 	return hostName;

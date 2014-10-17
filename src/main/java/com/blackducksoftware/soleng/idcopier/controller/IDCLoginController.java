@@ -269,10 +269,15 @@ public class IDCLoginController
 		    String server = br.readLine();
 		    while(server != null)
 		    {
+			try{
 			    IDCServer idcServer = new IDCServer(server,
 				    session.getUserName(), session.getPassword());
 			    servers.add(idcServer);
-			    server = br.readLine();
+			} catch (IllegalArgumentException iae)
+			{
+			    log.error("Unable to determine host name for: " + server);
+			}
+			server = br.readLine();
 		    }			    
 		} catch (IOException e)
 		{

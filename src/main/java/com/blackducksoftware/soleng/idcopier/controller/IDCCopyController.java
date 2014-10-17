@@ -58,7 +58,7 @@ public class IDCCopyController
 	    @RequestParam(value = IDCViewModelConstants.COPY_OVERWRITE_OPTION) Boolean overWriteOption,
 	    @RequestParam(value = IDCViewModelConstants.COPY_DEFER_BOM_REFRESH_OPTION) Boolean deferBomRefreshOption,
 	    @RequestParam(value = IDCViewModelConstants.COPY_RECURSIVE_OPTION) Boolean recursiveOption,
-	    @RequestParam(value = IDCViewModelConstants.COPY_RECURSIVE_OPTION) Boolean partialBomOption)
+	    @RequestParam(value = IDCViewModelConstants.COPY_RECURSIVE_OPTION) Boolean partialBomOption) throws Exception
     {
 
 	String returnMsg = null;
@@ -79,9 +79,9 @@ public class IDCCopyController
 	
 	if (!sourceServer.equalsIgnoreCase(targetServer))
 	{
-	    log.error("Functionality not supported");
 	    returnMsg = "Servers mismatch, functionality not supported!";
-	    return returnMsg;
+	    log.error(returnMsg);
+	    throw new Exception(returnMsg);
 	} else
 	{
 	    log.info("Attempting to copy: " + sb.toString());
