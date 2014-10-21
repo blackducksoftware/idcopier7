@@ -22,7 +22,7 @@
 		<hr>
 		<div class="container center-on-screen">
 			<form id="loginForm" class="well" method="POST"
-				commandName="protex-server" action="login.do">
+				commandName="protex-server" action="login.do" role="form">
 				<legend> Please Login </legend>
 				<fieldset>
 
@@ -49,14 +49,11 @@
 					</div>
 
 					<!-- Remember Me Option -->
-
 					<div class="form-group">
-
-						<div>
-							Remember me: <input id="remember-cookies" name="remember-cookies"
-								placeholder="RememberMe" class="checkbox" type="checkbox">
+						<div class="checkbox">
+							<label><input type="checkbox" id="remember-cookies"
+								name="remember-cookies">Remember Me</label>
 						</div>
-
 					</div>
 
 					<!-- Submit Button -->
