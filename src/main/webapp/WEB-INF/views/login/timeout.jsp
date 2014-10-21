@@ -5,17 +5,22 @@
 <title>Protex ID Copier | Redirecting...</title>
 
 <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+<link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/justified-nav.css">
 
 </head>
 <body>
-	<br />
-	<br />
-	<br />
-	<div class="container well">
-		<br />
-		<h1>Your session has expired. Redirecting to main page....</h1>
-		<br />
+	<div class="main">
+		<div class="header-logo">
+			<img src="images/tempIcon.png">
+		</div>
+		<hr>
+		<div class="container well center-on-screen">
+			<br />
+			<h1>Your session has expired. Redirecting to main page....</h1>
+			<br />
+		</div>
 	</div>
 </body>
 

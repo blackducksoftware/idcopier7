@@ -15,7 +15,7 @@
 <body>
 	<div class="main">
 		<div class="header-logo">
-			<img src="images/tempIcon.gif">
+			<img src="images/tempIcon.png">
 		</div>
 		<hr>
 		<div class="logging-container">

@@ -15,16 +15,12 @@
 
 </head>
 <body>
-
 	<div class="main">
 		<div class="header-logo">
 			<img src="images/tempIcon.png">
 		</div>
-
 		<hr>
-
-		<br />
-		<div class="container">
+		<div class="container center-on-screen">
 			<form id="loginForm" class="well" method="POST"
 				commandName="protex-server" action="login.do">
 				<legend> Please Login </legend>

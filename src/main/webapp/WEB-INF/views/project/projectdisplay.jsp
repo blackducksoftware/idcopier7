@@ -129,13 +129,13 @@
 						  The default behavior is read from the IDCConfig class and dynamically set via main.js
 						  The name of the checkbox must match the internal java value
 						 -->
-					
-						 
+
+
 						<tr>
 							<td><h4>Defer BOM refresh</h4></td>
 							<td><input id="deferBomRefreshCheckBox"
 								name="defer-bom-option" class="checkbox" type="checkbox"
-								value="deferBomRefreshCheckBox" ></td>
+								value="deferBomRefreshCheckBox"></td>
 						</tr>
 						<tr>
 							<td><h4>Recursive</h4></td>
@@ -145,15 +145,15 @@
 						</tr>
 						<tr>
 							<td><h4>Overwrite Identifications</h4></td>
-							<td><input id="overwriteIDsCheckBox"
-								name="overwrite-option" class="checkbox" type="checkbox" /></td>
+							<td><input id="overwriteIDsCheckBox" name="overwrite-option"
+								class="checkbox" type="checkbox" /></td>
 						</tr>
 						<tr>
 							<td><h4>Partial BOM Refresh</h4></td>
 							<td><input id="partialBOMCheckBox" name="partial-bom-option"
 								class="checkbox" type="checkbox" /></td>
 						</tr>
-						
+
 						<!--  BUTTONS -->
 
 						<tr>
