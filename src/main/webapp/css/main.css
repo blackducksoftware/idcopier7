@@ -3,6 +3,38 @@
     Author     : Niles Madison <niles.madison@gmail.com>
 */
 
+.header-text
+{
+	font-size: 18px;
+	line-height: 20px;
+}
+
+/**
+ Progress Bar Section
+*/
+.progress-bar-section
+{
+	width: 97%;
+	margin: 10px;
+}
+.refresh-progress-button
+{
+	padding: 1px;
+}
+
+.rp-dropdown-menu
+{
+	min-width: 10px !important;
+	background-color: #A4CAFF !important;
+	font-size: 11px !important;
+}
+
+
+.btn-spacer
+{
+	margin-left: 3px;
+}
+
 /*-- Tree Stuff */
 .pending-node {
 	font-weight: bold;

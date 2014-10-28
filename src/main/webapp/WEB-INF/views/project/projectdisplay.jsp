@@ -75,20 +75,32 @@
 			<div class="col-sm-5 col-lg-5 col-mx-5">
 				<div class="well">
 					<div class="projects-header-buffer">
-						<div class="row">
-							<p class="navbar-brand">Source Project</p>
-							<button id="refreshSourceProjectBom" type="button"
-								class="btn btn-primary btn-lg pull-right">
-								<span class="glyphicon glyphicon-refresh"></span>
-							</button>
-						</div>
-						<div class="row">
-							<div class="progress">
-								<div id="sourceProgressBar" class="progress-bar"
-									role="progressbar" data-transitiongoal="100"></div>
+						<p class="header-text">Source Project</p>
+					</div>
+
+					<div class="progress-bar-section">
+						<div class="refresh-progress-button ">
+							<div class="btn-group pull-right btn-spacer">
+								<button type="button"
+									class="btn btn-primary dropdown-toggle btn-xs"
+									data-toggle="dropdown">
+									Refresh <span class="caret"></span>
+								</button>
+								<ul class="rp-dropdown-menu dropdown-menu" role="menu">
+									<li><a href="#"
+										onclick="activateRefreshFromPullDown(source, partialRefresh)">Partial</a></li>
+									<li><a href="#"
+										onclick="activateRefreshFromPullDown(source, fullRefresh)">Full</a></li>
+								</ul>
 							</div>
 						</div>
+
+						<div class="progress">
+							<div id="sourceProgressBar" class="progress-bar"
+								role="progressbar" data-transitiongoal="100"></div>
+						</div>
 					</div>
+
 					<table class="table">
 						<tbody>
 							<tr>
@@ -148,12 +160,14 @@
 							<td><input id="overwriteIDsCheckBox" name="overwrite-option"
 								class="checkbox" type="checkbox" /></td>
 						</tr>
-						<tr>
-							<td><h4>Partial BOM Refresh</h4></td>
-							<td><input id="partialBOMCheckBox" name="partial-bom-option"
-								class="checkbox" type="checkbox" /></td>
-						</tr>
-
+						
+						<!--  Commenting out as part of refresh pulldown change 
+							<tr>
+								<td><h4>Partial BOM Refresh</h4></td>
+								<td><input id="partialBOMCheckBox" name="partial-bom-option"
+									class="checkbox" type="checkbox" /></td>
+							</tr>
+						-->
 						<!--  BUTTONS -->
 
 						<tr>
@@ -166,20 +180,35 @@
 			<div class="col-sm-5 col-lg-5 col-mx-5">
 				<div class="well">
 					<div class="projects-header-buffer">
-						<div class="row">
-							<p class="navbar-brand">Target Project</p>
-							<button id="refreshTargetProjectBom" type="button"
-								class="btn btn-primary btn-lg pull-right">
-								<span class="glyphicon glyphicon-refresh"></span>
-							</button>
-						</div>
-						<div class="row">
-							<div class="progress">
-								<div id="targetProgressBar" class="progress-bar"
-									role="progressbar" data-transitiongoal="100"></div>
+						<p class="header-text">Target Project</p>
+					</div>
+
+					<div class="progress-bar-section">
+
+						<div class="refresh-progress-button ">
+							<div class="btn-group pull-right btn-spacer">
+								<button type="button"
+									class="btn btn-primary dropdown-toggle btn-xs"
+									data-toggle="dropdown">
+									Refresh <span class="caret"></span>
+								</button>
+								<ul class="rp-dropdown-menu dropdown-menu" role="menu">
+									<li><a href="#"
+										onclick="activateRefreshFromPullDown('target', partialRefresh)">Partial</a></li>
+									<li><a href="#"
+										onclick="activateRefreshFromPullDown('target', fullRefresh)">Full</a></li>
+								</ul>
 							</div>
 						</div>
+
+						
+						<div class="progress">
+							<div id="targetProgressBar" class="progress-bar"
+								role="progressbar" data-transitiongoal="100"></div>
+						</div>
+					
 					</div>
+			
 					<table class="table">
 						<tbody>
 							<tr>
