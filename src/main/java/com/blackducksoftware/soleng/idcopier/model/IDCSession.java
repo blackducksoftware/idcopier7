@@ -30,6 +30,7 @@ public class IDCSession implements Serializable
 
     private String userName;
     private String password;
+    private String version;
     private String error;
 
     public IDCSession()

@@ -2,9 +2,7 @@
     Created on : Jun 29, 2014, 9:44:23 PM
     Author     : Niles Madison <niles.madison@gmail.com>
 */
-
-.header-text
-{
+.header-text {
 	font-size: 18px;
 	line-height: 20px;
 }
@@ -12,26 +10,50 @@
 /**
  Progress Bar Section
 */
-.progress-bar-section
-{
+.progress-bar-section {
 	width: 97%;
 	margin: 10px;
 }
-.refresh-progress-button
-{
+
+.refresh-progress-button {
 	padding: 1px;
 }
 
-.rp-dropdown-menu
-{
+.session-details {
+	text-align: right;
+	font-size: small; float : right;
+	padding-right: 10px;
+	float: right; padding-right : 10px;
+	padding-top: 70px;
+}
+
+.version-info {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.version-data {
+	padding-left: 5px;
+}
+
+.user-icon {
+	padding-left: 5px;
+	color: green;
+}
+
+.rp-dropdown-menu {
 	min-width: 10px !important;
 	background-color: #A4CAFF !important;
 	font-size: 11px !important;
 }
 
-
-.btn-spacer
-{
+.btn-spacer {
 	margin-left: 3px;
 }
 
@@ -73,8 +95,7 @@
 }
 
 .center-on-screen {
-	position: fixed; top : 50%; left : 50%; transform : translate( -50%,
-	-50%);
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);

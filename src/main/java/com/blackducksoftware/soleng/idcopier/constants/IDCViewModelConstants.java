@@ -90,4 +90,9 @@ public class IDCViewModelConstants
     public static final String TREE_NODE_PATH = "tree-node-path";
     public static final String TREE_LOADED_PATH = "tree-loaded-path";
     public static final String TREE_LAST_LOADED_PATH = "tree-last-loaded-path";
+    /**
+     * Session related variables
+     */
+    public static final String SESSION_USERNAME = "username";
+    public static final String SESSION_VERSION = "version";
 }

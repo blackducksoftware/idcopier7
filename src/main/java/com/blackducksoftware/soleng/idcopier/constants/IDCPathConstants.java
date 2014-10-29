@@ -32,6 +32,7 @@ public class IDCPathConstants {
 	public static final String GET_PROJECTS = "/getProjects";
 	public static final String REFRESH_BOM = "/bomRefresh";
 	public static final String REFRESH_BOM_STATUS = "/bomRefreshStatus";
+	public static final String SESSION_INFO ="/sessionInfo";
 	/**
 	 * Tree
 	 */
