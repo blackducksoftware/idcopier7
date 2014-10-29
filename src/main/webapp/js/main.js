@@ -8,47 +8,54 @@ var source = "Source";
 var target = "Target";
 // The locations array will be used to auto trigger internal jQuery functions
 var locations = [ source, target ];
-// Session Variables
-var usernameConstant = 'username';
-var versionConstant = 'version';
 // Growl Types
 var success = 'success';
 var info = 'info';
 var warning = 'warning';
 var error = 'error';
+
 // Growl level
 var noisy = 0;
 var quiet = 1;
+
 // This toggles the growl messages
 // TODO: Can make this configurable later.
 var noiseLevel = quiet;
-jQuery(document).ready(function() {
-	// Gets the user that is currently logged in
-	$.getJSON("sessionInfo", function(sessionData) {
-		$('.username-data').text(sessionData[usernameConstant]);
-	});
+
+jQuery(document).ready(function() 
+{
 	/**
 	 * Sets the checkbox
 	 */
-	$.getJSON("configSettings", function(data) {
-		if (data != null) {
+	$.getJSON("configSettings", function(data) 
+	{
+		if(data != null)
+		{
 			var checkboxes = $("[id$='CheckBox']");
-			for (var i = 0; i < checkboxes.length; i++) {
+			for(var i=0; i< checkboxes.length; i++)
+			{				
 				var checkBoxName = checkboxes[i].name;
 				var checkBoxId = checkboxes[i].id;
-				if (checkBoxName != null) {
+				
+				if(checkBoxName != null)
+				{
 					var configValueForName = data[checkBoxName];
-					var checkBoxDiv = $('#' + checkBoxId);
-					if (checkBoxDiv != null) {
+					var checkBoxDiv = $('#'+ checkBoxId);
+					if(checkBoxDiv != null)
+					{
 						checkBoxDiv.prop('checked', configValueForName);
-					}
-				}
+					}				
+				}						
 			}
-		}
+			
+		}	
 	});
+	
+
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
+
 	var populateWidgets = (function() {
 		console.log("Populating project pulldows");
 		$.each(locations, function(index, locationValue) {
@@ -106,7 +113,7 @@ jQuery(document).ready(function() {
 				// Load Tree
 				loadFancyTree(locationValue, serverName, projectId);
 				// Check refresh status via progress.js
-				if (sender === source) {
+				if (locationValue === source) {
 					getRefreshStatusForSourceProject(serverName, projectId);
 				} else {
 					getRefreshStatusForTargetProject(serverName, projectId);
@@ -191,7 +198,14 @@ jQuery(document).ready(function() {
 		var deferBOMOption = $('#deferBomRefreshCheckBox').is(':checked');
 		var recursiveCopyOption = $('#recursiveCopyCheckBox').is(':checked');
 		var overwriteIDsOption = $('#overwriteIDsCheckBox').is(':checked');
-		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
+		
+		// This used to be an option, but now if the defer is 'off' then always partial
+		//var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
+		if(deferBOMOption)
+			partialBOMOption = true;
+		else
+			partialBOMCheckBox = false;
+		
 		var params = {
 			'copy-source-server' : sourceServer,
 			'copy-target-server' : targetServer,
@@ -337,12 +351,14 @@ function verifyCopyParameters(params) {
 	var valid = true;
 	for ( var key in params) {
 		var parameter = params[key];
-		if (typeof parameter == "string") {
-			if (!parameter) {
+		if (typeof parameter =="string") 
+		{
+			if(!parameter)
+			{	
 				var msg = 'Invalid value for parameter: ' + key;
 				displayNotificationMessage(error, 'ERROR!', msg, noisy);
 				// alert("ERROR: Null value for parameter: " + key);
-				valid = false;
+				valid = false;	
 			}
 		}
 	}
@@ -371,9 +387,11 @@ function displayGrowlNotificationMessage(type, heading, message) {
 /**
  * This will display any HubSpot Messaging message we want to show up on the screen
  */
-function displayNotificationMessage(type, heading, message, noiselevel) {
-	if (noiselevel == quiet)
+function displayNotificationMessage(type, heading, message, noiselevel) 
+{
+	if(noiselevel == quiet)
 		return;
+	
 	var output;
 	// Check to see that the heading has been defined
 	if (heading !== undefined) {
@@ -393,18 +411,3 @@ function displayNotificationMessage(type, heading, message, noiselevel) {
 		showCloseButton : true
 	});
 }
-/**
- * Performs the logout for the user
- */
-$("#logoutButton").on('click', function() {
-	$.ajax({
-		type : 'POST',
-		url : 'logout',
-		success : function(msg) {
-			console.log(msg);
-		},
-		error : function(msg) {
-			console.log(msg);
-		}
-	});
-});
