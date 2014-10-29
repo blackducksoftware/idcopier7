@@ -2,6 +2,9 @@
  * GLOBALS
  */
 
+var partialRefresh = "partialRefresh";
+var fullRefresh = "fullRefresh";
+
 var previousSourcePercent = -1;
 var previousTargetPercent = -1;
 // Project currently selected
@@ -18,51 +21,51 @@ var targetProgressBar;
  * Loader
  */
 jQuery(document).ready(function() {
-	/**
-	 * Handle source project refresh
-	 */
+	
+	// Initialize the progress bars
+	// TODO: Investigate if this is even necessary.
 	sourceProgressBar = $('#sourceProgressBar').progressbar({
 		display_text : 'fill',
 		use_percentage : true
 	});
 	sourceProgressBar.attr('data-transitiongoal', 100).progressbar();
-	/**
-	 * Performs a refresh on project
-	 */
-	$("#refreshSourceProjectBom").on('click', function() {
-		var sourceServer = $('.selectSourceServer').children(":selected").text();
-		var sourceProjectId = $('.selectSourceProject').children(":selected").attr("id");
-		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
-		if (sourceProjectId == null) {
-			displayNotificationMessage(error, 'Unable to refresh BOM', 'Please select a target project!');
-			return false;
-		}
-		sourceProgressBar.attr('data-transitiongoal', 0).progressbar();
-		performBOMRefresh(source, sourceServer, sourceProjectId, partialBOMOption);
-	});
-	/**
-	 * Handle target project refresh
-	 */
+
 	targetProgressBar = $('#targetProgressBar').progressbar({
 		display_text : 'fill',
 		use_percentage : true
 	});
 	targetProgressBar.attr('data-transitiongoal', 100).progressbar();
-	/**
-	 * Performs a refresh on project
-	 */
-	$("#refreshTargetProjectBom").on('click', function() {
-		var targetServer = $('.selectTargetServer').children(":selected").text();
-		var targetProjectId = $('.selectTargetProject').children(":selected").attr("id");
-		var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
-		if (targetProjectId == null) {
-			displayNotificationMessage(error, 'Unable to refresh BOM', 'Please select a target project!');
-			return false;
-		}
-		targetProgressBar.attr('data-transitiongoal', 0).progressbar();
-		performBOMRefresh(target, targetServer, targetProjectId, partialBOMOption);
-	});
+
 });
+
+/**
+ * This is called by the pulldown button
+ * @param location
+ * @param refreshType
+ */
+function activateRefreshFromPullDown(location, refreshType)
+{
+	var usePartial = false;
+	if(refreshType == partialRefresh)
+		usePartial = true;
+	
+	var serverName = $('.select' + location + 'Server').children(":selected").text();
+	var projectId = $('.select' + location + 'Project').children(":selected").attr("id");
+	
+	console.log("Activating refresh, server: " + serverName + " project: " + projectId + " location: " + location);
+	
+	if (projectId == null) {
+		displayNotificationMessage(error, 'Unable to refresh BOM', 'Please select a project!');
+		return false;
+	}
+	
+	var progressBar = $("#" + location + "ProgressBar");
+	progressBar.attr('data-transitiongoal', 0).progressbar();
+	
+	performBOMRefresh(location, serverName, projectId, usePartial);
+}
+
+
 /**
  * Calls IDCProjectController and performs a BOM refresh against a specific server/project
  */
