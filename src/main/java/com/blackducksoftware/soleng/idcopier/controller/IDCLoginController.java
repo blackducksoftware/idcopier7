@@ -290,6 +290,9 @@ public class IDCLoginController {
 	public String logout(@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session) {
 		String msg = session.getUserName() + " has been logged out!";
 
+		// Going a bit overkill here, but just trying to be safe since just 'session = null' was not working as expected
+		session.setUserName(null);
+		session.setPassword(null);
 		session = null;
 
 		Map<String, String> logoutDetails = new HashMap<String, String>();
