@@ -23,9 +23,9 @@ var quiet = 1;
 // TODO: Can make this configurable later.
 var noiseLevel = quiet;
 jQuery(document).ready(function() {
+	// Gets the user that is currently logged in
 	$.getJSON("sessionInfo", function(sessionData) {
 		$('.username-data').text(sessionData[usernameConstant]);
-		// $('.version-data').text(sessionData[versionConstant]);
 	});
 	/**
 	 * Sets the checkbox
@@ -397,5 +397,14 @@ function displayNotificationMessage(type, heading, message, noiselevel) {
  * Performs the logout for the user
  */
 $("#logoutButton").on('click', function() {
-	alert("Logging out now!");
+	$.ajax({
+		type : 'POST',
+		url : 'logout',
+		success : function(msg) {
+			console.log(msg);
+		},
+		error : function(msg) {
+			console.log(msg);
+		}
+	});
 });

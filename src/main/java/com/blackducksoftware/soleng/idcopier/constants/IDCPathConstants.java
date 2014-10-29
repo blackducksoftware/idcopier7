@@ -21,6 +21,7 @@ public class IDCPathConstants {
 	 * Login
 	 */
 	public static final String LOGIN_MAIN_PATH = "/login";
+	public static final String LOGOUT_MAIN_PATH = "/logout";
 	public static final String LOGIN_PROCESS_PATH = "/login.do";
 	public static final String LOGIN_REDIRECT = "/redirect";
 	public static final String LOGIN_NEW_SERVER = "/reloginServer";

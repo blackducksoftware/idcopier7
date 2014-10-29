@@ -268,8 +268,6 @@ public class IDCLoginController {
 	public String getVersionInfo(@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session) {
 		Map<String, String> sessionDetails = new HashMap<String, String>();
 		sessionDetails.put(IDCViewModelConstants.SESSION_USERNAME, session.getUserName());
-		sessionDetails.put(IDCViewModelConstants.SESSION_VERSION, versionNumber);
-
 		return new Gson().toJson(sessionDetails);
 	}
 
@@ -286,6 +284,16 @@ public class IDCLoginController {
 			Cookie passwordCookie = new Cookie(IDCViewModelConstants.IDC_COOKIE_PASSWORD, session.getPassword());
 			response.addCookie(passwordCookie);
 		}
+	}
 
+	@RequestMapping(IDCPathConstants.LOGOUT_MAIN_PATH)
+	public String logout(@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session) {
+		String msg = session.getUserName() + " has been logged out!";
+
+		session = null;
+
+		Map<String, String> logoutDetails = new HashMap<String, String>();
+		logoutDetails.put(IDCViewModelConstants.LOGOUT_MESSAGE, msg);
+		return new Gson().toJson(logoutDetails);
 	}
 }

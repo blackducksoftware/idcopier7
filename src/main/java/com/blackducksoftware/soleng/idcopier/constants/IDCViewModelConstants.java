@@ -95,4 +95,8 @@ public class IDCViewModelConstants
      */
     public static final String SESSION_USERNAME = "username";
     public static final String SESSION_VERSION = "version";
+    /**
+     * Logout related variable
+     */
+    public static final String LOGOUT_MESSAGE = "msg";
 }
