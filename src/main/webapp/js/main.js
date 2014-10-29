@@ -397,4 +397,5 @@ function displayNotificationMessage(type, heading, message, noiselevel) {
  * Performs the logout for the user
  */
 $("#logoutButton").on('click', function() {
+	alert("Logging out now!");
 });

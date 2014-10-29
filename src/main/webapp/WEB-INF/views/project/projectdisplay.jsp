@@ -192,7 +192,7 @@
 					<tbody>
 						<tr>
 							<td class="bold">Version:</td>
-							<td class="version-data">${buildNumber}</td>
+							<td class="version-data">${display_version}</td>
 						</tr>
 					</tbody>
 				</table>

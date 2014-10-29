@@ -71,7 +71,18 @@
 				</fieldset>
 			</form>
 			<div id="errorLoginMsg" class="errorLoginMsg">${loginErrorMsg}</div>
+
 		</div>
+	</div>
+	<div class="version-info">
+		<table>
+			<tbody>
+				<tr>
+					<td class="bold">Version:</td>
+					<td class="version-data">${display_version}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </body>
 
