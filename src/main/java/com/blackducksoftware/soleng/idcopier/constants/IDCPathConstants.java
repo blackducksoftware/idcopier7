@@ -52,6 +52,11 @@ public class IDCPathConstants {
 	public static final String ADMIN_PATH = "/admin";
 
 	/**
+	 * Comments
+	 */
+	public static final String COPY_COMMENTS = "/comments";
+
+	/**
 	 * Copying
 	 */
 	public static final String COPY_IDS = "/copyIDs";

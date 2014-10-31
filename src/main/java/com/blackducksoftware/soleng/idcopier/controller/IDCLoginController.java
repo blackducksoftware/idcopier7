@@ -65,8 +65,6 @@ public class IDCLoginController {
 	private IDCConfig config;
 	@Autowired
 	private UserServiceModel userServiceModel;
-	// This is the version number of the IDC
-	private String versionNumber = "7.0-SNAPSHOT";
 
 	// Internal
 	private static List<IDCServer> servers = null;
@@ -287,12 +285,16 @@ public class IDCLoginController {
 	}
 
 	@RequestMapping(IDCPathConstants.LOGOUT_MAIN_PATH)
-	public String logout(@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session) {
+	public String logout(@ModelAttribute(IDCViewModelConstants.IDC_SESSION) IDCSession session, @CookieValue(value = IDCViewModelConstants.IDC_COOKIE_USER, required = false) String userNameCookie,
+			@CookieValue(value = IDCViewModelConstants.IDC_COOKIE_PASSWORD, required = false) String passwordCookie) {
+		// Message to be sent out to the browser console
 		String msg = session.getUserName() + " has been logged out!";
 
 		// Going a bit overkill here, but just trying to be safe since just 'session = null' was not working as expected
-		session.setUserName(null);
-		session.setPassword(null);
+		userNameCookie = null;
+		passwordCookie = null;
+		session.setUserName(userNameCookie);
+		session.setPassword(passwordCookie);
 		session = null;
 
 		Map<String, String> logoutDetails = new HashMap<String, String>();
