@@ -21,9 +21,11 @@
 
 .session-details {
 	text-align: right;
-	font-size: small; float : right;
+	font-size: small;
+	float: right;
 	padding-right: 10px;
-	float: right; padding-right : 10px;
+	float: right;
+	padding-right: 10px;
 	padding-top: 70px;
 }
 
@@ -85,6 +87,11 @@
 }
 
 .perform-copy-button, .perform-refresh-button {
+	width: 100%;
+}
+
+.center-button {
+	padding-bottom: 0;
 	width: 100%;
 }
 
