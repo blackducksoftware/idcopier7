@@ -86,7 +86,9 @@ jQuery(document).ready(function () {
 					getRefreshStatusForTargetProject(serverName, projectId);
 				}
 			});
-			buildBomDataTable();
+
+			var dataSet = [['Niles', '1.0', 'This is my comment']];
+			buildBomDataTable(dataSet);
 		});
 	})();
 	/**

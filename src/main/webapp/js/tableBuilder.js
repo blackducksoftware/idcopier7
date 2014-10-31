@@ -6,6 +6,7 @@
  */
 function buildBomDataTable(dataSet) {
 	$('#sourceProjectComponentTable').dataTable({
+		"multipleSelection" : true,
 		"retrieve" : true,
 		"searching" : true,
 		"ordering" : true,
@@ -13,9 +14,21 @@ function buildBomDataTable(dataSet) {
 		"bInfo" : true,
 		"data" : dataSet,
 		"columns" : [ {
-			"title" : "Component"
+			data : "active",
+			render : function(data, type, row) {
+				if (type === 'display') {
+					return '<input type="checkbox" class="editor-active">';
+				}
+				return data;
+			},
+			className : "dt-body-center"
 		}, {
-			"title" : "Version"
+			"title" : "Component",
+			"width" : "20%"
+
+		}, {
+			"title" : "Version",
+			"width" : "15%"
 		}, {
 			"title" : "Comment"
 		} ]
