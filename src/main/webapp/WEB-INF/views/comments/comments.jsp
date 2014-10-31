@@ -5,30 +5,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<!-- 
-
-	The initial display after the login. 
-	Contains the server selectors, project pulldown and JSON representing tree paths.
-
- -->
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Protex ID Copier | Main</title>
+<title>Protex ID Copier | Copy Comments</title>
 
 <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.css">
-<link rel="stylesheet"
-	href="css/Fancytree/skin-bootstrap/ui.fancytree.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 <link rel="stylesheet" href="css/menu.css">
 <link rel="stylesheet" href="css/Animate/animate.min.css">
 <link rel="stylesheet" href="css/HubSpot-messenger/messenger.css">
 <link rel="stylesheet"
 	href="css/HubSpot-messenger/messenger-theme-air.css">
-<!-- <link rel="stylesheet" href="css/HubSpot-messenger/messenger-spinner.css"> -->
+<link rel="stylesheet" href="css/DataTables/jquery.dataTables.css">
 
 </head>
 <body>
@@ -50,16 +41,11 @@
 		<nav class="animate">
 			<h1>Menu</h1>
 			<div class="divider"></div>
-
 			<ul>
-				<li><a href="comments" target="_blank"><h4>
-							Copy Comments <span class="glyphicon glyphicon-comment"></span>
-						</h4> </a></li>
 				<li><a href="log" target="_blank"><h4>
 							View Log <span class="glyphicon glyphicon-list-alt"></span>
 						</h4> </a></li>
 			</ul>
-
 			<div class="divider"></div>
 			<ul>
 				<li><a href="login" id="logoutButton"><h4>
@@ -77,7 +63,6 @@
 					</tr>
 				</tbody>
 			</table>
-
 		</div>
 	</div>
 	<hr>
@@ -87,7 +72,6 @@
 				<div class="projects-header-buffer">
 					<p class="header-text">Source Project</p>
 				</div>
-
 				<div class="progress-bar-section">
 					<div class="refresh-progress-button ">
 						<div class="btn-group pull-right btn-spacer">
@@ -114,74 +98,32 @@
 				<table class="table">
 					<tbody>
 						<tr>
-							<td><select class="form-control selectSourceServer"
+							<td><select class="form-control selectSourceCommentServer"
 								title="Select Source Server">
 							</select></td>
 						</tr>
 						<tr>
-							<td><select id="selectSourceProject"
-								name="selectSourceProject"
-								class="form-control selectSourceProject">
+							<td><select id="selectSourceCommentProject"
+								name="selectSourceCommentProject"
+								class="form-control selectSourceCommentProject">
 									<option value="1">No Projects</option>
 							</select></td>
 						</tr>
-						<tr>
-							<td><input class="form-control userSourcePathInput"
-								id="userSourcePathInput" name="userSourcePathInput"
-								placeholder="Source Path"></input></td>
-						</tr>
-						<tr>
-							<td><i>Selected:</i>
-								<h5 class="sourceSelectedPath"></h5></td>
-						</tr>
-						<tr>
-							<td></td>
-						</tr>
 					</tbody>
 				</table>
-				<div id="sourceCodeTree" data-source="ajax" class="sourceCodeTree"></div>
 			</div>
 		</div>
 		<div class="col-sm-2 col-lg-2">
 			<table class="table">
 				<tbody>
-					<!--  These options are invoked when use clicks perform copy button 
-						  Behavior is captured in main.js onclick	
-						  
-						  The default behavior is read from the IDCConfig class and dynamically set via main.js
-						  The name of the checkbox must match the internal java value
-						 -->
-
-
 					<tr>
-						<td><h4>Defer BOM refresh</h4></td>
-						<td><input id="deferBomRefreshCheckBox"
-							name="defer-bom-option" class="checkbox" type="checkbox"
-							value="deferBomRefreshCheckBox"></td>
+						<td><input type="button" id="displayBomButton"
+							value="Display Bill of Materials"
+							class="btn btn-primary center-button" /></td>
 					</tr>
 					<tr>
-						<td><h4>Recursive</h4></td>
-						<td><input id="recursiveCopyCheckBox" name="recursive-option"
-							class="checkbox" type="checkbox" value="recursiveCopyCheckBox" /></td>
-					</tr>
-					<tr>
-						<td><h4>Overwrite Identifications</h4></td>
-						<td><input id="overwriteIDsCheckBox" name="overwrite-option"
-							class="checkbox" type="checkbox" /></td>
-					</tr>
-
-					<!--  Commenting out as part of refresh pulldown change 
-							<tr>
-								<td><h4>Partial BOM Refresh</h4></td>
-								<td><input id="partialBOMCheckBox" name="partial-bom-option"
-									class="checkbox" type="checkbox" /></td>
-							</tr>
-						-->
-					<!--  BUTTONS -->
-
-					<tr>
-						<td colspan="2"><input type="button" id="submitCopyButton"
-							value="Perform Copy" class="btn btn-success perform-copy-button" /></td>
+						<td><input type="button" id="copyCommentsButton"
+							value="Copy Comments" class="btn btn-success center-button" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -225,35 +167,30 @@
 				<table class="table">
 					<tbody>
 						<tr>
-							<td><select class="form-control selectTargetServer"
-								id="selectTargetServer" name="selectTargetServer">
+							<td><select class="form-control selectTargetCommentServer"
+								id="selectTargetCommentServer" name="selectTargetCommentServer">
 							</select></td>
 						</tr>
 						<tr>
-							<td><select id="selectTargetProject"
-								name="selectTargetProject"
-								class="form-control selectTargetProject">
+							<td><select id="selectTargetCommentProject"
+								name="selectTargetCommentProject"
+								class="form-control selectTargetCommentProject">
 									<option value="1">No Projects</option>
 							</select></td>
 						</tr>
-						<tr>
-							<td><input class="form-control userTargetPathInput"
-								id="userTargetPathInput" name="userTargetPathInput"
-								placeholder="Target Path"></input></td>
-						</tr>
-						<tr>
-							<td><i>Selected:</i>
-								<h5 class="targetSelectedPath"></h5></td>
-						</tr>
-						<tr>
-							<td></td>
-						</tr>
 					</tbody>
 				</table>
-				<div id="targetCodeTree" class="targetCodeTree"></div>
 			</div>
 		</div>
-	</div>
+		<div class="col-sm-12 col-lg-12 col-mx-12">
+			<div class="well">
+				<div class="row input-spacing">
+					<table id="sourceProjectComponentTable" class="display"
+						cellspacing="0" width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 
@@ -261,22 +198,15 @@
 <script src="js/libs/jquery/jquery.js"></script>
 <script src="js/libs/twitter-bootstrap/js/bootstrap.js"></script>
 <script src="js/libs/jquery-ui/jquery-ui.custom.js"></script>
-<script src="js/libs/progress/p-loader.js"></script>
 <script src="js/libs/jquery-cookie/jquery.cookie.js"></script>
-<script src="js/libs/Fancytree/jquery.fancytree.js"></script>
-<script src="js/libs/Fancytree/jquery.fancytree.glyph.js"></script>
-<script src="js/libs/Fancytree/jquery.fancytree.persist.js"></script>
 <script src="js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-<!-- <script src="js/libs/bootstrap-growl/bootstrap-growl.min.js"></script> -->
 <script src="js/libs/HubSpot-messenger/messenger.js"></script>
 <script src="js/libs/HubSpot-messenger/messenger-theme-future.js"></script>
 <script src="js/libs/bootstrap-progressbar/bootstrap-progressbar.js"></script>
+<script src="js/libs/DataTables/jquery.dataTables.js"></script>
 <!--  ID Copier JS files -->
-<script src="js/tree.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/progress.js"></script>
-<!--  Keep this last, as main.js invokes other files -->
-<script src="js/main.js"></script>
-
-
+<script src="js/tableBuilder.js"></script>
+<script src="js/comments.js"></script>
 </ html>
