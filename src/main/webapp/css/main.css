@@ -36,6 +36,16 @@
 	transform: translate(-50%, -50%);
 }
 
+.commentProgressBar {
+	width: 100%;
+}
+
+.sourceProjectComponentTable {
+	width: 100%;
+	padding: 10;
+	padding-bottom: 0;
+}
+
 .bold {
 	font-weight: bold;
 }

@@ -72,29 +72,6 @@
 				<div class="projects-header-buffer">
 					<p class="header-text">Source Project</p>
 				</div>
-				<div class="progress-bar-section">
-					<div class="refresh-progress-button ">
-						<div class="btn-group pull-right btn-spacer">
-							<button type="button"
-								class="btn btn-primary dropdown-toggle btn-xs"
-								data-toggle="dropdown">
-								Refresh <span class="caret"></span>
-							</button>
-							<ul class="rp-dropdown-menu dropdown-menu" role="menu">
-								<li><a href="#"
-									onclick="activateRefreshFromPullDown(source, partialRefresh)">Partial</a></li>
-								<li><a href="#"
-									onclick="activateRefreshFromPullDown(source, fullRefresh)">Full</a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="progress">
-						<div id="sourceProgressBar" class="progress-bar"
-							role="progressbar" data-transitiongoal="100"></div>
-					</div>
-				</div>
-
 				<table class="table">
 					<tbody>
 						<tr>
@@ -143,27 +120,6 @@
 				<div class="projects-header-buffer">
 					<p class="header-text">Target Project</p>
 				</div>
-				<div class="progress-bar-section">
-					<div class="refresh-progress-button ">
-						<div class="btn-group pull-right btn-spacer">
-							<button type="button"
-								class="btn btn-primary dropdown-toggle btn-xs"
-								data-toggle="dropdown">
-								Refresh <span class="caret"></span>
-							</button>
-							<ul class="rp-dropdown-menu dropdown-menu" role="menu">
-								<li><a href="#"
-									onclick="activateRefreshFromPullDown('target', partialRefresh)">Partial</a></li>
-								<li><a href="#"
-									onclick="activateRefreshFromPullDown('target', fullRefresh)">Full</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="progress">
-						<div id="targetProgressBar" class="progress-bar"
-							role="progressbar" data-transitiongoal="100"></div>
-					</div>
-				</div>
 				<table class="table">
 					<tbody>
 						<tr>
@@ -183,10 +139,17 @@
 			</div>
 		</div>
 		<div class="col-sm-12 col-lg-12 col-mx-12">
+			<div class="commentProgressBar">
+				<div class="progress">
+					<div id="targetProgressBar" class="progress-bar" role="progressbar"
+						data-transitiongoal="100"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 col-lg-12 col-mx-12">
 			<div class="well">
-				<div class="row input-spacing">
-					<table id="sourceProjectComponentTable" class="display"
-						cellspacing="0" width="100%">
+				<div class="sourceProjectComponentTable">
+					<table id="sourceProjectComponentTable">
 					</table>
 				</div>
 			</div>

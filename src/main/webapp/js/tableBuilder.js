@@ -6,8 +6,11 @@
  */
 function buildBomDataTable(dataSet) {
 	$('#sourceProjectComponentTable').dataTable({
-		"paging" : false,
-		"bInfo" : false,
+		"retrieve" : true,
+		"searching" : true,
+		"ordering" : true,
+		"paging" : true,
+		"bInfo" : true,
 		"data" : dataSet,
 		"columns" : [ {
 			"title" : "Component"
