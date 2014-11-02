@@ -149,7 +149,7 @@
 		<div class="col-sm-12 col-lg-12 col-mx-12">
 			<div class="well">
 				<div class="sourceProjectComponentTable">
-					<table id="sourceProjectComponentTable">
+					<table id="sourceProjectComponentTable" class="table table-bordered" cellspacing="0" width="100%">
 					</table>
 				</div>
 			</div>

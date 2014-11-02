@@ -33,7 +33,7 @@ public class IDCPathConstants {
 	public static final String GET_PROJECTS = "/getProjects";
 	public static final String REFRESH_BOM = "/bomRefresh";
 	public static final String REFRESH_BOM_STATUS = "/bomRefreshStatus";
-	public static final String SESSION_INFO ="/sessionInfo";
+	public static final String SESSION_INFO = "/sessionInfo";
 	/**
 	 * Tree
 	 */
@@ -50,6 +50,11 @@ public class IDCPathConstants {
 	 * Admin
 	 */
 	public static final String ADMIN_PATH = "/admin";
+
+	/**
+	 * /BOM
+	 */
+	public static final String BILL_OF_MATERIALS = "/bom";
 
 	/**
 	 * Comments

@@ -71,6 +71,7 @@ public class IDCViewModelConstants
     public static final String COPY_SOURCE_SERVER = "copy-source-server";
     public static final String COPY_TARGET_SERVER = "copy-target-server";
     public static final String COPY_SOURCE_PROJECT_ID= "copy-source-project-id";
+    public static final String COPY_SOURCE_PROJECT_NAME= "copy-source-project-name";
     public static final String COPY_TARGET_PROJECT_ID = "copy-target-project-id";
     public static final String COPY_SOURCE_PATH = "copy-source-path";
     public static final String COPY_TARGET_PATHS = "copy-target-paths";
