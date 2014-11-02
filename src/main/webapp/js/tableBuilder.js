@@ -14,20 +14,23 @@ function buildBomDataTable(dataSet) {
 		"bInfo" : true,
 		"data" : dataSet,
 		"columns" : [ {
-			data : "active",
+			"title" : "Select",
 			render : function(data, type, row) {
 				if (type === 'display') {
-					return '<input type="checkbox" class="editor-active">';
+					return '<input type="checkbox" class="editor-active" checked>';
 				}
 				return data;
 			},
-			className : "dt-body-center"
+			className : "center-content",
+			"width" : "70px"
 		}, {
 			"title" : "Component",
+			className : "center-content",
 			"width" : "20%"
 
 		}, {
 			"title" : "Version",
+			className : "center-content",
 			"width" : "15%"
 		}, {
 			"title" : "Comment"
