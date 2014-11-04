@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
-import com.blackducksoftware.sdk.protex.common.ComponentInfo;
-import com.blackducksoftware.sdk.protex.project.ProjectApi;
 import com.blackducksoftware.sdk.protex.project.bom.BomApi;
 import com.blackducksoftware.sdk.protex.project.bom.BomComponent;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
@@ -42,7 +40,8 @@ public class ICDCopyCommentsController {
 	}
 
 	@RequestMapping(IDCPathConstants.BILL_OF_MATERIALS)
-	public String copyIDs(@RequestParam(value = IDCViewModelConstants.COPY_SOURCE_SERVER) String sourceServer, @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PROJECT_NAME) String sourceProjectName,
+	public String copyIDs(@RequestParam(value = IDCViewModelConstants.COPY_SOURCE_SERVER) String sourceServer,
+			@RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PROJECT_NAME) String sourceProjectName,
 			@RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PROJECT_ID) String sourceProjectId) {
 
 		String returnMsg = null;
@@ -63,15 +62,11 @@ public class ICDCopyCommentsController {
 				String comment = bomApi.getComponentComment(sourceProjectId, current.getComponentKey());
 				bomItem.setComment(comment);
 				bomItems.add(bomItem);
-
-				System.out.println(new Gson().toJson(bomItem));
 			}
 
-			// System.out.println(new Gson().toJson(bomItems));
-
-			returnMsg = new Gson().toJson(bom);
+			return new Gson().toJson(bomItems);
 		} catch (Exception e) {
-			returnMsg = e.getMessage();
+			log.error("Unable to get BOM for " + sourceProjectName);
 		}
 
 		return returnMsg;
