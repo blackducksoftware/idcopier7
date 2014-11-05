@@ -245,7 +245,6 @@ function verifyCopyParameters(params) {
 	var valid = true;
 	for (var key in params) {
 		var parameter = params[key];
-		displayNotificationMessage(info, 'Info!', parameter, noisy);
 		if (typeof parameter === "string") {
 			if (!parameter) {
 				var msg = 'Invalid value for parameter: ' + key;
