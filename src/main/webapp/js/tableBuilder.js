@@ -1,5 +1,6 @@
 var dataTableData = null;
 var showOnlyComments = true;
+var table;
 
 jQuery(document).ready(
 	function () {
@@ -10,7 +11,21 @@ jQuery(document).ready(
 
 		setBOMData(dataTableData);
 	});
+	$("#selectAllButton").click(function () {
+		console.log("Selecting all components");
+		alterTableCheckBoxes(true)
+	});
+	$("#clearSelectionButton").click(function () {
+		console.log("Unselecting all components");
+		alterTableCheckBoxes(false)
+	});
 });
+
+function alterTableCheckBoxes(value) {
+	$('.editor-active').each(function () { 
+		this.checked = value; 
+	});
+}
 
 function setBOMData(billOfMaterials) {
 	dataTableData = billOfMaterials;
@@ -28,7 +43,7 @@ function setBOMData(billOfMaterials) {
 
 		if (!showOnlyComments) {
 			bomDataSet.push(bomItem);
-		}else if (comment.trim().length > 0){
+		} else if (comment.trim().length > 0) {
 			bomDataSet.push(bomItem);
 		}
 	});
@@ -44,39 +59,39 @@ function setBOMData(billOfMaterials) {
  */
 function buildBomDataTable(dataSet) {
 	console.log("Building BOM table with the comment filter set to " + showOnlyComments);
-	$('#sourceProjectComponentTable').dataTable({
-		"multipleSelection" : true,
-		"destroy" : true,
-		"scrollY" : 250,
-		"searching" : true,
-		"ordering" : true,
-		"paging" : false,
-		"bInfo" : true,
-		"data" : dataSet,
-		"columns" : [{
-				"title" : "Select",
-				className : "center-horizontal",
-				"width" : "40px",
-				render : function (data, type, row) {
-					return '<input type="checkbox" class="editor-active" checked>';
+	table = $('#sourceProjectComponentTable').dataTable({
+			"multipleSelection" : true,
+			"destroy" : true,
+			"scrollY" : 250,
+			"searching" : true,
+			"ordering" : true,
+			"paging" : false,
+			"bInfo" : true,
+			"data" : dataSet,
+			"columns" : [{
+					"title" : "Select",
+					className : "center-horizontal",
+					"width" : "40px",
+					render : function (data, type, row) {
+						return '<input type="checkbox" class="editor-active" checked>';
+					}
+				}, {
+					"title" : "Component",
+					className : "center-horizontal",
+					"width" : "20%"
+				}, {
+					"title" : "Component ID",
+					"visible" : false
+				}, {
+					"title" : "Version",
+					className : "center-horizontal",
+					"width" : "15%"
+				}, {
+					"title" : "Version ID",
+					"visible" : false
+				}, {
+					"title" : "Comment"
 				}
-			}, {
-				"title" : "Component",
-				className : "center-horizontal",
-				"width" : "20%"
-			}, {
-				"title" : "Component ID",
-				"visible" : false
-			}, {
-				"title" : "Version",
-				className : "center-horizontal",
-				"width" : "15%"
-			}, {
-				"title" : "Version ID",
-				"visible" : false
-			}, {
-				"title" : "Comment"
-			}
-		]
-	});
+			]
+		});
 }
