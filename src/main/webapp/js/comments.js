@@ -139,7 +139,7 @@ jQuery(document).ready(function () {
 			'copy-source-project-name' : sourceProjectName
 		};
 		console.log("Displaying the Bill of Materials for " + sourceProjectName + " [" + sourceProjectId + "] on " + sourceServer);
-		
+
 		$.ajax({
 			type : 'POST',
 			url : 'bom',
@@ -148,20 +148,7 @@ jQuery(document).ready(function () {
 				console.log('Successfully retrieved the Bill of Materials');
 				displayNotificationMessage(success, 'Successfully!', 'Successfully retrieved the Bill of Materials', noisy);
 
-				var bomDataSet = [];
-
-				$.each(JSON.parse(billOfMaterials), function (index, currentBomItem) {
-					var componentName = currentBomItem.componentName;
-					var componentId = currentBomItem.componentId;
-					var versionName = currentBomItem.versionName;
-					var versionId = currentBomItem.versionId;
-					var comment = currentBomItem.comment;
-
-					var bomItem = [true ,  componentName, componentId , versionName , versionId , comment];
-					bomDataSet.push(bomItem);
-				});
-				
-				buildBomDataTable(JSON.parse(billOfMaterials));
+				setBOMData(billOfMaterials);
 			},
 			error : function (msg) {
 				console.log('Unable to retrieved the Bill of Materials');
@@ -294,6 +281,10 @@ function displayNotificationMessage(type, heading, message, noiselevel) {
 		showCloseButton : true
 	});
 }
+function checkValue(value) {
+	return "'" + value + "'";
+}
+
 /**
  * Performs the logout for the user
  */

@@ -146,10 +146,43 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-sm-6 col-lg-6 col-mx-6 table-controls">
+			<!-- <div class="btn-group">
+				<button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+					data-toggle="dropdown">
+					Select <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#">Select All <span
+							class="glyphicon glyphicon-plus"></span></a></li>
+					<li><a href="#">Clear All <span
+							class="glyphicon glyphicon-minus"></span></a></li>
+				</ul>
+			</div> -->
+
+			<button type="button"
+				class="btn btn-primary btn-sm table-button-controls">
+				Select All <span class="glyphicon glyphicon-plus"></span>
+			</button>
+			<button type="button"
+				class="btn btn-primary btn-sm table-button-controls">
+				Clear Selected <span class="glyphicon glyphicon-minus"></span>
+			</button>
+		</div>
+		<div class="col-sm-6 col-lg-6 col-mx-6 table-controls">
+			<label class="checkbox go-right" for="onlyShowComponentsWithCommentsCheckBox">
+				<input type="checkbox" name="onlyShowComponentsWithCommentsCheckBox"
+				id="onlyShowComponentsWithCommentsCheckBox"
+				value="Only Show
+				Components With Comments" checked>
+				Only Show Components With Comments
+			</label>
+		</div>
 		<div class="col-sm-12 col-lg-12 col-mx-12">
 			<div class="well">
 				<div class="sourceProjectComponentTable">
-					<table id="sourceProjectComponentTable" class="table table-bordered" cellspacing="0" width="100%">
+					<table id="sourceProjectComponentTable"
+						class="table table-bordered" cellspacing="0" width="100%">
 					</table>
 				</div>
 			</div>

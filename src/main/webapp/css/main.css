@@ -7,6 +7,11 @@
 	line-height: 20px;
 }
 
+.go-right {
+	float: right;
+	padding-right: 0;
+}
+
 /**
  Progress Bar Section
 */
@@ -109,6 +114,22 @@
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.center-horizontal {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.left-middle {
+	text-align: left; position : relative;
+	top: 50%;
+	transform: translateY(-50%);
+	position: relative;
 }
 
 .center-on-screen {
@@ -116,6 +137,14 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+}
+
+.table-controls {
+	padding-bottom: 5;
+}
+
+.table-button-controls {
+	width: 120px;
 }
 
 .main {
