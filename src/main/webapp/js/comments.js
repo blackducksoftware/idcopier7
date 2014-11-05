@@ -90,6 +90,8 @@ jQuery(document).ready(function () {
 	 * Submit copying of commments button.
 	 */
 	$("#copyCommentsButton").on('click', function () {
+		getTableData();
+
 		console.log("Submitting comments copy...");
 		// Copy required values
 		var sourceServer = $('.selectSourceCommentServer').children(":selected").text();

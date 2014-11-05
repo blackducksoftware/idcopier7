@@ -100,7 +100,7 @@
 					</tr>
 					<tr>
 						<td><input type="button" id="copyCommentsButton"
-							value="Copy Comments" class="btn btn-success center-button" /></td>
+							value="Express Copy" class="btn btn-success center-button" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -161,11 +161,11 @@
 			</div> -->
 
 			<button type="button"
-				class="btn btn-primary btn-sm table-button-controls">
+				class="btn btn-primary btn-sm table-button-controls" id="selectAllButton">
 				Select All <span class="glyphicon glyphicon-plus"></span>
 			</button>
 			<button type="button"
-				class="btn btn-primary btn-sm table-button-controls">
+				class="btn btn-primary btn-sm table-button-controls" id="clearSelectionButton">
 				Clear Selected <span class="glyphicon glyphicon-minus"></span>
 			</button>
 		</div>

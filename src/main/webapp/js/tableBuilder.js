@@ -13,17 +13,17 @@ jQuery(document).ready(
 	});
 	$("#selectAllButton").click(function () {
 		console.log("Selecting all components");
-		alterTableCheckBoxes(true)
+		alterTableCheckBoxes(true);
 	});
 	$("#clearSelectionButton").click(function () {
 		console.log("Unselecting all components");
-		alterTableCheckBoxes(false)
+		alterTableCheckBoxes(false);
 	});
 });
 
 function alterTableCheckBoxes(value) {
-	$('.editor-active').each(function () { 
-		this.checked = value; 
+	$('.editor-active').each(function () {
+		this.checked = value;
 	});
 }
 
@@ -73,7 +73,7 @@ function buildBomDataTable(dataSet) {
 					className : "center-horizontal",
 					"width" : "40px",
 					render : function (data, type, row) {
-						return '<input type="checkbox" class="editor-active" checked>';
+						return '<input type="checkbox" class="editor-active">';
 					}
 				}, {
 					"title" : "Component",
@@ -94,4 +94,26 @@ function buildBomDataTable(dataSet) {
 				}
 			]
 		});
+
+	alterTableCheckBoxes(true);
+}
+
+function getTableData() {
+	var data = table.fnGetData();
+
+	for (i = 0; i < data.length; i++) {
+		var currentBomItem = data[i];
+		var selected = currentBomItem[0];
+		var componentName = currentBomItem[1].toString();
+		var componentId = currentBomItem[2].toString();
+		var versionName = currentBomItem[3].toString();
+		var versionId = currentBomItem[4].toString();
+		var comment = currentBomItem[5].toString();
+
+		console.log(selected + " - " + componentName + " - " + componentId + " - " + versionName + " - " + versionId + " - " + comment);
+		// console.log(" > " + table.cell(i, 0).data());
+		console.log();
+	}
+
+	console.log(data);
 }
