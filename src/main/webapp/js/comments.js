@@ -8,21 +8,23 @@ var target = "Target";
 var locations = [source, target];
 // Session Variables
 var usernameConstant = 'username';
-// Growl Types
-var success = 'success';
-var info = 'info';
-var warning = 'warning';
-var error = 'error';
-// Growl level
-// This toggles the growl messages
-var noisy = 0;
-var quiet = 1;
-var noiseLevel = quiet;
+
+// If the 'display bom' is clicked, this is flipped to true.
+var expressCopy = false;
+/**
+ * Loader
+ */
 jQuery(document).ready(function () {
 	// Gets the user that is currently logged in
 	$.getJSON("sessionInfo", function (sessionData) {
 		$('.username-data').text(sessionData[usernameConstant]);
 	});
+	
+	/**
+	 * Hides the progress animator
+	 */
+	$('.commentLoader').hide();
+	
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
@@ -86,10 +88,19 @@ jQuery(document).ready(function () {
 			buildBomDataTable(null);
 		});
 	})();
+	
+	
 	/**
-	 * Submit copying of commments button.
+	 * Can either be Express Copy
+	 * or Copy Selected.
+	 * 
+	 * The behavior is governed by the user's previous
+	 * actions. 
 	 */
-	$("#copyCommentsButton").on('click', function () {
+	$("#copyCommentsButton").on('click', function () 
+	{
+		var restfulPath = 'copyComments';
+
 		getTableData();
 
 		console.log("Submitting comments copy...");
@@ -104,7 +115,8 @@ jQuery(document).ready(function () {
 			'copy-target-server' : targetServer,
 			'copy-source-project-id' : sourceProjectId,
 			'copy-target-project-id' : targetProjectId,
-			'copy-comments-components' : components
+			'copy-comments-components' : components,
+			'copy-express' : expressCopy
 		};
 		var verified = verifyCopyParameters(params);
 		if (!verified) {
@@ -113,14 +125,20 @@ jQuery(document).ready(function () {
 		// Perform the Copying of comments
 		$.ajax({
 			type : 'POST',
-			url : 'copyComments',
+			url : restfulPath,
 			data : params,
+			// TODO: Can this be repurposed?
+			beforeSend: function()
+			{
+				$('.commentLoader').show();
+			},	
+			complete: function()
+			{
+				$('.commentLoader').hide();
+			},
 			success : function (msg) {
 				console.log(msg);
 				displayNotificationMessage(success, 'Successfully copied comments', msg, noiseLevel);
-				// Call the BOM refresh
-				// if necessary
-				// performBOMRefresh("target", targetServer, targetProjectId, partialBOMOption);
 			},
 			error : function (msg) {
 				console.log(msg);
@@ -128,7 +146,13 @@ jQuery(document).ready(function () {
 			}
 		});
 	});
-	$("#displayBomButton").on('click', function () {
+	
+	/**
+	 * Loads the BOM into the table
+	 */
+	$("#displayBomButton").on('click', function () 
+	{
+		expressCopy = true;
 		var sourceServer = $('.selectSourceCommentServer').children(":selected").text();
 		var sourceProjectId = $('.selectSourceCommentProject').children(":selected").attr("id");
 		var sourceProjectName = $('.selectSourceCommentProject').children(":selected").text();
@@ -144,17 +168,25 @@ jQuery(document).ready(function () {
 
 		$.ajax({
 			type : 'POST',
-			url : 'bom',
+			url : 'displayBom',
 			data : params,
+			beforeSend: function()
+			{
+				$('.commentLoader').show();
+			},	
+			complete: function()
+			{
+				$('.commentLoader').hide();
+			},
 			success : function (billOfMaterials) {
 				console.log('Successfully retrieved the Bill of Materials');
-				displayNotificationMessage(success, 'Successfully!', 'Successfully retrieved the Bill of Materials', noisy);
+				displayNotificationMessage(success, 'BOM Display', 'Successfully retrieved the Bill of Materials', noisy);
 
 				setBOMData(billOfMaterials);
 			},
 			error : function (msg) {
 				console.log('Unable to retrieved the Bill of Materials');
-				displayNotificationMessage(error, 'Unable to retrieved the Bill of Materials', msg, noisy);
+				displayNotificationMessage(error, 'BOM Display', msg, noisy);
 			}
 		});
 	});
@@ -195,7 +227,6 @@ function setProjects(sender, message, data) {
 		if (cachedProjectId === value.projectId) {
 			displayNotificationMessage(info, "Loading Cached Comment Project", "Found cached project ID", noiseLevel);
 			projectSelectorDiv.append("<option id=\"" + value.projectId + "\" selected=true>" + value.name + "</option>");
-			// loadFancyTree(sender, cachedServerName, cachedProjectId);
 		} else {
 			projectSelectorDiv.append("<option id=\"" + value.projectId + "\">" + value.name + "</option>");
 		}
@@ -215,89 +246,9 @@ function getProjectIDforLocation(locationValue) {
 	}
 	return projectId;
 }
-/**
- * Uses the jQuery deferred/promise mechanism to wait until our JSON is
- * retrieved This function handles all success/fail calls in one location
- *
- * @param path
- * @returns
- */
-function processJSON(path, source, widgetName) {
-	var msg = "Processed " + source + " " + widgetName;
-	var deferred = $.Deferred();
-	$.getJSON(path, function (data) {
-		deferred.resolve(data);
-	}).fail(function (jqxhr, textStatus, error) {
-		displayNotificationMessage(error, "Error: " + msg, jqxhr.responseText, noisy);
-	}).done(function () {
-		// Always show error
-		displayNotificationMessage(success, "Processing", msg, noiseLevel);
-	});
-	return deferred.promise();
-}
-/**
- * Little function to test the parameters for some client-side validation
- *
- * @param params
- */
-function verifyCopyParameters(params) {
-	console.log("Verifying params");
-	var valid = true;
-	for (var key in params) {
-		var parameter = params[key];
-		if (typeof parameter === "string") {
-			if (!parameter) {
-				var msg = 'Invalid value for parameter: ' + key;
-				displayNotificationMessage(error, 'ERROR!', msg, noisy);
-				// alert("ERROR: Null value for parameter: " + key);
-				valid = false;
-			}
-		}
-	}
-	return valid;
-}
-/**
- * This will display any HubSpot Messaging message we want to show up on the
- * screen
- */
-function displayNotificationMessage(type, heading, message, noiselevel) {
-	if (noiselevel == quiet)
-		return;
-	var output;
-	// Check to see that the heading has been defined
-	if (heading !== undefined) {
-		output = '<b>' + heading + '</b>';
-	}
-	// Check to see that the message has been defined
-	if (message !== undefined) {
-		output = output + '<br />' + message;
-	}
-	Messenger.options = {
-		extraClasses : 'messenger-fixed messenger-on-bottom messenger-on-right',
-		theme : 'air'
-	};
-	Messenger().post({
-		message : output,
-		type : type,
-		showCloseButton : true
-	});
-}
+
+
 function checkValue(value) {
 	return "'" + value + "'";
 }
 
-/**
- * Performs the logout for the user
- */
-$("#logoutButton").on('click', function () {
-	$.ajax({
-		type : 'POST',
-		url : 'logout',
-		success : function (msg) {
-			console.log(msg);
-		},
-		error : function (msg) {
-			console.log(msg);
-		}
-	});
-});

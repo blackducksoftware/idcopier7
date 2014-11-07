@@ -52,7 +52,7 @@
 			<div class="divider"></div>
 
 			<ul>
-				<li><a href="comments" target="_blank"><h4>
+				<li><a href="displayComments" target="_blank"><h4>
 							Copy Comments <span class="glyphicon glyphicon-comment"></span>
 						</h4> </a></li>
 				<li><a href="log" target="_blank"><h4>
@@ -275,8 +275,9 @@
 <script src="js/tree.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/progress.js"></script>
+<!--  Common JS functions shared between main and comments -->
+<script src="js/common.js"></script>
 <!--  Keep this last, as main.js invokes other files -->
 <script src="js/main.js"></script>
-
 
 </ html>

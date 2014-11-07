@@ -75,7 +75,10 @@ public class IDCViewModelConstants
     public static final String COPY_TARGET_PROJECT_ID = "copy-target-project-id";
     public static final String COPY_SOURCE_PATH = "copy-source-path";
     public static final String COPY_TARGET_PATHS = "copy-target-paths";
-     
+    // This is for copying comments
+    public static final String COPY_EXPRESS = "copy-express";
+    
+    
     //// These are optional
     // Should the copying recursively traverse the children
     public static final String COPY_RECURSIVE_OPTION = "recursive-option";

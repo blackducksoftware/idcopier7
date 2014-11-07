@@ -12,6 +12,7 @@
 
 <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
 <link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/comments.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/justified-nav.css">
 <link rel="stylesheet" href="css/menu.css">
@@ -139,12 +140,15 @@
 			</div>
 		</div>
 		<div class="col-sm-12 col-lg-12 col-mx-12">
-			<div class="commentProgressBar">
-				<div class="progress">
-					<div id="targetProgressBar" class="progress-bar" role="progressbar"
-						data-transitiongoal="100"></div>
-				</div>
+		<center>
+			<div class="commentLoader">
+					<div class="progress" style="height:10px;">
+			  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+			    <span class="sr-only"></span>
+			  </div>
 			</div>
+			</div>
+			</center>
 		</div>
 		<div class="col-sm-6 col-lg-6 col-mx-6 table-controls">
 			<!-- <div class="btn-group">
@@ -204,5 +208,8 @@
 <script src="js/menu.js"></script>
 <script src="js/progress.js"></script>
 <script src="js/tableBuilder.js"></script>
+<!-- This contains some of the helper methods -->
+<script src="js/common.js"></script>
 <script src="js/comments.js"></script>
+
 </ html>

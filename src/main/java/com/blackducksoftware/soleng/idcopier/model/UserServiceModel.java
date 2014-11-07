@@ -8,6 +8,8 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.model;
 
+import java.io.Serializable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
@@ -24,7 +26,7 @@ import com.blackducksoftware.soleng.idcopier.service.ProjectService;
  *  @date Oct 16, 2014
  *
  */
-public class UserServiceModel
+public class UserServiceModel implements Serializable
 {
     private LoginService loginService;
     private ProjectService projectService;
