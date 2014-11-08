@@ -87,7 +87,6 @@ public class ICDCopyCommentsController
     @RequestMapping(IDCPathConstants.COPY_COMMENTS)
     public String copyComments(
 	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_SERVER) String sourceServer,
-	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PROJECT_NAME) String sourceProjectName,
 	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PROJECT_ID) String sourceProjectId,
 	    
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_SERVER) String targetServer,

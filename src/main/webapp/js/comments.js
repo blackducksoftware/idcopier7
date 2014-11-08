@@ -9,8 +9,8 @@ var locations = [source, target];
 // Session Variables
 var usernameConstant = 'username';
 
-// If the 'display bom' is clicked, this is flipped to true.
-var expressCopy = false;
+// If the 'display bom' is clicked, this is flipped to false, since it will no longer be express.
+var expressCopy = true;
 /**
  * Loader
  */
@@ -99,8 +99,6 @@ jQuery(document).ready(function () {
 	 */
 	$("#copyCommentsButton").on('click', function () 
 	{
-		var restfulPath = 'copyComments';
-
 		getTableData();
 
 		console.log("Submitting comments copy...");
@@ -109,13 +107,12 @@ jQuery(document).ready(function () {
 		var targetServer = $('.selectTargetCommentServer').children(":selected").text();
 		var sourceProjectId = $('.selectSourceCommentProject').children(":selected").attr("id");
 		var targetProjectId = $('.selectTargetCommentProject').children(":selected").attr("id");
-		var components = $('.sourceSelectedPath').text();
+
 		var params = {
 			'copy-source-server' : sourceServer,
 			'copy-target-server' : targetServer,
 			'copy-source-project-id' : sourceProjectId,
 			'copy-target-project-id' : targetProjectId,
-			'copy-comments-components' : components,
 			'copy-express' : expressCopy
 		};
 		var verified = verifyCopyParameters(params);
@@ -125,7 +122,7 @@ jQuery(document).ready(function () {
 		// Perform the Copying of comments
 		$.ajax({
 			type : 'POST',
-			url : restfulPath,
+			url : 'copyComments',
 			data : params,
 			// TODO: Can this be repurposed?
 			beforeSend: function()
@@ -152,7 +149,7 @@ jQuery(document).ready(function () {
 	 */
 	$("#displayBomButton").on('click', function () 
 	{
-		expressCopy = true;
+		expressCopy = false;
 		var sourceServer = $('.selectSourceCommentServer').children(":selected").text();
 		var sourceProjectId = $('.selectSourceCommentProject').children(":selected").attr("id");
 		var sourceProjectName = $('.selectSourceCommentProject').children(":selected").text();
