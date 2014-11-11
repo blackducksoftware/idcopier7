@@ -73,7 +73,7 @@ function buildBomDataTable(dataSet) {
 					className : "center-horizontal",
 					"width" : "40px",
 					render : function (data, type, row) {
-						return '<input type="checkbox" class="editor-active">';
+						return '<input type="checkbox" class="editor-active" id="' + row[2] + '">';
 					}
 				}, {
 					"title" : "Component",
@@ -99,21 +99,27 @@ function buildBomDataTable(dataSet) {
 }
 
 function getTableData() {
-	var data = table.fnGetData();
+	// Gets the selected inputs only.
+	var data = table.$('input, select');
 
-	for (i = 0; i < data.length; i++) {
+	for (i = 0; i < data.length; i++) 
+	{
+		var selectedIDs = [];
 		var currentBomItem = data[i];
-		var selected = currentBomItem[0];
-		var componentName = currentBomItem[1].toString();
-		var componentId = currentBomItem[2].toString();
-		var versionName = currentBomItem[3].toString();
-		var versionId = currentBomItem[4].toString();
-		var comment = currentBomItem[5].toString();
+		
+		var id = currentBomItem.id;
+		selectedIDs[i] = id;
+//		var selected = currentBomItem[0];
+//		var componentName = currentBomItem[1].toString();
+//		var componentId = currentBomItem[2].toString();
+//		var versionName = currentBomItem[3].toString();
+//		var versionId = currentBomItem[4].toString();
+//		var comment = currentBomItem[5].toString();
 
-		console.log(selected + " - " + componentName + " - " + componentId + " - " + versionName + " - " + versionId + " - " + comment);
+		//console.log(selected + " - " + componentName + " - " + componentId + " - " + versionName + " - " + versionId + " - " + comment);
 		// console.log(" > " + table.cell(i, 0).data());
-		console.log();
+		console.log("ID selected: " + id);
 	}
-
+	return selectedIDs;
 	console.log(data);
 }

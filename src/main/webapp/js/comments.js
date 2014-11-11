@@ -1,11 +1,6 @@
 /**
  * Globals
  */
-var servers = "servers";
-var source = "Source";
-var target = "Target";
-// The locations array will be used to auto trigger internal jQuery functions
-var locations = [source, target];
 // Session Variables
 var usernameConstant = 'username';
 
@@ -21,10 +16,10 @@ jQuery(document).ready(function () {
 	});
 	
 	/**
-	 * Hides the progress animator
+	 * Hides the progress animators
 	 */
 	$('.commentLoader').hide();
-	
+	$('.copyLoader').hide();
 	/**
 	 * Populates the pulldowns Assign onChange behavior
 	 */
@@ -99,7 +94,7 @@ jQuery(document).ready(function () {
 	 */
 	$("#copyCommentsButton").on('click', function () 
 	{
-		getTableData();
+		var idArray = getTableData();
 
 		console.log("Submitting comments copy...");
 		// Copy required values
@@ -113,8 +108,15 @@ jQuery(document).ready(function () {
 			'copy-target-server' : targetServer,
 			'copy-source-project-id' : sourceProjectId,
 			'copy-target-project-id' : targetProjectId,
+			'copy-comment-ids' : idArray,
 			'copy-express' : expressCopy
 		};
+		
+		if(!expressCopy)
+		{
+			
+		}
+		
 		var verified = verifyCopyParameters(params);
 		if (!verified) {
 			return false;
@@ -124,22 +126,23 @@ jQuery(document).ready(function () {
 			type : 'POST',
 			url : 'copyComments',
 			data : params,
+			traditional: true,
 			// TODO: Can this be repurposed?
 			beforeSend: function()
 			{
-				$('.commentLoader').show();
+				$('.copyLoader').show();
 			},	
 			complete: function()
 			{
-				$('.commentLoader').hide();
+				$('.copyLoader').hide();
 			},
 			success : function (msg) {
 				console.log(msg);
-				displayNotificationMessage(success, 'Successfully copied comments', msg, noiseLevel);
+				displayNotificationMessage(success, 'Copying Comments', msg, noisy);
 			},
 			error : function (msg) {
 				console.log(msg);
-				displayNotificationMessage(error, 'Failed to copy identifications', msg, noisy);
+				displayNotificationMessage(error, 'Error Copying Comments', msg, noisy);
 			}
 		});
 	});
@@ -229,19 +232,6 @@ function setProjects(sender, message, data) {
 		}
 		console.log("Outputting project: " + value);
 	});
-}
-/**
- * Helper method to return project ID of pulldown
- *
- * @param location
- */
-function getProjectIDforLocation(locationValue) {
-	var projectSelectorDiv = ".select" + locationValue + "Project";
-	var projectId = $(projectSelectorDiv).children(":selected").attr("id");
-	if (projectId === null) {
-		displayNotificationMessage(error, "Error getting project ID", "Project ID cannot be determined", noisy);
-	}
-	return projectId;
 }
 
 

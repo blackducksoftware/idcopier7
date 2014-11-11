@@ -3,11 +3,7 @@
  */
 // The list of selected target paths
 var targetPaths = "";
-var servers = "servers";
-var source = "Source";
-var target = "Target";
-// The locations array will be used to auto trigger internal jQuery functions
-var locations = [ source, target ];
+
 // Session Variables
 var usernameConstant = 'username';
 var versionConstant = 'version';
@@ -281,19 +277,7 @@ function setProjects(sender, message, data) {
 		console.log("Outputting project: " + value);
 	});
 }
-/**
- * Helper method to return project ID of pulldown
- * 
- * @param location
- */
-function getProjectIDforLocation(locationValue) {
-	var projectSelectorDiv = ".select" + locationValue + "Project";
-	var projectId = $(projectSelectorDiv).children(":selected").attr("id");
-	if (projectId == null) {
-		displayNotificationMessage(error, "Error getting project ID", "Project ID cannot be determined", noisy);
-	}
-	return projectId;
-}
+
 function getPath(path) {
 	var currentNode = $('.sourceCodeTree').dynatree("getTree").getNodeByKey(path);
 	if (currentNode !== null) {

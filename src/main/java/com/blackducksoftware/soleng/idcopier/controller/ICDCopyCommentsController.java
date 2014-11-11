@@ -1,7 +1,9 @@
 package com.blackducksoftware.soleng.idcopier.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.blackducksoftware.sdk.fault.SdkFault;
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.sdk.protex.common.ComponentInfo;
+import com.blackducksoftware.sdk.protex.common.ComponentKey;
 import com.blackducksoftware.sdk.protex.project.bom.BomApi;
 import com.blackducksoftware.sdk.protex.project.bom.BomComponent;
 import com.blackducksoftware.soleng.idcopier.constants.IDCPathConstants;
@@ -32,6 +36,7 @@ import com.google.gson.Gson;
 public class ICDCopyCommentsController
 {
     static Logger log = Logger.getLogger(ICDAdminController.class);
+    private Map<String, BomComponent> sourceBomComments = null;
 
     @Autowired
     private UserServiceModel userServiceModel;
@@ -57,22 +62,26 @@ public class ICDCopyCommentsController
 	try
 	{
 	    LoginService loginService = userServiceModel.getLoginService();
-
 	    ProtexServerProxy sourceProxy = loginService.getProxy(sourceServer);
-
 	    BomApi bomApi = sourceProxy.getBomApi();
+
 	    List<BomComponent> bom = bomApi.getBomComponents(sourceProjectId);
 	    List<IDCBomItem> bomItems = new ArrayList<IDCBomItem>();
 
-	 
-	    
-	    for (BomComponent current : bom)
+	    // Want to reset this map every time.
+	    sourceBomComments = new HashMap<String, BomComponent>();
+
+	    for (BomComponent bomComponent : bom)
 	    {
-		IDCBomItem bomItem = new IDCBomItem(current);
+		IDCBomItem idcBomItem = new IDCBomItem(bomComponent);
 		String comment = bomApi.getComponentComment(sourceProjectId,
-			current.getComponentKey());
-		bomItem.setComment(comment);
-		bomItems.add(bomItem);
+			bomComponent.getComponentKey());
+
+		idcBomItem.setComment(comment);
+		bomItems.add(idcBomItem);
+
+		sourceBomComments.put(bomComponent.getComponentKey()
+			.getComponentId(), bomComponent);
 	    }
 	    log.info("Retrieved components, count: " + bom.size());
 	    return new Gson().toJson(bomItems);
@@ -83,23 +92,97 @@ public class ICDCopyCommentsController
 
 	return returnMsg;
     }
-    
+
     @RequestMapping(IDCPathConstants.COPY_COMMENTS)
     public String copyComments(
 	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_SERVER) String sourceServer,
 	    @RequestParam(value = IDCViewModelConstants.COPY_SOURCE_PROJECT_ID) String sourceProjectId,
-	    
+
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_SERVER) String targetServer,
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_PROJECT_ID) String targetProjectId,
+	    @RequestParam(value = IDCViewModelConstants.COPY_COMMENT_IDS) String[] commentIds,
 	    @RequestParam(value = IDCViewModelConstants.COPY_EXPRESS) Boolean expressCopy)
-	    
+
     {
 	String returnMsg = "";
-	
+
 	log.info("Copying comments, express copy set to: " + expressCopy);
-	
-	
-	
+
+	if (sourceProjectId.equals(targetProjectId))
+	{
+	    String msg = "Project source and target IDs cannot be the same";
+	    log.warn(msg);
+	    return msg;
+	}
+
+	try
+	{
+	    LoginService loginService = userServiceModel.getLoginService();
+	    ProtexServerProxy sourceProxy = loginService.getProxy(sourceServer);
+	    ProtexServerProxy targetProxy = loginService.getProxy(targetServer);
+	    BomApi sourceBomApi = sourceProxy.getBomApi();
+	    BomApi targetBomApi = targetProxy.getBomApi();
+
+	    StringBuilder successMsg = new StringBuilder();
+
+	    List<BomComponent> sourceBomList = new ArrayList<BomComponent>();
+	    if (expressCopy)
+	    {
+		sourceBomList = sourceBomApi.getBomComponents(sourceProjectId);
+	    } else
+	    {
+		for (String id : commentIds)
+		{
+		    if (id.length() > 0)
+		    {
+			BomComponent comp = sourceBomComments.get(id);
+			if (comp == null)
+			    log.warn("Internal cache does not contain bom component for id: "
+				    + id);
+			sourceBomList.add(comp);
+		    }
+		}
+	    }
+
+	    for (BomComponent component : sourceBomList)
+	    {
+		ComponentKey key = component.getComponentKey();
+		try
+		{
+		    // Get the comment from the existing source
+		    String comment = sourceBomApi.getComponentComment(
+			    sourceProjectId, key);
+
+		    // Apply it to the target
+		    if (comment != null && comment.length() > 0)
+		    {
+
+			targetBomApi.setComponentComment(targetProjectId, key,
+				comment);
+
+			successMsg.append("Copied comment with id: "
+				+ key.getComponentId());
+			successMsg.append("\n");
+		    }
+
+		} catch (SdkFault e)
+		{
+		    successMsg
+			    .append("Could not find component key on target server with id: "
+				    + key.getComponentId());
+		    successMsg.append("\n");
+		}
+	    }
+
+	    returnMsg = successMsg.toString();
+	    log.info(returnMsg);
+
+	} catch (Exception e)
+	{
+	    log.error(e.getMessage());
+	    returnMsg = "Unable to copy comments, cause: " + e.getMessage();
+	}
+
 	return returnMsg;
     }
 }

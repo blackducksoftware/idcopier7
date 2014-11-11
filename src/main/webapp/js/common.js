@@ -10,6 +10,14 @@
  * GLOBALS
  */
 	// Growl Types
+
+
+	var servers = "servers";
+	var source = "Source";
+	var target = "Target";
+	// The locations array will be used to auto trigger internal jQuery functions
+	var locations = [source, target];
+
 	var success = 'success';
 	var info = 'info';
 	var warning = 'warning';
@@ -109,6 +117,21 @@ function displayNotificationMessage(type, heading, message, noiselevel) {
 		showCloseButton : true
 	});
 }
+
+/**
+ * Helper method to return project ID of pulldown
+ * 
+ * @param location
+ */
+function getProjectIDforLocation(locationValue) {
+	var projectSelectorDiv = ".select" + locationValue + "Project";
+	var projectId = $(projectSelectorDiv).children(":selected").attr("id");
+	if (projectId == null) {
+		displayNotificationMessage(error, "Error getting project ID", "Project ID cannot be determined", noisy);
+	}
+	return projectId;
+}
+
 /**
  * Performs the logout for the user
  */

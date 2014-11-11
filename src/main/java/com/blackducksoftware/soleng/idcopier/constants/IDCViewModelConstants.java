@@ -77,6 +77,8 @@ public class IDCViewModelConstants
     public static final String COPY_TARGET_PATHS = "copy-target-paths";
     // This is for copying comments
     public static final String COPY_EXPRESS = "copy-express";
+    public static final String COPY_COMMENT_IDS = "copy-comment-ids";
+  
     
     
     //// These are optional

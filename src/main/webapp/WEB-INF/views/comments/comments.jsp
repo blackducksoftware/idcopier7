@@ -140,15 +140,28 @@
 			</div>
 		</div>
 		<div class="col-sm-12 col-lg-12 col-mx-12">
-		<center>
+
 			<div class="commentLoader">
-					<div class="progress" style="height:10px;">
-			  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-			    <span class="sr-only"></span>
-			  </div>
+				<div class="progress" style="height: 10px;">
+					<div class="progress-bar progress-bar-striped active"
+						role="progressbar" aria-valuenow="100" aria-valuemin="0"
+						aria-valuemax="100" style="width: 100%">
+						<span class="sr-only"></span>
+					</div>
+				</div>
 			</div>
+			
+			<div class="copyLoader">
+				<div class="progress" style="height: 10px;">
+					<div class="progress-bar progress-bar-success progress-bar-striped active"
+						role="progressbar" aria-valuenow="100" aria-valuemin="0"
+						aria-valuemax="100" style="width: 100%">
+						<span class="sr-only"></span>
+					</div>
+				</div>
 			</div>
-			</center>
+			
+
 		</div>
 		<div class="col-sm-6 col-lg-6 col-mx-6 table-controls">
 			<!-- <div class="btn-group">
@@ -165,17 +178,20 @@
 			</div> -->
 
 			<button type="button"
-				class="btn btn-primary btn-sm table-button-controls" id="selectAllButton">
+				class="btn btn-primary btn-sm table-button-controls"
+				id="selectAllButton">
 				Select All <span class="glyphicon glyphicon-plus"></span>
 			</button>
 			<button type="button"
-				class="btn btn-primary btn-sm table-button-controls" id="clearSelectionButton">
+				class="btn btn-primary btn-sm table-button-controls"
+				id="clearSelectionButton">
 				Clear Selected <span class="glyphicon glyphicon-minus"></span>
 			</button>
 		</div>
 		<div class="col-sm-6 col-lg-6 col-mx-6 table-controls">
-			<label class="checkbox go-right" for="onlyShowComponentsWithCommentsCheckBox">
-				<input type="checkbox" name="onlyShowComponentsWithCommentsCheckBox"
+			<label class="checkbox go-right"
+				for="onlyShowComponentsWithCommentsCheckBox"> <input
+				type="checkbox" name="onlyShowComponentsWithCommentsCheckBox"
 				id="onlyShowComponentsWithCommentsCheckBox"
 				value="Only Show
 				Components With Comments" checked>
@@ -208,7 +224,6 @@
 <script src="js/menu.js"></script>
 <script src="js/progress.js"></script>
 <script src="js/tableBuilder.js"></script>
-<!-- This contains some of the helper methods -->
 <script src="js/common.js"></script>
 <script src="js/comments.js"></script>
 
