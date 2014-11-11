@@ -6,6 +6,10 @@ var usernameConstant = 'username';
 
 // If the 'display bom' is clicked, this is flipped to false, since it will no longer be express.
 var expressCopy = true;
+
+// The copy button
+var copyButton = $("#copyCommentsButton");
+
 /**
  * Loader
  */
@@ -92,7 +96,7 @@ jQuery(document).ready(function () {
 	 * The behavior is governed by the user's previous
 	 * actions. 
 	 */
-	$("#copyCommentsButton").on('click', function () 
+	copyButton.on('click', function () 
 	{
 		var idArray = getTableData();
 
@@ -152,7 +156,7 @@ jQuery(document).ready(function () {
 	 */
 	$("#displayBomButton").on('click', function () 
 	{
-		expressCopy = false;
+		// Gather variables
 		var sourceServer = $('.selectSourceCommentServer').children(":selected").text();
 		var sourceProjectId = $('.selectSourceCommentProject').children(":selected").attr("id");
 		var sourceProjectName = $('.selectSourceCommentProject').children(":selected").text();
@@ -183,6 +187,10 @@ jQuery(document).ready(function () {
 				displayNotificationMessage(success, 'BOM Display', 'Successfully retrieved the Bill of Materials', noisy);
 
 				setBOMData(billOfMaterials);
+				// Change button of copying
+				copyButton.val("Copy Selected");
+				// Disable express copy
+				expressCopy = false;
 			},
 			error : function (msg) {
 				console.log('Unable to retrieved the Bill of Materials');

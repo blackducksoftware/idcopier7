@@ -102,9 +102,9 @@ function getTableData() {
 	// Gets the selected inputs only.
 	var data = table.$('input, select');
 
-	for (i = 0; i < data.length; i++) 
+	var selectedIDs = [];
+	for (var i = 0; i < data.length; i++) 
 	{
-		var selectedIDs = [];
 		var currentBomItem = data[i];
 		
 		var id = currentBomItem.id;

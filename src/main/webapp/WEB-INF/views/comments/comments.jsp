@@ -100,8 +100,10 @@
 							class="btn btn-primary center-button" /></td>
 					</tr>
 					<tr>
-						<td><input type="button" id="copyCommentsButton"
-							value="Express Copy" class="btn btn-success center-button" /></td>
+						<td>
+						<input type="button" id="copyCommentsButton"
+							value="Express Copy" class="btn btn-success center-button" />
+						</td>
 					</tr>
 				</tbody>
 			</table>
