@@ -38,8 +38,9 @@ function setBOMData(billOfMaterials) {
 		var versionName = new String(currentBomItem.versionName);
 		var versionId = new String(currentBomItem.versionId);
 		var comment = new String(currentBomItem.comment);
-
-		bomItem = [true, componentName, componentId, versionName, versionId, comment];
+		var uniqueID = new String(currentBomItem.uniqueID);
+		
+		bomItem = [true, componentName, componentId, versionName, versionId, comment, uniqueID];
 
 		if (!showOnlyComments) {
 			bomDataSet.push(bomItem);
@@ -73,7 +74,7 @@ function buildBomDataTable(dataSet) {
 					className : "center-horizontal",
 					"width" : "40px",
 					render : function (data, type, row) {
-						return '<input type="checkbox" class="editor-active" id="' + row[2] + '">';
+						return '<input type="checkbox" class="editor-active" id="' + row[6] + '">';
 					}
 				}, {
 					"title" : "Component",
@@ -92,34 +93,29 @@ function buildBomDataTable(dataSet) {
 				}, {
 					"title" : "Comment"
 				}
+				, {
+					"title" : "Unique ID",
+					"visible": false					
+				}
 			]
 		});
 
 	alterTableCheckBoxes(true);
+	
 }
 
 function getTableData() {
 	// Gets the selected inputs only.
-	var data = table.$('input, select');
-
 	var selectedIDs = [];
-	for (var i = 0; i < data.length; i++) 
-	{
-		var currentBomItem = data[i];
-		
-		var id = currentBomItem.id;
-		selectedIDs[i] = id;
-//		var selected = currentBomItem[0];
-//		var componentName = currentBomItem[1].toString();
-//		var componentId = currentBomItem[2].toString();
-//		var versionName = currentBomItem[3].toString();
-//		var versionId = currentBomItem[4].toString();
-//		var comment = currentBomItem[5].toString();
+	$('#sourceProjectComponentTable input[type=checkbox]:checked').each(function() 
+	{ 
+		var checkedId = this.id;
+		selectedIDs.push(checkedId);
 
-		//console.log(selected + " - " + componentName + " - " + componentId + " - " + versionName + " - " + versionId + " - " + comment);
-		// console.log(" > " + table.cell(i, 0).data());
-		console.log("ID selected: " + id);
-	}
+		console.log("ID selected: " + checkedId);
+	});
+	
+
 	return selectedIDs;
 	console.log(data);
 }

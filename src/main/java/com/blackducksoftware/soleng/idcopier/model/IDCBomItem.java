@@ -1,39 +1,52 @@
 package com.blackducksoftware.soleng.idcopier.model;
 
+import com.blackducksoftware.sdk.protex.common.ComponentInfo;
 import com.blackducksoftware.sdk.protex.project.bom.BomComponent;
 
 @SuppressWarnings("unused")
-public class IDCBomItem {
-	private String componentName;
-	private String componentId;
-	private String versionName;
-	private String versionId;
-	private String comment;
+public class IDCBomItem
+{
+    // This is a concatenation of the comp and version Ids.
+    // This is also the same ID on the UI and is essential for caching.
+    private String uniqueID = "";
+    private String componentName;
+    private String componentId;
+    private String versionName;
+    private String versionId;
+    private String comment;
 
-	public IDCBomItem(BomComponent bomComponent) {
-		this.componentName = bomComponent.getComponentName();
-		this.componentId = bomComponent.getComponentKey().getComponentId();
+    public IDCBomItem(BomComponent componentInfo)
+    {
+	this.componentName = componentInfo.getComponentName();
+	this.componentId = componentInfo.getComponentKey().getComponentId();
 
-		// Set the version Name such that if it is null, it will now read 'Unspecified'
-		if (bomComponent.getVersionName() == null) {
-			this.versionName = "Unspecified";
-		} else {
-			this.versionName = bomComponent.getVersionName();
-		}
-
-		// Set the Version ID to be able to handle unspecified versions
-		if (bomComponent.getComponentKey().getVersionId() == null) {
-			this.versionId = "";
-		} else {
-			versionId = bomComponent.getComponentKey().getVersionId();
-		}
+	// With version 
+	if (componentInfo.getComponentKey().getVersionId() == null)
+	{
+	    this.versionId = "Unspecified";
+	    this.versionName = "Unspecified";
+	} else
+	{
+	    versionId = componentInfo.getComponentKey().getVersionId();
+	    versionName = componentInfo.getVersionName();
 	}
 
-	public void setComment(String comment) {
-		if (comment == null) {
-			this.comment = "";
-		} else {
-			this.comment = comment;
-		}
+	uniqueID = componentId + "_" + versionId;
+    }
+
+    public void setComment(String comment)
+    {
+	if (comment == null)
+	{
+	    this.comment = "";
+	} else
+	{
+	    this.comment = comment;
 	}
+    }
+
+    public String getUniqueID()
+    {
+	return uniqueID;
+    }
 }

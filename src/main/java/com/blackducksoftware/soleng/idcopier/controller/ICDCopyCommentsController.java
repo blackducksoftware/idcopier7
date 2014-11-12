@@ -66,6 +66,7 @@ public class ICDCopyCommentsController
 	    BomApi bomApi = sourceProxy.getBomApi();
 
 	    List<BomComponent> bom = bomApi.getBomComponents(sourceProjectId);
+	    
 	    List<IDCBomItem> bomItems = new ArrayList<IDCBomItem>();
 
 	    // Want to reset this map every time.
@@ -74,14 +75,16 @@ public class ICDCopyCommentsController
 	    for (BomComponent bomComponent : bom)
 	    {
 		IDCBomItem idcBomItem = new IDCBomItem(bomComponent);
+		
 		String comment = bomApi.getComponentComment(sourceProjectId,
 			bomComponent.getComponentKey());
 
+		
+		
 		idcBomItem.setComment(comment);
 		bomItems.add(idcBomItem);
 
-		sourceBomComments.put(bomComponent.getComponentKey()
-			.getComponentId(), bomComponent);
+		sourceBomComments.put(idcBomItem.getUniqueID(), bomComponent);
 	    }
 	    log.info("Retrieved components, count: " + bom.size());
 	    return new Gson().toJson(bomItems);
@@ -131,6 +134,7 @@ public class ICDCopyCommentsController
 		sourceBomList = sourceBomApi.getBomComponents(sourceProjectId);
 	    } else
 	    {
+		// These are unique IDs, that were created during the BomItem instantiation.
 		for (String id : commentIds)
 		{
 		    if (id.length() > 0)
