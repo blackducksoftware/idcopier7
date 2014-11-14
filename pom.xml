@@ -4,7 +4,7 @@
 	<groupId>com.blackducksoftware.protex.sdk</groupId>
 	<artifactId>IDCopier7</artifactId>
 	<packaging>war</packaging>
-	<version>7.0.1-SNAPSHOT</version>
+	<version>7.0.2-SNAPSHOT</version>
 	<name>protex-idcopier Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 

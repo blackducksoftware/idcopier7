@@ -21,7 +21,7 @@
 <link rel="stylesheet"
 	href="css/HubSpot-messenger/messenger-theme-air.css">
 <link rel="stylesheet" href="css/DataTables/jquery.dataTables.css">
-
+<link rel="stylesheet" href="css/spop/css/jquery.smallipop.css">
 </head>
 <body>
 	<div class="main">
@@ -222,6 +222,7 @@
 <script src="js/libs/HubSpot-messenger/messenger-theme-future.js"></script>
 <script src="js/libs/bootstrap-progressbar/bootstrap-progressbar.js"></script>
 <script src="js/libs/DataTables/jquery.dataTables.js"></script>
+<script src="js/libs/spop/jquery.smallipop.min.js"></script>
 <!--  ID Copier JS files -->
 <script src="js/menu.js"></script>
 <script src="js/progress.js"></script>

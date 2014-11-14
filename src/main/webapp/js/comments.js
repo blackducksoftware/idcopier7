@@ -10,6 +10,9 @@ var expressCopy = true;
 // The copy button
 var copyButton = $("#copyCommentsButton");
 
+// This is the table return by the table builder
+var table = null;
+
 /**
  * Loader
  */
@@ -83,8 +86,11 @@ jQuery(document).ready(function () {
 				// Remember selection in cookie
 				$.cookie(projectSelectorDiv, projectId);
 			});
-			// var dataSet = [['true', 'Niles', 'c_niles', '1.0', 'v101', 'This is my comment'], ['true', 'Madison', 'c_madison', '4.6-Beta-3', 'v46beta3', 'This is not really used']];
-			buildBomDataTable(null);
+	
+			table = buildBomDataTable(null);
+			
+	
+
 		});
 	})();
 	
@@ -197,6 +203,12 @@ jQuery(document).ready(function () {
 				displayNotificationMessage(error, 'BOM Display', msg, noisy);
 			}
 		});
+		
+		// Resize window headers		
+		$(window).bind('resize', function() {
+			table.fnAdjustColumnSizing();
+		});
+
 	});
 });
 /**
