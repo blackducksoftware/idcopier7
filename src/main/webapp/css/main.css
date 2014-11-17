@@ -3,25 +3,7 @@
     Author     : Niles Madison <niles.madison@gmail.com>
 */
 
-/** ToolTip Section Start **/
-.smallipop-content {
-	border: 0;
-	background: #fcfcfc;
-	overflow: scroll;
-	height: auto;
-	min-height: 30px;
-	max-height: 300px;
-}
 
-.truncate
-{
-	white-space:nowrap;
-    max-width:600px;
-    overflow:hidden;
-    text-overflow: ellipsis
-}
-
-/** ToolTip Section End **/
 
 .header-text {
 	font-size: 18px;

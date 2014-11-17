@@ -90,6 +90,10 @@ public class IDCViewModelConstants
     public static final String COPY_OVERWRITE_OPTION = "overwrite-option";
     // Should the BOM Refresh do the whole project or only those files that changed recently?
     public static final String PARTIAL_BOM_OPTION = "partial-bom-option";
+    // Should comments on the comment copying page be appended?
+    public static final String APPEND_COMMENTS_OPTION = "append-comments-option";
+    
+    
     /**
      * Tree related variables
      */

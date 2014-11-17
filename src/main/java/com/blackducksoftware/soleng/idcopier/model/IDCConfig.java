@@ -41,10 +41,14 @@ public class IDCConfig
     @Autowired
     ApplicationContext cxt;
 
+    // Options on the main page
     private Boolean deferBomRefresh = false;
     private Boolean overwriteIDs = false;
     private Boolean recursive = false;
     private Boolean partialBom = false;
+    
+    // Options on the comment page
+    private Boolean appendComments = false;
     
     private String serverList = null;
     
@@ -145,6 +149,17 @@ public class IDCConfig
     public void setPartialBom(Boolean partialBom)
     {
 	this.partialBom = partialBom;
+    }
+
+    public Boolean isAppendComments()
+    {
+	return appendComments;
+    }
+
+    public void setAppendComments(Boolean appendComments)
+    {
+	appendComments = getBooleanProperty(IDCConfigurationConstants.OPTION_APPEND_COMMENTS);
+	this.appendComments = appendComments;
     }
 
 

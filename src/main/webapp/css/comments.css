@@ -1,7 +1,33 @@
 @CHARSET "ISO-8859-1";
 
+
+.checkbox-option
+{
+	float: right;
+}
+
+
 .commentLoader
 {
 
 }
 
+/** ToolTip Section Start **/
+.smallipop-content {
+	border: 0;
+	background: #fcfcfc;
+	overflow: scroll;
+	height: auto;
+	min-height: 30px;
+	max-height: 300px;
+}
+
+.truncate
+{
+	white-space:nowrap;
+    max-width:600px;
+    overflow:hidden;
+    text-overflow: ellipsis
+}
+
+/** ToolTip Section End **/

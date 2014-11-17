@@ -112,6 +112,7 @@ jQuery(document).ready(function () {
 		var targetServer = $('.selectTargetCommentServer').children(":selected").text();
 		var sourceProjectId = $('.selectSourceCommentProject').children(":selected").attr("id");
 		var targetProjectId = $('.selectTargetCommentProject').children(":selected").attr("id");
+		var appendCommentsOption = $('#appendCommentsCheckbox').is(':checked');
 
 		var params = {
 			'copy-source-server' : sourceServer,
@@ -119,14 +120,10 @@ jQuery(document).ready(function () {
 			'copy-source-project-id' : sourceProjectId,
 			'copy-target-project-id' : targetProjectId,
 			'copy-comment-ids' : idArray,
-			'copy-express' : expressCopy
+			'copy-express' : expressCopy,
+			'append-comments-option': appendCommentsOption
 		};
-		
-		if(!expressCopy)
-		{
-			
-		}
-		
+				
 		var verified = verifyCopyParameters(params);
 		if (!verified) {
 			return false;

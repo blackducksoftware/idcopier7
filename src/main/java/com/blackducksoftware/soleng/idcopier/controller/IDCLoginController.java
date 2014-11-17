@@ -150,6 +150,7 @@ public class IDCLoginController {
 			options.put(IDCViewModelConstants.COPY_RECURSIVE_OPTION, config.isRecursive());
 			options.put(IDCViewModelConstants.COPY_OVERWRITE_OPTION, config.isOverwriteIDs());
 			options.put(IDCViewModelConstants.PARTIAL_BOM_OPTION, config.istPartialBom());
+			options.put(IDCViewModelConstants.APPEND_COMMENTS_OPTION, config.isAppendComments());
 
 			Gson gson = new Gson();
 			configJson = gson.toJson(options);

@@ -1,6 +1,8 @@
 package com.blackducksoftware.soleng.idcopier.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +68,7 @@ public class ICDCopyCommentsController
 	    BomApi bomApi = sourceProxy.getBomApi();
 
 	    List<BomComponent> bom = bomApi.getBomComponents(sourceProjectId);
-	    
+
 	    List<IDCBomItem> bomItems = new ArrayList<IDCBomItem>();
 
 	    // Want to reset this map every time.
@@ -75,12 +77,10 @@ public class ICDCopyCommentsController
 	    for (BomComponent bomComponent : bom)
 	    {
 		IDCBomItem idcBomItem = new IDCBomItem(bomComponent);
-		
+
 		String comment = bomApi.getComponentComment(sourceProjectId,
 			bomComponent.getComponentKey());
 
-		
-		
 		idcBomItem.setComment(comment);
 		bomItems.add(idcBomItem);
 
@@ -104,7 +104,8 @@ public class ICDCopyCommentsController
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_SERVER) String targetServer,
 	    @RequestParam(value = IDCViewModelConstants.COPY_TARGET_PROJECT_ID) String targetProjectId,
 	    @RequestParam(value = IDCViewModelConstants.COPY_COMMENT_IDS) String[] commentIds,
-	    @RequestParam(value = IDCViewModelConstants.COPY_EXPRESS) Boolean expressCopy)
+	    @RequestParam(value = IDCViewModelConstants.COPY_EXPRESS) Boolean expressCopy,
+	    @RequestParam(value = IDCViewModelConstants.APPEND_COMMENTS_OPTION) Boolean appendComments)
 
     {
 	String returnMsg = "";
@@ -134,7 +135,8 @@ public class ICDCopyCommentsController
 		sourceBomList = sourceBomApi.getBomComponents(sourceProjectId);
 	    } else
 	    {
-		// These are unique IDs, that were created during the BomItem instantiation.
+		// These are unique IDs, that were created during the BomItem
+		// instantiation.
 		for (String id : commentIds)
 		{
 		    if (id.length() > 0)
@@ -156,6 +158,10 @@ public class ICDCopyCommentsController
 		    // Get the comment from the existing source
 		    String comment = sourceBomApi.getComponentComment(
 			    sourceProjectId, key);
+
+		    if (appendComments)
+			comment = appendCommentToTarget(comment, key,
+				targetProjectId, targetBomApi);
 
 		    // Apply it to the target
 		    if (comment != null && comment.length() > 0)
@@ -188,5 +194,45 @@ public class ICDCopyCommentsController
 	}
 
 	return returnMsg;
+    }
+
+    /**
+     * Appends the source comment to the target comment.
+     * 
+     * @param comment
+     * @param key
+     * @param targetProjectId
+     * @param targetBomApi
+     * @return
+     */
+    private String appendCommentToTarget(String comment, ComponentKey key,
+	    String targetProjectId, BomApi targetBomApi)
+    {
+	StringBuilder sb = new StringBuilder();
+	try
+	{
+	    String targetComment = targetBomApi.getComponentComment(
+		    targetProjectId, key);
+	    sb.append(targetComment);
+
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    String currentDate = sdf.format(new Date());
+
+	    if (comment != null && comment.length() > 0)
+	    {
+		sb.append("\n");
+		sb.append("---Appended Comment from IDCopier on: " + currentDate+"---");
+		sb.append("\n");
+		// Now add the source comment to the end
+		sb.append(comment);
+	    }
+
+	} catch (SdkFault e)
+	{
+	    log.warn("Attempted to append comments, but failed to get target: "
+		    + e.getMessage());
+	}
+
+	return sb.toString();
     }
 }

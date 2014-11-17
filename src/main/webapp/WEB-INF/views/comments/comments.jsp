@@ -105,6 +105,18 @@
 							value="Express Copy" class="btn btn-success center-button" />
 						</td>
 					</tr>
+					
+					<!--  Copying Comment Options -->
+					<tr>
+						<td>Append Comments
+
+							<div class="checkbox-option">
+								<input id="appendCommentsCheckbox" name="append-comments-option"
+									class="checkbox" type="checkbox">
+							</div></td>
+					</tr>
+
+					<!--  -->
 				</tbody>
 			</table>
 			<div class="version-info">
