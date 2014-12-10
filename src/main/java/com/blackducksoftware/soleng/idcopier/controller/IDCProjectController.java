@@ -8,6 +8,7 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -30,6 +31,7 @@ import com.blackducksoftware.soleng.idcopier.constants.IDCViewConstants;
 import com.blackducksoftware.soleng.idcopier.constants.IDCViewModelConstants;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
+import com.blackducksoftware.soleng.idcopier.model.ProjectComparator;
 import com.blackducksoftware.soleng.idcopier.model.UserServiceModel;
 import com.blackducksoftware.soleng.idcopier.service.LoginService;
 import com.blackducksoftware.soleng.idcopier.service.ProjectService;
@@ -64,6 +66,7 @@ public class IDCProjectController
 	    IDCServer server = loginService.getServerByName(serverName);
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    projects = projectService.getProjectsByServer(proxy, server);
+	    Collections.sort(projects, new ProjectComparator());
 
 	} catch (Exception e)
 	{

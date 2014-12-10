@@ -165,8 +165,10 @@ jQuery(document).ready(function() {
 	/**
 	 * Submit copy button Note the # lookup for non-div Grab the options on the main page as they are part of the copy functionality.
 	 */
-	$("#submitCopyButton").on('click', function() {
+	$("#submitCopyButton").on('click', function() 
+	{
 		console.log("Submitting copy IDs...");
+		var partialBOMOption;
 		// Copy required values
 		var sourceServer = $('.selectSourceServer').children(":selected").text();
 		var targetServer = $('.selectTargetServer').children(":selected").text();
@@ -182,7 +184,7 @@ jQuery(document).ready(function() {
 		if (deferBOMOption)
 			partialBOMOption = true;
 		else
-			partialBOMCheckBox = false;
+			partialBOMOption = false;
 		var params = {
 			'copy-source-server' : sourceServer,
 			'copy-target-server' : targetServer,
@@ -207,10 +209,10 @@ jQuery(document).ready(function() {
 			data : params,
 			success : function(msg) {
 				console.log(msg);
-				displayNotificationMessage(success, 'Successfully copied identifications', msg, noiseLevel);
+				displayNotificationMessage(success, 'Successfully copied identifications', msg, noisy);
 				// Call the BOM refresh if necessary
 				if (!deferBOMOption) {
-					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.", noiseLevel);
+					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.", noisy);
 					performBOMRefresh("target", targetServer, targetProjectId, partialBOMOption);
 				}
 			},
