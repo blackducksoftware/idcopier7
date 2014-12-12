@@ -49,7 +49,7 @@ public class CopyService
 	    iApi.copyIdentifications(sourceProjectId, sourcePath, targetProjectId,
 		    targetPath, config.isRecursive(), config.isOverwriteIDs(), BomRefreshMode.SKIP);
 	    
-	    log.info("Finished copying");
+	    log.info("Finished copying from source path: " + sourcePath);
 	    
 	} catch (Exception e)
 	{

@@ -66,8 +66,6 @@ public class IDCProjectController
 	    IDCServer server = loginService.getServerByName(serverName);
 	    ProtexServerProxy proxy = loginService.getProxy(serverName);
 	    projects = projectService.getProjectsByServer(proxy, server);
-	    Collections.sort(projects, new ProjectComparator());
-
 	} catch (Exception e)
 	{
 	    log.error("Error getting projects", e);

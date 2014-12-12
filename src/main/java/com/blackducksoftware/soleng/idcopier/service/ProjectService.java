@@ -34,6 +34,7 @@ import com.blackducksoftware.sdk.protex.project.codetree.SourceFileInfoNode;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.blackducksoftware.soleng.idcopier.model.IDCTree;
+import com.blackducksoftware.soleng.idcopier.model.ProjectComparator;
 import com.google.gson.Gson;
 
 /**
@@ -77,7 +78,7 @@ public class ProjectService implements Serializable {
 		} else {
 			return projects;
 		}
-
+		Collections.sort(projects, new ProjectComparator());
 		return projects;
 	}
 

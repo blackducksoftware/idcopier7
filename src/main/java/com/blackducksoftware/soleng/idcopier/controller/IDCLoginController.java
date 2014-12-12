@@ -150,6 +150,7 @@ public class IDCLoginController {
 			options.put(IDCViewModelConstants.COPY_RECURSIVE_OPTION, config.isRecursive());
 			options.put(IDCViewModelConstants.COPY_OVERWRITE_OPTION, config.isOverwriteIDs());
 			options.put(IDCViewModelConstants.PARTIAL_BOM_OPTION, config.istPartialBom());
+			options.put(IDCViewModelConstants.PULL_PARENT_IDS_OPTION, config.isPullParentIds());
 			options.put(IDCViewModelConstants.APPEND_COMMENTS_OPTION, config.isAppendComments());
 
 			Gson gson = new Gson();
@@ -173,7 +174,8 @@ public class IDCLoginController {
 	}
 
 	/**
-	 * Processes a server change from the dropdown Return JSON project list TODO: This actually retreives a project list, consider refactoring?
+	 * Processes a server change from the dropdown Return JSON project list 
+	 * TODO: This actually retreives a project list, consider refactoring?
 	 * 
 	 * @param session
 	 * @return

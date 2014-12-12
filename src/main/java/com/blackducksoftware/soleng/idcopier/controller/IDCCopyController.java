@@ -8,6 +8,10 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.controller;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,10 +62,12 @@ public class IDCCopyController
 	    @RequestParam(value = IDCViewModelConstants.COPY_OVERWRITE_OPTION) Boolean overWriteOption,
 	    @RequestParam(value = IDCViewModelConstants.COPY_DEFER_BOM_REFRESH_OPTION) Boolean deferBomRefreshOption,
 	    @RequestParam(value = IDCViewModelConstants.COPY_RECURSIVE_OPTION) Boolean recursiveOption,
-	    @RequestParam(value = IDCViewModelConstants.COPY_RECURSIVE_OPTION) Boolean partialBomOption) throws Exception
+	    @RequestParam(value = IDCViewModelConstants.COPY_RECURSIVE_OPTION) Boolean partialBomOption,
+	    @RequestParam(value = IDCViewModelConstants.PULL_PARENT_IDS_OPTION) Boolean pullParentIdsOption)
+	    throws Exception
     {
 
-	String returnMsg = null;
+	StringBuilder returnMsg = new StringBuilder();
 
 	StringBuilder sb = new StringBuilder();
 	sb.append("Preparing ID Copy with the following parameters: ");
@@ -76,12 +82,13 @@ public class IDCCopyController
 	sb.append("\n Defer BOM Refresh: " + deferBomRefreshOption);
 	sb.append("\n Recursive: " + recursiveOption);
 	sb.append("\n Partial BOM Refresh: " + partialBomOption);
-	
+	sb.append("\n Pull Parent IDs: " + pullParentIdsOption);
+
 	if (!sourceServer.equalsIgnoreCase(targetServer))
 	{
-	    returnMsg = "Servers mismatch, functionality not supported!";
+	    returnMsg.append("Servers mismatch, functionality not supported!");
 	    log.error(returnMsg);
-	    throw new Exception(returnMsg);
+	    throw new Exception(returnMsg.toString());
 	} else
 	{
 	    log.info("Attempting to copy: " + sb.toString());
@@ -93,9 +100,9 @@ public class IDCCopyController
 		config.setOverwriteIDs(overWriteOption);
 		config.setRecursive(recursiveOption);
 		config.setPartialBom(partialBomOption);
-
+	
 		LoginService loginService = userServiceModel.getLoginService();
-		
+
 		ProtexServerProxy sourceProxy = loginService
 			.getProxy(sourceServer);
 
@@ -113,20 +120,80 @@ public class IDCCopyController
 		{
 		    targetPath = targetPath.trim();
 		    log.info("Preparing to copy to target path: " + targetPath);
-		    copyService.performCopy(sourceProxy, sourceProjectId,
-			    targetProjectId, sourcePath, targetPath);
+
+		    /**
+		     * Pulling parent IDs requires us to provide all sub-parents
+		     * of the source path.
+		     */
+
+		    List<String> sourcePaths = getAllPaths(sourcePath,
+			    pullParentIdsOption);
+		    int dirCount = 0;
+		    for (String pathSegment : sourcePaths)
+		    {
+			copyService.performCopy(sourceProxy, sourceProjectId,
+				targetProjectId, pathSegment, targetPath);
+			dirCount++;
+		    }
+
 		    log.info("Finished copying from source path: " + sourcePath
 			    + " to  target path: " + targetPath);
+		    returnMsg.append("[" + sourcePath + "] Finished Copying IDs, directories examined: " + dirCount);
+		    returnMsg.append("\n");
 		}
-		returnMsg = "Finished Copying IDs";
+	    } catch (NullPointerException npe)
+	    {
+		returnMsg.append("Error during copying...check logs for errors.");
 	    } catch (Exception e)
 	    {
-		returnMsg = e.getMessage();
+		returnMsg.append(e.getMessage());
 	    }
 
 	}
 
-	return returnMsg;
+	return returnMsg.toString();
 
+    }
+
+    /**
+     * @param sourcePath
+     * @return
+     */
+    private List<String> getAllPaths(String sourcePath,
+	    boolean pullParentIdsOption)
+    {
+	List<String> allPaths = new ArrayList<String>();
+
+	if (pullParentIdsOption)
+	{
+	    allPaths = getAllParentPaths(allPaths, sourcePath);
+	} else
+	{
+	    allPaths.add(sourcePath);
+	}
+	return allPaths;
+    }
+
+    /**
+     * Recursively collects all the parents
+     * 
+     * @param allPaths
+     * @param sourcePath
+     * @return
+     */
+    private List<String> getAllParentPaths(List<String> allPaths,
+	    String sourcePath)
+    {
+	sourcePath = sourcePath.replace("\\", "/");      // For Protex, only forward slash is acceptable
+	allPaths.add(sourcePath);
+	File fullPath = new File(sourcePath);
+	String parentPath = fullPath.getParent();
+	if (parentPath == null)
+	{
+	    return allPaths;
+	} else
+	{	    
+	    return getAllParentPaths(allPaths, parentPath);
+	}
     }
 }

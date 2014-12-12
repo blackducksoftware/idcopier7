@@ -46,6 +46,7 @@ public class IDCConfig
     private Boolean overwriteIDs = false;
     private Boolean recursive = false;
     private Boolean partialBom = false;
+    private Boolean pullParentIds = false;
     
     // Options on the comment page
     private Boolean appendComments = false;
@@ -160,6 +161,12 @@ public class IDCConfig
     {
 	appendComments = getBooleanProperty(IDCConfigurationConstants.OPTION_APPEND_COMMENTS);
 	this.appendComments = appendComments;
+    }
+
+    public Boolean isPullParentIds()
+    {
+	pullParentIds = getBooleanProperty(IDCConfigurationConstants.OPTION_PULL_PARENT_IDS);
+	return pullParentIds;
     }
 
 
