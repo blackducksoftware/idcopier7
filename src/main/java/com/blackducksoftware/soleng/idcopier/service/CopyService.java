@@ -36,7 +36,7 @@ public class CopyService
 
     public void performCopy(ProtexServerProxy sourceProxy,
 	    String sourceProjectId, String targetProjectId, String sourcePath,
-	    String targetPath) throws Exception
+	    String targetPath, Boolean overWrite) throws Exception
     {
 	try
 	{
@@ -47,7 +47,7 @@ public class CopyService
 	     * This is because the Controller will perform the refresh call if necessary
 	     */
 	    iApi.copyIdentifications(sourceProjectId, sourcePath, targetProjectId,
-		    targetPath, config.isRecursive(), config.isOverwriteIDs(), BomRefreshMode.SKIP);
+		    targetPath, config.isRecursive(), overWrite, BomRefreshMode.SKIP);
 	    
 	    log.info("Finished copying from source path: " + sourcePath);
 	    

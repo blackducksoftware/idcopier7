@@ -131,8 +131,14 @@ public class IDCCopyController
 		    int dirCount = 0;
 		    for (String pathSegment : sourcePaths)
 		    {
+			// In the case where pull parent is selected
+			// we do not want to overwrite the parents, just the first path
+			boolean overWrite = config.isOverwriteIDs();
+			if(pullParentIdsOption && dirCount != 0)
+			    overWrite = false;
+			
 			copyService.performCopy(sourceProxy, sourceProjectId,
-				targetProjectId, pathSegment, targetPath);
+				targetProjectId, pathSegment, targetPath, overWrite);
 			dirCount++;
 		    }
 

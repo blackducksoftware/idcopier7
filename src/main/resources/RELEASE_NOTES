@@ -1,9 +1,14 @@
+-----------------------------------
+7.0.6-SNAPSHOT:  December 16th, 2014
+-----------------------------------
+- Pull Parent IDs and Overwrite no longer wipe out IDs
+-----------------------------------
 7.0.5-SNAPSHOT:  December 13th, 2014
-
+-----------------------------------
 - Project sorting
 - Pull Parent IDs feature (see example for explanation)
 
+-----------------------------------
 7.0.0-SNAPSHOT:  October 17th, 2014
 -----------------------------------
-
 - Initial alpha release
