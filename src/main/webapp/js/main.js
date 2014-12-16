@@ -179,6 +179,7 @@ jQuery(document).ready(function() {
 		var deferBOMOption = $('#deferBomRefreshCheckBox').is(':checked');
 		var recursiveCopyOption = $('#recursiveCopyCheckBox').is(':checked');
 		var overwriteIDsOption = $('#overwriteIDsCheckBox').is(':checked');
+		var pullParentIDsOption = $('#pullParentIDsCheckBox').is(':checked');
 		// This used to be an option, but now if the defer is 'off' then always partial
 		// var partialBOMOption = $('#partialBOMCheckBox').is(':checked');
 		if (deferBOMOption)
@@ -196,7 +197,8 @@ jQuery(document).ready(function() {
 			'defer-bom-option' : deferBOMOption,
 			'recursive-option' : recursiveCopyOption,
 			'overwrite-option' : overwriteIDsOption,
-			'partial-bom-option' : partialBOMOption
+			'partial-bom-option' : partialBOMOption,
+			'pull-parent-ids-option' : pullParentIDsOption
 		};
 		var verified = verifyCopyParameters(params);
 		if (!verified) {
@@ -214,6 +216,7 @@ jQuery(document).ready(function() {
 				if (!deferBOMOption) {
 					displayNotificationMessage(info, "Refresh", "Defer BOM refresh unchecked, triggering refresh.", noisy);
 					performBOMRefresh("target", targetServer, targetProjectId, partialBOMOption);
+					refreshNodes("target");
 				}
 			},
 			error : function(msg) {

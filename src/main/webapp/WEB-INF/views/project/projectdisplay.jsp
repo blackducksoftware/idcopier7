@@ -169,6 +169,12 @@
 						<td><input id="overwriteIDsCheckBox" name="overwrite-option"
 							class="checkbox" type="checkbox" /></td>
 					</tr>
+					
+					<tr>
+						<td><h4>Get Parent IDs</h4></td>
+						<td><input id="pullParentIDsCheckBox" name="pull-parent-ids-option"
+							class="checkbox" type="checkbox" /></td>
+					</tr>
 
 					<!--  Commenting out as part of refresh pulldown change 
 							<tr>
