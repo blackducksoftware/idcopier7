@@ -165,7 +165,7 @@
 							class="checkbox" type="checkbox" value="recursiveCopyCheckBox" /></td>
 					</tr>
 					<tr>
-						<td><h4>Overwrite Identifications</h4></td>
+						<td><h4>Replace Target Identifications</h4></td>
 						<td><input id="overwriteIDsCheckBox" name="overwrite-option"
 							class="checkbox" type="checkbox" /></td>
 					</tr>

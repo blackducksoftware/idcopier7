@@ -144,7 +144,7 @@ function loadFancyTree(sender, serverName, projectId)
 	
 	var lazyLoadFunction  = function(event, data) {
 		var node = data.node;
-		var finalPath = path + node.key;
+		var finalPath = path + encodeURIComponent(node.key);
 		data.result = $.ajax({
 			url : finalPath,
 			dataType : "json"

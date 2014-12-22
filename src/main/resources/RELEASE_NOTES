@@ -1,7 +1,14 @@
 -----------------------------------
+7.0.7-SNAPSHOT:  December 22nd, 2014
+-----------------------------------
+- Fix for folder names with unusual characters
+- Fix for folder names with capitalization differences
+
+-----------------------------------
 7.0.6-SNAPSHOT:  December 16th, 2014
 -----------------------------------
 - Pull Parent IDs and Overwrite no longer wipe out IDs
+
 -----------------------------------
 7.0.5-SNAPSHOT:  December 13th, 2014
 -----------------------------------

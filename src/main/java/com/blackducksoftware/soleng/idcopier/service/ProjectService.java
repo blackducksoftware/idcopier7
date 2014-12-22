@@ -34,6 +34,7 @@ import com.blackducksoftware.sdk.protex.project.codetree.SourceFileInfoNode;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.blackducksoftware.soleng.idcopier.model.IDCTree;
+import com.blackducksoftware.soleng.idcopier.model.NodeComparator;
 import com.blackducksoftware.soleng.idcopier.model.ProjectComparator;
 import com.google.gson.Gson;
 
@@ -44,396 +45,363 @@ import com.google.gson.Gson;
  * @date Sep 16, 2014
  * 
  */
-public class ProjectService implements Serializable {
-	static Logger log = Logger.getLogger(ProjectService.class);
+public class ProjectService implements Serializable
+{
+    static Logger log = Logger.getLogger(ProjectService.class);
 
-	private IDCSession session;
-	private ProtexServerProxy proxy;
-	private String ROOT = "/";
+    private IDCSession session;
+    private ProtexServerProxy proxy;
+    private String ROOT = "/";
 
-	// Map of projects for caching lookup
-	private Map<String, List<ProjectInfo>> projectMap;
-	// Map of BOM Apis per proxy
-	private Map<ProtexServerProxy, BomApi> bomApis;
+    // Map of projects for caching lookup
+    private Map<String, List<ProjectInfo>> projectMap;
+    // Map of BOM Apis per proxy
+    private Map<ProtexServerProxy, BomApi> bomApis;
 
-	public ProjectService() {
-		projectMap = new HashMap<String, List<ProjectInfo>>();
-		bomApis = new HashMap<ProtexServerProxy, BomApi>();
-	}
+    public ProjectService()
+    {
+	projectMap = new HashMap<String, List<ProjectInfo>>();
+	bomApis = new HashMap<ProtexServerProxy, BomApi>();
+    }
 
-	/**
-	 * Gets projects from internal map
-	 * 
-	 * @param server
-	 * @param proxy
-	 * @return
-	 * @throws Exception
-	 */
-	public List<ProjectInfo> getProjectsByServer(ProtexServerProxy proxy, IDCServer server) throws Exception {
-		this.proxy = proxy;
-		List<ProjectInfo> projects = projectMap.get(server.getServerName());
-		if (projects == null) {
-			projects = getProjectsByUser(proxy, server.getUserName());
-			projectMap.put(server.getServerName(), projects);
-		} else {
-			return projects;
-		}
-		Collections.sort(projects, new ProjectComparator());
-		return projects;
-	}
-
-	public String getProjectJSON(ProtexServerProxy proxy, String projectID) {
-		this.proxy = proxy;
-		String jsonTree = getProjectCodeTree(projectID);
-
-		log.debug("Got Tree: " + jsonTree);
-
-		return jsonTree;
-	}
-
-	public String getFolderJSON(ProtexServerProxy proxy, String projectID, String path) 
+    /**
+     * Gets projects from internal map
+     * 
+     * @param server
+     * @param proxy
+     * @return
+     * @throws Exception
+     */
+    public List<ProjectInfo> getProjectsByServer(ProtexServerProxy proxy,
+	    IDCServer server) throws Exception
+    {
+	this.proxy = proxy;
+	List<ProjectInfo> projects = projectMap.get(server.getServerName());
+	if (projects == null)
 	{
-		this.proxy = proxy;
-		log.debug("PATH=" + path);
+	    projects = getProjectsByUser(proxy, server.getUserName());
+	    projectMap.put(server.getServerName(), projects);
+	} else
+	{
+	    return projects;
+	}
+	Collections.sort(projects, new ProjectComparator());
+	return projects;
+    }
 
-		String jsonTree = getProjectCodeTreeNodesWithCount(projectID, path);
+    public String getProjectJSON(ProtexServerProxy proxy, String projectID)
+    {
+	this.proxy = proxy;
+	String jsonTree = getProjectCodeTree(projectID);
 
-		log.debug("Got Tree: " + jsonTree);
+	log.debug("Got Tree: " + jsonTree);
 
-		return jsonTree;
+	return jsonTree;
+    }
+
+    public String getFolderJSON(ProtexServerProxy proxy, String projectID,
+	    String path)
+    {
+	this.proxy = proxy;
+	log.debug("PATH=" + path);
+
+	String jsonTree = getProjectCodeTreeNodesWithCount(projectID, path);
+
+	log.debug("Got Tree: " + jsonTree);
+
+	return jsonTree;
+    }
+
+    @Deprecated
+    public List<ProjectInfo> getProjectsByUser(ProtexServerProxy proxy,
+	    String userName) throws Exception
+    {
+	this.proxy = proxy;
+	ProjectApi pApi = proxy.getProjectApi();
+
+	List<ProjectInfo> projects = null;
+	try
+	{
+	    projects = pApi.getProjectsByUser(userName);
+	} catch (SdkFault e)
+	{
+	    throw new Exception("Unable to get projects for user"
+		    + e.getMessage());
 	}
 
-	@Deprecated
-	public List<ProjectInfo> getProjectsByUser(ProtexServerProxy proxy, String userName) throws Exception {
-		this.proxy = proxy;
-		ProjectApi pApi = proxy.getProjectApi();
+	return projects;
+    }
 
-		List<ProjectInfo> projects = null;
-		try {
-			projects = pApi.getProjectsByUser(userName);
-		} catch (SdkFault e) {
-			throw new Exception("Unable to get projects for user" + e.getMessage());
-		}
+    /**
+     * Returns the JSON code path for the project
+     * 
+     * @param projectID
+     * @return
+     */
+    public String getProjectCodeTree(String projectID)
+    {
+	String json = "";
+	try
+	{
+	    CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
+	    ctrRequest.setDepth(-1);
+	    ctrRequest.setIncludeParentNode(true);
+	    List<CodeTreeNodeType> nodeTypes = ctrRequest
+		    .getIncludedNodeTypes();
 
-		return projects;
+	    nodeTypes.add(CodeTreeNodeType.FILE);
+	    nodeTypes.add(CodeTreeNodeType.FOLDER);
+
+	    List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(
+		    projectID, "/", ctrRequest);
+
+	    log.info("Got top level nodes, count: " + nodes.size());
+
+	    Gson gson = new Gson();
+	    json = gson.toJson(nodes);
 	}
 
-	/**
-	 * Returns the JSON code path for the project
-	 * 
-	 * @param projectID
-	 * @return
-	 */
-	public String getProjectCodeTree(String projectID) {
-		String json = "";
-		try {
-			CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
-			ctrRequest.setDepth(-1);
-			ctrRequest.setIncludeParentNode(true);
-			List<CodeTreeNodeType> nodeTypes = ctrRequest.getIncludedNodeTypes();
-
-			nodeTypes.add(CodeTreeNodeType.FILE);
-			nodeTypes.add(CodeTreeNodeType.FOLDER);
-
-			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, "/", ctrRequest);
-
-			log.info("Got top level nodes, count: " + nodes.size());
-
-			Gson gson = new Gson();
-			json = gson.toJson(nodes);
-		}
-
-		catch (Exception e) {
-			log.error("Could not convert project tree to JSON", e);
-		}
-
-		return json;
+	catch (Exception e)
+	{
+	    log.error("Could not convert project tree to JSON", e);
 	}
 
-	/**
-	 * Returns the status of BOM refresh
-	 * 
-	 * @param proxy
-	 * @param projectId
-	 * @return
-	 */
-	public BomProgressStatus getBOMRefreshStatus(ProtexServerProxy proxy, String projectId) {
-		this.proxy = proxy;
-		BomProgressStatus status = null;
-		BomApi bomApi = getBomApiForProxy(proxy);
-		try {
-			status = bomApi.getRefreshBomProgress(projectId);
-			if (status != null)
-				log.debug("Got status object:" + status.getPercentComplete());
-		} catch (SdkFault e) {
-			log.error("Error getting status for project ID: " + projectId);
-			log.error("Reason: " + e.getMessage());
-		}
+	return json;
+    }
 
-		return status;
+    /**
+     * Returns the status of BOM refresh
+     * 
+     * @param proxy
+     * @param projectId
+     * @return
+     */
+    public BomProgressStatus getBOMRefreshStatus(ProtexServerProxy proxy,
+	    String projectId)
+    {
+	this.proxy = proxy;
+	BomProgressStatus status = null;
+	BomApi bomApi = getBomApiForProxy(proxy);
+	try
+	{
+	    status = bomApi.getRefreshBomProgress(projectId);
+	    if (status != null)
+		log.debug("Got status object:" + status.getPercentComplete());
+	} catch (SdkFault e)
+	{
+	    log.error("Error getting status for project ID: " + projectId);
+	    log.error("Reason: " + e.getMessage());
 	}
 
-	/**
-	 * Gets the tree with all its paths and pending counts.
-	 * 
-	 * @param projectID
-	 * @param path
-	 * @return
-	 */
-	public String getProjectCodeTreeNodesWithCount(String projectID, String path) {
-		String json = "";
+	return status;
+    }
 
-		try {
-			int pendingCount = 0;
+    /**
+     * Gets the tree with all its paths and pending counts.
+     * 
+     * @param projectID
+     * @param path
+     * @return
+     */
+    public String getProjectCodeTreeNodesWithCount(String projectID, String path)
+    {
+	String json = "";
 
-			CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
-			ctrRequest.setDepth(1);
-			ctrRequest.setIncludeParentNode(false);
-			ctrRequest.getCounts().add(NodeCountType.PENDING_ID_ALL);
-			List<CodeTreeNodeType> nodeTypes = ctrRequest.getIncludedNodeTypes();
+	try
+	{
+	    int pendingCount = 0;
 
-			nodeTypes.add(CodeTreeNodeType.FILE);
-			nodeTypes.add(CodeTreeNodeType.FOLDER);
-			nodeTypes.add(CodeTreeNodeType.EXPANDED_ARCHIVE); // Added this in
-			// as it's a
-			// requirement for
-			// NetApp, and
-			// useful for us
-			// as well. It
-			// will be treaded
-			// as a folder
+	    CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
+	    ctrRequest.setDepth(1);
+	    ctrRequest.setIncludeParentNode(false);
+	    ctrRequest.getCounts().add(NodeCountType.PENDING_ID_ALL);
+	    List<CodeTreeNodeType> nodeTypes = ctrRequest
+		    .getIncludedNodeTypes();
 
-			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, path, ctrRequest);
+	    nodeTypes.add(CodeTreeNodeType.FILE);
+	    nodeTypes.add(CodeTreeNodeType.FOLDER);
+	    nodeTypes.add(CodeTreeNodeType.EXPANDED_ARCHIVE); // Added this in
+	    // as it's a
+	    // requirement for
+	    // NetApp, and
+	    // useful for us
+	    // as well. It
+	    // will be treaded
+	    // as a folder
 
-			log.debug("Got nodes for '" + path + "' (count: " + nodes.size() + ")");
+	    List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(
+		    projectID, path, ctrRequest);
 
-			List<String> folderNodes = new ArrayList<String>();
-			List<String> fileNodes = new ArrayList<String>();
+	    log.debug("Got nodes for '" + path + "' (count: " + nodes.size()
+		    + ")");
 
-			HashMap<String, CodeTreeNode> folderLookup = new HashMap<String, CodeTreeNode>();
-			HashMap<String, CodeTreeNode> fileLookup = new HashMap<String, CodeTreeNode>();
+	    List<String> folderNodes = new ArrayList<String>();
+	    List<String> fileNodes = new ArrayList<String>();
 
-			for (CodeTreeNode codeTreeNode : nodes) {
-				String name = codeTreeNode.getName().toLowerCase();
-				pendingCount += getCounts(codeTreeNode.getNodeCounts());
+	    HashMap<String, CodeTreeNode> folderLookup = new HashMap<String, CodeTreeNode>();
+	    HashMap<String, CodeTreeNode> fileLookup = new HashMap<String, CodeTreeNode>();
 
-				if (codeTreeNode.getNodeType() == CodeTreeNodeType.FILE) {
-					fileNodes.add(name);
-					fileLookup.put(name, codeTreeNode);
-				} else {
-					folderNodes.add(name);
-					folderLookup.put(name, codeTreeNode);
-				}
-			}
+	    for (CodeTreeNode codeTreeNode : nodes)
+	    {
+		String name = codeTreeNode.getName();
+		pendingCount += getCounts(codeTreeNode.getNodeCounts());
 
-			Collections.sort(folderNodes);
-			Collections.sort(fileNodes);
-
-			List<IDCTree> treeNodes = new ArrayList<IDCTree>();
-
-			CodeTreeNode currentTreeNode;
-			String name;
-			String filePath;
-
-			for (String currentNodeString : folderNodes) {
-				currentTreeNode = folderLookup.get(currentNodeString);
-				name = currentTreeNode.getName();
-				filePath = name;
-				int count = getCounts(currentTreeNode.getNodeCounts());
-
-				treeNodes.add(new IDCTree(filePath, name, true, count));
-			}
-
-			for (String currentNodeString : fileNodes) {
-				currentTreeNode = fileLookup.get(currentNodeString);
-				name = currentTreeNode.getName();
-				filePath = name;
-				int count = getCounts(currentTreeNode.getNodeCounts());
-
-				treeNodes.add(new IDCTree(filePath, name, false, count));
-			}
-
-			Gson gson = new Gson();
-
-			if (path.equals("/")) {
-				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
-
-				IDCTree rootNode = new IDCTree("", getProjectName(projectID), true, pendingCount);
-				rootNode.setExpand(true);
-				rootNode.addChildren(treeNodes);
-				projectNodes.add(rootNode);
-				json = gson.toJson(projectNodes);
-			} else {
-				json = gson.toJson(treeNodes);
-			}
-		} catch (Exception e) {
-			// log.error("Could not convert project tree to JSON", e);
-
-			List<IDCTree> projectNodes = new ArrayList<IDCTree>();
-			IDCTree rootNode = new IDCTree("", getProjectName(projectID), true, 0);
-			projectNodes.add(rootNode);
-
-			return new Gson().toJson(projectNodes);
+		if (codeTreeNode.getNodeType() == CodeTreeNodeType.FILE)
+		{
+		    fileNodes.add(name);
+		    fileLookup.put(name, codeTreeNode);
+		} else
+		{
+		    folderNodes.add(name);
+		    folderLookup.put(name, codeTreeNode);
 		}
+	    }
 
-		return json;
+	    Collections.sort(folderNodes, String.CASE_INSENSITIVE_ORDER);
+	    Collections.sort(fileNodes, String.CASE_INSENSITIVE_ORDER);
+
+	    List<IDCTree> treeNodes = new ArrayList<IDCTree>();
+
+	    CodeTreeNode currentTreeNode;
+	    String name;
+	    String filePath;
+
+	    for (String currentNodeString : folderNodes)
+	    {
+		currentTreeNode = folderLookup.get(currentNodeString);
+		name = currentTreeNode.getName();
+		filePath = name;
+		int count = getCounts(currentTreeNode.getNodeCounts());
+
+		treeNodes.add(new IDCTree(filePath, name, true, count));
+	    }
+
+	    for (String currentNodeString : fileNodes)
+	    {
+		currentTreeNode = fileLookup.get(currentNodeString);
+		name = currentTreeNode.getName();
+		filePath = name;
+		int count = getCounts(currentTreeNode.getNodeCounts());
+
+		treeNodes.add(new IDCTree(filePath, name, false, count));
+	    }
+
+	    Gson gson = new Gson();
+
+	    if (path.equals("/"))
+	    {
+		List<IDCTree> projectNodes = new ArrayList<IDCTree>();
+
+		IDCTree rootNode = new IDCTree("", getProjectName(projectID),
+			true, pendingCount);
+		rootNode.setExpand(true);
+		rootNode.addChildren(treeNodes);
+		projectNodes.add(rootNode);
+		json = gson.toJson(projectNodes);
+	    } else
+	    {
+		json = gson.toJson(treeNodes);
+	    }
+	} catch (Exception e)
+	{
+	    // log.error("Could not convert project tree to JSON", e);
+
+	    List<IDCTree> projectNodes = new ArrayList<IDCTree>();
+	    IDCTree rootNode = new IDCTree("", getProjectName(projectID), true,
+		    0);
+	    projectNodes.add(rootNode);
+
+	    return new Gson().toJson(projectNodes);
 	}
 
-	public String getProjectCodeTreeNodes(String projectID, String path) {
-		String json = "";
+	return json;
+    }
 
-		try {
-			CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
-			ctrRequest.setDepth(1);
-			ctrRequest.setIncludeParentNode(false);
-			List<CodeTreeNodeType> nodeTypes = ctrRequest.getIncludedNodeTypes();
-
-			nodeTypes.add(CodeTreeNodeType.FILE);
-			nodeTypes.add(CodeTreeNodeType.FOLDER);
-
-			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, path, ctrRequest);
-
-			log.info("Got nodes for '" + path + "' (count: " + nodes.size() + ")");
-
-			List<String> folderNodes = new ArrayList<String>();
-			List<String> fileNodes = new ArrayList<String>();
-
-			HashMap<String, CodeTreeNode> folderLookup = new HashMap<String, CodeTreeNode>();
-			HashMap<String, CodeTreeNode> fileLookup = new HashMap<String, CodeTreeNode>();
-
-			for (CodeTreeNode codeTreeNode : nodes) {
-				String name = codeTreeNode.getName().toLowerCase();
-
-				if (codeTreeNode.getNodeType() == CodeTreeNodeType.FILE) {
-					fileNodes.add(name);
-					fileLookup.put(name, codeTreeNode);
-				} else {
-					folderNodes.add(name);
-					folderLookup.put(name, codeTreeNode);
-				}
-			}
-
-			Collections.sort(folderNodes);
-			Collections.sort(fileNodes);
-
-			List<IDCTree> treeNodes = new ArrayList<IDCTree>();
-
-			CodeTreeNode currentTreeNode;
-			String name;
-			String filePath;
-
-			for (String currentNodeString : folderNodes) {
-				currentTreeNode = folderLookup.get(currentNodeString);
-				name = currentTreeNode.getName();
-				filePath = name;
-
-				treeNodes.add(new IDCTree(filePath, name, true));
-			}
-
-			for (String currentNodeString : fileNodes) {
-				currentTreeNode = fileLookup.get(currentNodeString);
-				name = currentTreeNode.getName();
-				filePath = name;
-
-				treeNodes.add(new IDCTree(filePath, name, false));
-			}
-
-			Gson gson = new Gson();
-
-			if (path.equals("/")) {
-				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
-
-				IDCTree rootNode = new IDCTree("", getProjectName(projectID), true);
-				rootNode.setExpand(true);
-				rootNode.addChildren(treeNodes);
-				projectNodes.add(rootNode);
-				json = gson.toJson(projectNodes);
-			} else {
-				json = gson.toJson(treeNodes);
-			}
-		} catch (Exception e) {
-			// log.error("Could not convert project tree to JSON", e);
-
-			List<IDCTree> projectNodes = new ArrayList<IDCTree>();
-			IDCTree rootNode = new IDCTree("", getProjectName(projectID), true);
-			projectNodes.add(rootNode);
-
-			return new Gson().toJson(projectNodes);
-		}
-
-		return json;
-	}
-
-	public boolean isValidPath(String projectID, String path) {
-		try {
-			List<SourceFileInfoNode> info = proxy.getCodeTreeApi().getFileInfo(projectID, path, 1, false,
-					CharEncoding.BASE_64);
-			if (info != null) {
-				return true;
-			}
-		} catch (Exception e) {
-			return false;
-		}
-
+    public boolean isValidPath(String projectID, String path)
+    {
+	try
+	{
+	    List<SourceFileInfoNode> info = proxy.getCodeTreeApi().getFileInfo(
+		    projectID, path, 1, false, CharEncoding.BASE_64);
+	    if (info != null)
+	    {
 		return true;
+	    }
+	} catch (Exception e)
+	{
+	    return false;
 	}
 
-	public String constructPath(String path, String name) {
-		String out = "";
+	return true;
+    }
 
-		log.info(path + name);
+    public String constructPath(String path, String name)
+    {
+	String out = "";
 
-		if (path.endsWith("/")) {
-			out = path + name;
-		} else {
-			out = path + "/" + name;
-		}
+	log.info(path + name);
 
-		log.info(out);
-
-		return out;
+	if (path.endsWith("/"))
+	{
+	    out = path + name;
+	} else
+	{
+	    out = path + "/" + name;
 	}
 
-	public String getProjectName(String projectID) {
-		String projectName = "";
+	log.info(out);
 
-		try {
-			Project project = proxy.getProjectApi().getProjectById(projectID);
+	return out;
+    }
 
-			return project.getName();
-		} catch (SdkFault e) {
-			log.error("Unable to get project name", e);
-		}
+    public String getProjectName(String projectID)
+    {
+	String projectName = "";
 
-		return projectName;
+	try
+	{
+	    Project project = proxy.getProjectApi().getProjectById(projectID);
+
+	    return project.getName();
+	} catch (SdkFault e)
+	{
+	    log.error("Unable to get project name", e);
 	}
 
-	public int getCounts(List<NodeCount> counts) {
-		int count = 0;
+	return projectName;
+    }
 
-		if (counts != null) {
-			for (NodeCount counter : counts) {
-				count += counter.getCount();
-			}
-		}
+    public int getCounts(List<NodeCount> counts)
+    {
+	int count = 0;
 
-		return count;
+	if (counts != null)
+	{
+	    for (NodeCount counter : counts)
+	    {
+		count += counter.getCount();
+	    }
 	}
 
-	/**
-	 * Uses the internal map to quickly fetch a BOM Api
-	 * 
-	 * @param currentProxy
-	 *            - User supplied proxy
-	 * @return
-	 */
-	private BomApi getBomApiForProxy(ProtexServerProxy currentProxy) {
-		BomApi bomApi = bomApis.get(currentProxy);
-		if (bomApi == null) {
-			bomApi = currentProxy.getBomApi();
-			bomApis.put(currentProxy, bomApi);
-		}
+	return count;
+    }
 
-		return bomApi;
+    /**
+     * Uses the internal map to quickly fetch a BOM Api
+     * 
+     * @param currentProxy
+     *            - User supplied proxy
+     * @return
+     */
+    private BomApi getBomApiForProxy(ProtexServerProxy currentProxy)
+    {
+	BomApi bomApi = bomApis.get(currentProxy);
+	if (bomApi == null)
+	{
+	    bomApi = currentProxy.getBomApi();
+	    bomApis.put(currentProxy, bomApi);
 	}
+
+	return bomApi;
+    }
 }
