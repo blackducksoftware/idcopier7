@@ -215,18 +215,7 @@
 		<repository>
 			<id>soleng-repo</id>
 			<name>SolEng Artifactory Repo</name>
-			<url>http://lame.blackducksoftware.com:8081/artifactory/soleng</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>nexus-local</id>
-			<name>Nexus repo</name>
-			<url>http://proserv-nexus:8080/nexus/content/repositories/thirdparty</url>
+			<url>http://artifactory.blackducksoftware.com:8081/artifactory/soleng</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
