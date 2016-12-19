@@ -41,8 +41,7 @@ public class IDCTree {
 	}
 
 	private String cleanName(String original, int count) {
-		if (count > 0) 
-		{
+		if (count > 0) {
 			original = original + " (" + count + ")";
 			hasPending = true;
 		}
@@ -115,13 +114,11 @@ public class IDCTree {
 		this.children.add(child);
 	}
 
-	public boolean isHasPending()
-	{
-	    return hasPending;
+	public boolean isHasPending() {
+		return hasPending;
 	}
 
-	public void setHasPending(boolean hasPending)
-	{
-	    this.hasPending = hasPending;
+	public void setHasPending(boolean hasPending) {
+		this.hasPending = hasPending;
 	}
 }

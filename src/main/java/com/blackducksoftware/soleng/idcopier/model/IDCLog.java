@@ -1,8 +1,8 @@
 package com.blackducksoftware.soleng.idcopier.model;
 
 public class IDCLog {
-	// private String time;
-	// private String thread;
+	private String time;
+	private String thread;
 	private String level;
 	private String category;
 	private String message;
@@ -10,21 +10,21 @@ public class IDCLog {
 	public IDCLog() {
 	}
 
-	// public String getTime() {
-	// return time;
-	// }
+	public String getTime() {
+		return time;
+	}
 
-	// public void setTime(String time) {
-	// this.time = time;
-	// }
+	public void setTime(String time) {
+		this.time = time;
+	}
 
-	// public String getThread() {
-	// return thread;
-	// }
+	public String getThread() {
+		return thread;
+	}
 
-	// public void setThread(String thread) {
-	// this.thread = thread;
-	// }
+	public void setThread(String thread) {
+		this.thread = thread;
+	}
 
 	public String getLevel() {
 		return level;

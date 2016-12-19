@@ -50,7 +50,6 @@ public class IDCPathConstants {
 	 * Admin
 	 */
 	public static final String ADMIN_PATH = "/admin";
-	
 
 	/**
 	 * Comments
@@ -58,7 +57,7 @@ public class IDCPathConstants {
 	public static final String DISPLAY_BILL_OF_MATERIALS = "/displayBom";
 	public static final String DISPLAY_COMMENTS = "/displayComments";
 	public static final String COPY_COMMENTS = "/copyComments";
-	
+
 	/**
 	 * Copying
 	 */

@@ -1,22 +1,13 @@
 /**
-Copyright (C)2014 Black Duck Software Inc.
-http://www.blackducksoftware.com/
-All rights reserved. **/
+ * Copyright (C)2014 Black Duck Software Inc.
+ * http://www.blackducksoftware.com/
+ * All rights reserved.
+ */
 
 /**
- * 
+ *
  */
 package com.blackducksoftware.soleng.idcopier.service;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import com.blackducksoftware.sdk.fault.SdkFault;
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
@@ -25,26 +16,24 @@ import com.blackducksoftware.sdk.protex.project.ProjectApi;
 import com.blackducksoftware.sdk.protex.project.ProjectInfo;
 import com.blackducksoftware.sdk.protex.project.bom.BomApi;
 import com.blackducksoftware.sdk.protex.project.bom.BomProgressStatus;
-import com.blackducksoftware.sdk.protex.project.codetree.CharEncoding;
-import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNode;
-import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNodeRequest;
-import com.blackducksoftware.sdk.protex.project.codetree.CodeTreeNodeType;
-import com.blackducksoftware.sdk.protex.project.codetree.NodeCount;
-import com.blackducksoftware.sdk.protex.project.codetree.NodeCountType;
-import com.blackducksoftware.sdk.protex.project.codetree.SourceFileInfoNode;
+import com.blackducksoftware.sdk.protex.project.codetree.*;
+import com.blackducksoftware.sdk.protex.util.CodeTreeUtilities;
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCSession;
 import com.blackducksoftware.soleng.idcopier.model.IDCTree;
-import com.blackducksoftware.soleng.idcopier.model.NodeComparator;
 import com.blackducksoftware.soleng.idcopier.model.ProjectComparator;
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Service layer to handle project requests
- * 
+ *
  * @author Ari Kamen
  * @date Sep 16, 2014
- * 
  */
 public class ProjectService implements Serializable {
 	static Logger log = Logger.getLogger(ProjectService.class);
@@ -65,14 +54,13 @@ public class ProjectService implements Serializable {
 
 	/**
 	 * Gets projects from internal map
-	 * 
+	 *
 	 * @param server
 	 * @param proxy
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ProjectInfo> getProjectsByServer(ProtexServerProxy proxy,
-			IDCServer server) throws Exception {
+	public List<ProjectInfo> getProjectsByServer(ProtexServerProxy proxy, IDCServer server) throws Exception {
 		this.proxy = proxy;
 		List<ProjectInfo> projects = projectMap.get(server.getServerName());
 		if (projects == null) {
@@ -99,8 +87,7 @@ public class ProjectService implements Serializable {
 		return jsonTree;
 	}
 
-	public String getFolderJSON(ProtexServerProxy proxy, String projectID,
-			String path) {
+	public String getFolderJSON(ProtexServerProxy proxy, String projectID, String path) {
 		this.proxy = proxy;
 		log.debug("PATH=" + path);
 
@@ -112,8 +99,7 @@ public class ProjectService implements Serializable {
 	}
 
 	@Deprecated
-	public List<ProjectInfo> getProjectsByUser(ProtexServerProxy proxy,
-			String userName) throws Exception {
+	public List<ProjectInfo> getProjectsByUser(ProtexServerProxy proxy, String userName) throws Exception {
 		this.proxy = proxy;
 		ProjectApi pApi = proxy.getProjectApi();
 
@@ -121,8 +107,7 @@ public class ProjectService implements Serializable {
 		try {
 			projects = pApi.getProjectsByUser(userName);
 		} catch (SdkFault e) {
-			throw new Exception("Unable to get projects for user"
-					+ e.getMessage());
+			throw new Exception("Unable to get projects for user" + e.getMessage());
 		}
 
 		return projects;
@@ -130,7 +115,7 @@ public class ProjectService implements Serializable {
 
 	/**
 	 * Returns the JSON code path for the project
-	 * 
+	 *
 	 * @param projectID
 	 * @return
 	 */
@@ -140,22 +125,18 @@ public class ProjectService implements Serializable {
 			CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
 			ctrRequest.setDepth(-1);
 			ctrRequest.setIncludeParentNode(true);
-			List<CodeTreeNodeType> nodeTypes = ctrRequest
-					.getIncludedNodeTypes();
+			List<CodeTreeNodeType> nodeTypes = ctrRequest.getIncludedNodeTypes();
 
 			nodeTypes.add(CodeTreeNodeType.FILE);
 			nodeTypes.add(CodeTreeNodeType.FOLDER);
 
-			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(
-					projectID, "/", ctrRequest);
+			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, "/", ctrRequest);
 
 			log.info("Got top level nodes, count: " + nodes.size());
 
 			Gson gson = new Gson();
 			json = gson.toJson(nodes);
-		}
-
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Could not convert project tree to JSON", e);
 		}
 
@@ -164,13 +145,12 @@ public class ProjectService implements Serializable {
 
 	/**
 	 * Returns the status of BOM refresh
-	 * 
+	 *
 	 * @param proxy
 	 * @param projectId
 	 * @return
 	 */
-	public BomProgressStatus getBOMRefreshStatus(ProtexServerProxy proxy,
-			String projectId) {
+	public BomProgressStatus getBOMRefreshStatus(ProtexServerProxy proxy, String projectId) {
 		this.proxy = proxy;
 		BomProgressStatus status = null;
 		BomApi bomApi = getBomApiForProxy(proxy);
@@ -188,7 +168,7 @@ public class ProjectService implements Serializable {
 
 	/**
 	 * Gets the tree with all its paths and pending counts.
-	 * 
+	 *
 	 * @param projectID
 	 * @param path
 	 * @return
@@ -200,28 +180,14 @@ public class ProjectService implements Serializable {
 			int pendingCount = 0;
 
 			CodeTreeNodeRequest ctrRequest = new CodeTreeNodeRequest();
-			ctrRequest.setDepth(1);
+			ctrRequest.setDepth(CodeTreeUtilities.DIRECT_CHILDREN);
 			ctrRequest.setIncludeParentNode(false);
+			ctrRequest.getIncludedNodeTypes().addAll(CodeTreeUtilities.ALL_CODE_TREE_NODE_TYPES);
 			ctrRequest.getCounts().add(NodeCountType.PENDING_ID_ALL);
-			List<CodeTreeNodeType> nodeTypes = ctrRequest
-					.getIncludedNodeTypes();
 
-			nodeTypes.add(CodeTreeNodeType.FILE);
-			nodeTypes.add(CodeTreeNodeType.FOLDER);
-			nodeTypes.add(CodeTreeNodeType.EXPANDED_ARCHIVE); // Added this in
-			// as it's a
-			// requirement for
-			// NetApp, and
-			// useful for us
-			// as well. It
-			// will be treaded
-			// as a folder
+			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(projectID, path, ctrRequest);
 
-			List<CodeTreeNode> nodes = proxy.getCodeTreeApi().getCodeTreeNodes(
-					projectID, path, ctrRequest);
-
-			log.debug("Got nodes for '" + path + "' (count: " + nodes.size()
-					+ ")");
+			log.debug("Got nodes for '" + path + "' (count: " + nodes.size() + ")");
 
 			List<String> folderNodes = new ArrayList<String>();
 			List<String> fileNodes = new ArrayList<String>();
@@ -274,8 +240,7 @@ public class ProjectService implements Serializable {
 			if (path.equals("/")) {
 				List<IDCTree> projectNodes = new ArrayList<IDCTree>();
 
-				IDCTree rootNode = new IDCTree("", getProjectName(projectID),
-						true, pendingCount);
+				IDCTree rootNode = new IDCTree("", getProjectName(projectID), true, pendingCount);
 				rootNode.setExpand(true);
 				rootNode.addChildren(treeNodes);
 				projectNodes.add(rootNode);
@@ -287,8 +252,7 @@ public class ProjectService implements Serializable {
 			// log.error("Could not convert project tree to JSON", e);
 
 			List<IDCTree> projectNodes = new ArrayList<IDCTree>();
-			IDCTree rootNode = new IDCTree("", getProjectName(projectID), true,
-					0);
+			IDCTree rootNode = new IDCTree("", getProjectName(projectID), true, 0);
 			projectNodes.add(rootNode);
 
 			return new Gson().toJson(projectNodes);
@@ -299,8 +263,7 @@ public class ProjectService implements Serializable {
 
 	public boolean isValidPath(String projectID, String path) {
 		try {
-			List<SourceFileInfoNode> info = proxy.getCodeTreeApi().getFileInfo(
-					projectID, path, 1, false, CharEncoding.BASE_64);
+			List<SourceFileInfoNode> info = proxy.getCodeTreeApi().getFileInfo(projectID, path, 1, false, CharEncoding.BASE_64);
 			if (info != null) {
 				return true;
 			}
@@ -344,6 +307,11 @@ public class ProjectService implements Serializable {
 	public int getCounts(List<NodeCount> counts) {
 		int count = 0;
 
+		for (NodeCount counter : counts) {
+			System.out.println(counter.getCountType());
+			System.out.println(counter.getCount());
+		}
+
 		if (counts != null) {
 			for (NodeCount counter : counts) {
 				count += counter.getCount();
@@ -355,9 +323,8 @@ public class ProjectService implements Serializable {
 
 	/**
 	 * Uses the internal map to quickly fetch a BOM Api
-	 * 
-	 * @param currentProxy
-	 *            - User supplied proxy
+	 *
+	 * @param currentProxy - User supplied proxy
 	 * @return
 	 */
 	private BomApi getBomApiForProxy(ProtexServerProxy currentProxy) {

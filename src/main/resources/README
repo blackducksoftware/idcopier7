@@ -1,4 +1,4 @@
-IDCopier 7.0.0 
+IDCopier 7.0.8 
 --------------
 
 Deployment
@@ -18,5 +18,3 @@ Step 5: (Optional) Configure optional settings in your property file.
 
 Note:  servers_file can be modified at any time and will dynamically be reflected in IDCopier
 Note:  config_file changes will only be reflected upon restart of web application.
-
-

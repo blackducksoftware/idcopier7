@@ -1,4 +1,3 @@
-https://kiowa.blackducksoftware.com
-https://lakota.blackducksoftware.com
-https://ute.blackducksoftware.com
-https://smb.blackducksoftware.com
+https://server1.domain.com
+https://server2.domain.com
+https://server3.domain.com

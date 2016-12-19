@@ -36,22 +36,18 @@ public class IDCSessionListener implements HttpSessionListener {
 		int timeout = -1;
 
 		/**
-		 * OH boy, this is a weird one. Unlike the controllers and other Spring classes, there is no way to autowire our IDCConfig class because Spring is
-		 * unaware of it from a context standpoint.
+		 * OH boy, this is a weird one. Unlike the controllers and other Spring classes, there is no way to autowire our IDCConfig class because Spring is unaware of it from a context standpoint.
 		 * 
 		 * So we are forced to get the Bean explicitly from the web application context.
 		 * 
-		 * Unfortunately, for whatever reason the convenient methods (possibly due to Java Config setup) give us null web contexts, so we have to look it up via
-		 * attribute.
+		 * Unfortunately, for whatever reason the convenient methods (possibly due to Java Config setup) give us null web contexts, so we have to look it up via attribute.
 		 * 
 		 * TODO: If there is a way around this mess, find it.
 		 */
 		ServletContext sc = event.getSession().getServletContext();
 		// Lookup our specific servlet, using constants to make it a bit less
 		// hard-coded
-		WebApplicationContext ctx = (WebApplicationContext) sc
-				.getAttribute("org.springframework.web.servlet.FrameworkServlet.CONTEXT."
-						+ IDCViewModelConstants.IDC_WEB_CONTEXT);
+		WebApplicationContext ctx = (WebApplicationContext) sc.getAttribute("org.springframework.web.servlet.FrameworkServlet.CONTEXT." + IDCViewModelConstants.IDC_WEB_CONTEXT);
 
 		IDCConfig configBean = ctx.getBean(IDCConfig.class);
 		String timeOutStr;

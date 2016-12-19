@@ -4,7 +4,7 @@
 	<groupId>com.blackducksoftware.protex.sdk</groupId>
 	<artifactId>IDCopier7</artifactId>
 	<packaging>war</packaging>
-	<version>7.0.7-SNAPSHOT</version>
+	<version>7.0.8-SNAPSHOT</version>
 	<name>protex-idcopier Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -17,7 +17,7 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-framework-bom</artifactId>
-				<version>4.0.2.RELEASE</version>
+				<version>4.3.0.RELEASE</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -35,19 +35,19 @@
 		<dependency>
 			<groupId>com.blackducksoftware.protex.sdkclient</groupId>
 			<artifactId>protex-sdk-utilities</artifactId>
-			<version>7.0.2</version>
+			<version>7.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.blackducksoftware.protex.sdkclient</groupId>
 			<artifactId>protex-sdk-client</artifactId>
-			<version>7.0.2</version>
+			<version>7.4.1</version>
 		</dependency>
 		<!-- The blackduck CXF Utilities have been taken out out of the utilities 
 			for now, should be placed back -->
 		<dependency>
-			<groupId>com.blackducksoftware.blackduck-cxf-utilities</groupId>
+			<groupId>com.blackducksoftware.protex.sdkclient</groupId>
 			<artifactId>blackduck-cxf-utilities</artifactId>
-			<version>1.1</version>
+			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -214,15 +214,9 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>soleng-repo</id>
-			<name>SolEng Artifactory Repo</name>
-			<url>http://artifactory.blackducksoftware.com:8081/artifactory/soleng</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<id>bintray-bds-tools</id>
+			<name>BDS Bintray for Common Framework</name>
+			<url>http://dl.bintray.com/bds/sdk/</url>
 		</repository>
 	</repositories>
 </project>

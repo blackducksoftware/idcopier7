@@ -174,8 +174,7 @@ public class IDCLoginController {
 	}
 
 	/**
-	 * Processes a server change from the dropdown Return JSON project list 
-	 * TODO: This actually retreives a project list, consider refactoring?
+	 * Processes a server change from the dropdown Return JSON project list TODO: This actually retreives a project list, consider refactoring?
 	 * 
 	 * @param session
 	 * @return
