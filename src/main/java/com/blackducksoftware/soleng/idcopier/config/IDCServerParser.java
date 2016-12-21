@@ -8,14 +8,14 @@ All rights reserved. **/
  */
 package com.blackducksoftware.soleng.idcopier.config;
 
-import java.io.FileReader;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.blackducksoftware.soleng.idcopier.model.IDCServer;
 import com.blackducksoftware.soleng.idcopier.model.IDCServerList;
 import com.thoughtworks.xstream.XStream;
+import org.apache.log4j.Logger;
+
+import java.io.FileReader;
+import java.util.List;
+
 
 /**
  * @author Ari Kamen
