@@ -1,10 +1,11 @@
 /**
-Copyright (C)2014 Black Duck Software Inc.
-http://www.blackducksoftware.com/
-All rights reserved. **/
+ * Copyright (C)2014 Black Duck Software Inc.
+ * http://www.blackducksoftware.com/
+ * All rights reserved.
+ */
 
 /**
- * 
+ *
  */
 package com.blackducksoftware.soleng.idcopier.config;
 
@@ -16,11 +17,10 @@ import org.apache.log4j.Logger;
 import java.io.FileReader;
 import java.util.List;
 
-
 /**
  * @author Ari Kamen
  * @date Sep 22, 2014
- * 
+ *
  */
 public class IDCServerParser {
 
