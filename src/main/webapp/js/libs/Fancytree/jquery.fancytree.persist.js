@@ -1,20 +1,26 @@
-/*!
- * jquery.fancytree.persist.js
+/*
+ * IDCopier
  *
- * Persist tree status in cookiesRemove or highlight tree nodes, based on a filter.
- * (Extension module for jquery.fancytree.js: https://github.com/mar10/fancytree/)
+ * Copyright (C) 2017 Black Duck Software, Inc.
+ * http://www.blackducksoftware.com/
  *
- * @depends: jquery.cookie.js
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
- * Copyright (c) 2014, Martin Wendt (http://wwWendt.de)
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Released under the MIT license
- * https://github.com/mar10/fancytree/wiki/LicenseInfo
- *
- * @version @VERSION
- * @date @DATE
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 ;(function($, window, document, undefined) {
 
 "use strict";
