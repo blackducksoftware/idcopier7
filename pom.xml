@@ -10,7 +10,7 @@
 
   <groupId>com.blackducksoftware.tools</groupId>
   <artifactId>IDCopier7</artifactId>
-  <version>7.1.0-SNAPSHOT</version>
+  <version>7.1.0</version>
   <packaging>war</packaging>
 
   <name>IDCopier</name>
