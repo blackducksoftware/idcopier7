@@ -11,7 +11,7 @@
 
     <groupId>com.blackducksoftware.tools</groupId>
     <artifactId>IDCopier7</artifactId>
-    <version>7.1.0</version>
+    <version>7.1.1</version>
     <packaging>war</packaging>
 
     <name>IDCopier</name>
@@ -140,8 +140,37 @@
     <build>
         <resources>
             <resource>
-                <filtering>true</filtering>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.css</exclude>
+                    <exclude>**/*.ico</exclude>
+                    <exclude>**/*.gif</exclude>
+                    <exclude>**/*.png</exclude>
+                    <exclude>**/*.eot</exclude>
+                    <exclude>**/*.svg</exclude>
+                    <exclude>**/*.woff</exclude>
+                    <exclude>**/*.woff2</exclude>
+                    <exclude>**/*.ttf</exclude>
+                    <exclude>**/*.map</exclude>
+                </excludes>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.css</include>
+                    <include>**/*.ico</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
+                    <include>**/*.eot</include>
+                    <include>**/*.svg</include>
+                    <include>**/*.woff</include>
+                    <include>**/*.woff2</include>
+                    <include>**/*.ttf</include>
+                    <include>**/*.map</include>
+                </includes>
             </resource>
         </resources>
 
@@ -190,6 +219,19 @@
                         <resource>
                             <directory>src/main/webapp</directory>
                             <filtering>true</filtering>
+                            <excludes>
+                                <exclude>**/*.css</exclude>
+                                <exclude>**/*.ico</exclude>
+                                <exclude>**/*.gif</exclude>
+                                <exclude>**/*.png</exclude>
+                                <exclude>**/*.pdf</exclude>
+                                <exclude>**/*.eot</exclude>
+                                <exclude>**/*.svg</exclude>
+                                <exclude>**/*.woff</exclude>
+                                <exclude>**/*.woff2</exclude>
+                                <exclude>**/*.ttf</exclude>
+                                <exclude>**/*.map</exclude>
+                            </excludes>
                         </resource>
                     </webResources>
                 </configuration>
