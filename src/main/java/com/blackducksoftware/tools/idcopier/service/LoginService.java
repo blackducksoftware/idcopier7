@@ -59,7 +59,7 @@ public class LoginService implements Serializable {
 	/**
 	 * The first login
 	 *
-	 * @param session
+	 * @param serverName
 	 */
 	public IDCServer getServerByName(String serverName) throws Exception {
 		IDCServer server = serverMap.get(serverName);

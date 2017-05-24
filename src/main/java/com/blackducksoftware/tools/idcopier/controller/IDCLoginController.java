@@ -132,14 +132,11 @@ public class IDCLoginController {
              * It has since been modified to loop through each of the servers until it is able to log in to one of them.
              */
             for (IDCServer server : servers) {
-                System.out.println(server.getServerURI());
-
                 try {
                     proxy = loginService.getProxyByServerURI(server.getServerURI());
                     proxy.validateCredentials();
                 } catch (Exception e) {
-                    log.error("Login failed: " + e.getMessage());
-
+                    // log.error("Login failed: " + e.getMessage());
                     server = null;
                 }
 
