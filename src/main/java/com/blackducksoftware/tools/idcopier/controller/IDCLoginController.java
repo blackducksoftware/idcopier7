@@ -136,8 +136,17 @@ public class IDCLoginController {
                     proxy = loginService.getProxyByServerURI(server.getServerURI());
                     proxy.validateCredentials();
                 } catch (Exception e) {
-                    // log.error("Login failed: " + e.getMessage());
-                    server = null;
+                    if (e.getMessage().contains("Invalid credentials")) {
+                        log.error("Login failed: " + e.getMessage());
+                        StringBuilder message = new StringBuilder();
+                        message.append("Failed to authenticate against server: [" + server.getServerURI() + "]");
+                        message.append("<br />");
+                        message.append("Cause: " + e.getCause());
+
+                        throw new Exception(message.toString());
+                    } else {
+                        server = null;
+                    }
                 }
 
                 if (server != null) {
@@ -168,7 +177,7 @@ public class IDCLoginController {
                 StringBuilder message = new StringBuilder();
                 message.append("Failed to authenticate against all Protex servers:");
 
-                for(IDCServer server:servers){
+                for (IDCServer server : servers) {
                     message.append("<br />");
                     message.append(server.getServerURI());
                 }
