@@ -6,12 +6,12 @@
     <parent>
         <groupId>com.blackducksoftware.integration</groupId>
         <artifactId>common-maven-parent</artifactId>
-        <version>3.0.0</version>
+        <version>5.0.0</version>
     </parent>
 
     <groupId>com.blackducksoftware.tools</groupId>
     <artifactId>IDCopier7</artifactId>
-    <version>7.1.1.1</version>
+    <version>7.1.1.2</version>
     <packaging>war</packaging>
 
     <name>IDCopier</name>
@@ -35,12 +35,12 @@
         <dependency>
             <groupId>com.blackducksoftware.protex.sdkclient</groupId>
             <artifactId>protex-sdk-utilities</artifactId>
-            <version>7.5.0</version>
+            <version>7.7.2</version>
         </dependency>
         <dependency>
             <groupId>com.blackducksoftware.protex.sdkclient</groupId>
             <artifactId>protex-sdk-client</artifactId>
-            <version>7.5.0</version>
+            <version>7.7.2</version>
         </dependency>
         <!-- The blackduck CXF Utilities have been taken out out of the utilities for now, should be placed back -->
         <dependency>
