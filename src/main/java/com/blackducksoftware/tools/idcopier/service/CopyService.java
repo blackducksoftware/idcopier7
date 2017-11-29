@@ -26,65 +26,59 @@
  */
 package com.blackducksoftware.tools.idcopier.service;
 
-import org.apache.log4j.Logger;
-
 import com.blackducksoftware.sdk.protex.client.util.ProtexServerProxy;
 import com.blackducksoftware.sdk.protex.common.BomRefreshMode;
 import com.blackducksoftware.sdk.protex.project.codetree.identification.IdentificationApi;
 import com.blackducksoftware.tools.idcopier.model.IDCConfig;
+import org.apache.log4j.Logger;
 
 /**
  * Class responsible for copying IDs
  *
  * @author Ari Kamen
  * @date Sep 25, 2014
- *
  */
 public class CopyService {
-	private IDCConfig config;
+    private IDCConfig config;
 
-	static Logger log = Logger.getLogger(CopyService.class);
+    static Logger log = Logger.getLogger(CopyService.class);
 
-	public CopyService(IDCConfig config) {
-		this.config = config;
-	}
+    public CopyService(IDCConfig config) {
+        this.config = config;
+    }
 
-	public void performCopy(ProtexServerProxy sourceProxy, String sourceProjectId, String targetProjectId,
-			String sourcePath, String targetPath, Boolean overWrite) throws Exception {
-		try {
-			IdentificationApi iApi = sourceProxy.getIdentificationApi();
+    public void performCopy(ProtexServerProxy sourceProxy, String sourceProjectId, String targetProjectId,
+                            String sourcePath, String targetPath, Boolean overWrite) throws Exception {
+        try {
+            IdentificationApi iApi = sourceProxy.getIdentificationApi();
 
-			// Always skip the refresh This is because the Controller will
-			// perform the refresh call if necessary
+            // Always skip the refresh This is because the Controller will
+            // perform the refresh call if necessary
 
-			iApi.copyIdentifications(sourceProjectId, sourcePath, targetProjectId, targetPath, config.isRecursive(), overWrite, BomRefreshMode.SKIP);
+            iApi.copyIdentifications(sourceProjectId, sourcePath, targetProjectId, targetPath, config.isRecursive(), overWrite, BomRefreshMode.SKIP);
 
-			log.info("Finished copying from source path: " + sourcePath);
+            log.info("Finished copying from source path: " + sourcePath);
 
-		} catch (Exception e) {
-			log.error("Error copying: " + e.getMessage());
-			throw new Exception("Error copying", e);
-		}
-	}
+        } catch (Exception e) {
+            log.error("Error copying: " + e.getMessage());
+            throw new Exception("Error copying", e);
+        }
+    }
 
-	/*
-	public void performEffectiveCopy(ProtexServerProxy sourceProxy, String sourceProjectId, String targetProjectId,
-			String sourcePath, String targetPath, Boolean overWrite) throws Exception {
-		try {
-			IdentificationApi iApi = sourceProxy.getIdentificationApi();
+    public void performEffectiveCopy(ProtexServerProxy sourceProxy, String sourceProjectId, String targetProjectId,
+                                     String sourcePath, String targetPath, Boolean overWrite) throws Exception {
+        try {
+            IdentificationApi iApi = sourceProxy.getIdentificationApi();
 
-			// Always skip the refresh This is because the Controller will
-			// perform the refresh call if necessary
+            // Always skip the refresh This is because the Controller will perform the refresh call if necessary
+            iApi.copyEffectiveIdentifications(sourceProjectId, sourcePath, targetProjectId, targetPath,
+                    config.isRecursive(), overWrite, BomRefreshMode.SKIP);
 
-			iApi.copyEffectiveIdentifications(sourceProjectId, sourcePath, targetProjectId, targetPath,
-					config.isRecursive(), overWrite, BomRefreshMode.SKIP);
+            log.info("Finished copying from source path: " + sourcePath);
 
-			log.info("Finished copying from source path: " + sourcePath);
-
-		} catch (Exception e) {
-			log.error("Error copying: " + e.getMessage());
-			throw new Exception("Error copying", e);
-		}
-	}
-	*/
+        } catch (Exception e) {
+            log.error("Error copying: " + e.getMessage());
+            throw new Exception("Error copying", e);
+        }
+    }
 }
