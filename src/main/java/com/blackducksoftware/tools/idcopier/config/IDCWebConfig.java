@@ -39,35 +39,35 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 //Marks this class as configuration
 @Configuration
 // Specifies which package to scan
-@ComponentScan({ "com.blackducksoftware.tools.idcopier.controller", "com.blackducksoftware.tools.idcopier.model" })
+@ComponentScan({"com.blackducksoftware.tools.idcopier.controller", "com.blackducksoftware.tools.idcopier.model"})
 // Enables Spring's annotations
 @EnableWebMvc
 public class IDCWebConfig extends WebMvcConfigurerAdapter {
 
-	@Bean
-	public UrlBasedViewResolver setupViewResolver() {
-		UrlBasedViewResolver resolver = new UrlBasedViewResolver();
-		resolver.setPrefix("/WEB-INF/views/");
-		resolver.setSuffix(".jsp");
-		resolver.setViewClass(JstlView.class);
-		return resolver;
-	}
+    @Bean
+    public UrlBasedViewResolver setupViewResolver() {
+        UrlBasedViewResolver resolver = new UrlBasedViewResolver();
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setSuffix(".jsp");
+        resolver.setViewClass(JstlView.class);
+        return resolver;
+    }
 
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
-	}
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
 
-	@Bean
-	@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public UserServiceModel loginServiceModel() {
-		return new UserServiceModel();
-	}
+    @Bean
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public UserServiceModel loginServiceModel() {
+        return new UserServiceModel();
+    }
 
-	@Bean
-	@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public ProjectService projectService() {
-		return new ProjectService();
-	}
+    @Bean
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public ProjectService projectService() {
+        return new ProjectService();
+    }
 
 }
